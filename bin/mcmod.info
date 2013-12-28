@@ -1,0 +1,16 @@
+[
+{
+  "modid": "modname",
+  "name": "Mod Name",
+  "description": "I don't know what to call this yet.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authors": ["Tyrope"],
+  "credits": "stuff",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
