@@ -1,14 +1,14 @@
 [
 {
-  "modid": "modname",
-  "name": "Mod Name",
-  "description": "I don't know what to call this yet.",
+  "modid": "fencing",
+  "name": "Fencing",
+  "description": "Adding multipart-enabled fences to make your gardens and farms look pretty",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
   "authors": ["Tyrope"],
-  "credits": "stuff",
+  "credits": "",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
