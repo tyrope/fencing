@@ -10,10 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import net.minecraftforge.event.ForgeSubscribe;
-import nl.tyrope.fencing.Refs;
 import nl.tyrope.fencing.Refs.MetaValues;
 import nl.tyrope.fencing.tileEntities.FenceEntity;
 import cpw.mods.fml.relauncher.Side;
@@ -71,12 +68,12 @@ public class FenceBlock extends BlockContainer {
 		return false;
 	}
 
+	// Block Update Detection
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
 		((FenceEntity) world.getBlockTileEntity(x, y, z)).blockUpdate();
 	}
 
-	// Block Update Detection
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z,
 			int blockID) {
