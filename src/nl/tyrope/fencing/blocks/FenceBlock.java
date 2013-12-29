@@ -1,24 +1,24 @@
 package nl.tyrope.fencing.blocks;
 
 import java.util.List;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import nl.tyrope.fencing.Refs;
+import nl.tyrope.fencing.Refs.MetaValues;
 import nl.tyrope.fencing.tileEntities.FenceEntity;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class FenceBlock extends BlockContainer {
-
-	public static int renderId;
 
 	public FenceBlock(int id) {
 		super(id, Material.wood);
@@ -43,9 +43,14 @@ public class FenceBlock extends BlockContainer {
 		ItemStack stack;
 		for (int ix = 0; ix < 4; ix++) {
 			stack = new ItemStack(this, 1, ix);
-			System.out.println("---------SubBlock: "+stack.getDisplayName()+" = "+stack.getUnlocalizedName()+"("+stack.itemID+":"+stack.getItemDamage()+")");
 			subItems.add(stack);
 		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Icon getIcon(int i, int j) {
+		return Refs.FenceItemIcons[j]; //FIXME Always renders metadata 0.
 	}
 
 	// Make sure you set this as your TileEntity class relevant for the block!
@@ -71,21 +76,14 @@ public class FenceBlock extends BlockContainer {
 		return false;
 	}
 
-	// This is the icon to use for showing the block in your hand.
-	public void registerIcons(IconRegister icon) {
-		this.blockIcon = icon.registerIcon(Refs.MODID + ":BarbedFenceIcon");
-	}
-
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z,
 			Entity entity) {
 		int meta = world.getBlockMetadata(x, y, z);
 
-		if (meta == 2) {
-			// Silly
+		if (meta == MetaValues.FenceSilly) {
 			entity.motionX *= 0.1D;
 			entity.motionZ *= 0.1D;
-		} else if (meta == 3) {
-			// Barbed
+		} else if (meta == MetaValues.FenceBarbed) {
 			entity.attackEntityFrom(DamageSource.cactus, 1.0F);
 		}
 	}

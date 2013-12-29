@@ -1,0 +1,6 @@
+item.fencePole.name=Fence Post
+
+tile.fenceBlockString.name=String Fence
+tile.fenceBlockIron.name=Iron Fence
+tile.fenceBlockSilly.name=Silly String Fence
+tile.fenceBlockBarbed.name=Barbed Wire Fence

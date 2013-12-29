@@ -1,7 +1,5 @@
 package nl.tyrope.fencing.render;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -14,17 +12,15 @@ import net.minecraft.world.World;
 import nl.tyrope.fencing.Refs;
 import nl.tyrope.fencing.models.FenceModel;
 
+import org.lwjgl.opengl.GL11;
+
 public class FenceRenderer extends TileEntitySpecialRenderer {
 
 	// The model of your block
 	private final FenceModel model;
-	// The texture to use
-	private final ResourceLocation texture;
 
-	public FenceRenderer(String texture) {
+	public FenceRenderer() {
 		this.model = new FenceModel();
-		this.texture = new ResourceLocation(Refs.MODID + ":textures/blocks/"
-				+ texture + "Fence.png");
 	}
 
 	private void adjustRotatePivotViaMeta(World world, int x, int y, int z) {
@@ -44,7 +40,8 @@ public class FenceRenderer extends TileEntitySpecialRenderer {
 		// This is the texture of your block. It's pathed to be the same place
 		// as your other blocks here.
 		// Use in 1.6.2 this
-		ResourceLocation textures = (texture);
+		ResourceLocation textures = (new ResourceLocation(Refs.MODID
+				+ ":textures/blocks/fence" + te.getBlockMetadata() + ".png"));
 		// the ':' is very important
 		// binding the textures
 		Minecraft.getMinecraft().renderEngine.bindTexture(textures);
