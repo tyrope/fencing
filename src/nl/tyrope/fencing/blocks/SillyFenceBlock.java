@@ -5,10 +5,11 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import nl.tyrope.fencing.Refs;
-import nl.tyrope.fencing.tileEntities.SillyFenceEntity;
+import nl.tyrope.fencing.tileEntities.FenceEntity;
 
 public class SillyFenceBlock extends BlockContainer {
 
@@ -26,7 +27,7 @@ public class SillyFenceBlock extends BlockContainer {
 	// Make sure you set this as your TileEntity class relevant for the block!
 	@Override
 	public TileEntity createNewTileEntity(World world) {
-		return new SillyFenceEntity();
+		return new FenceEntity();
 	}
 
 	// You don't want the normal render type, or it wont render properly.
@@ -50,4 +51,14 @@ public class SillyFenceBlock extends BlockContainer {
 	public void registerIcons(IconRegister icon) {
 		this.blockIcon = icon.registerIcon(Refs.MODID + ":SillyFenceIcon");
 	}
+
+    /**
+     * Source: net.minecraft.block.BlockSoulSand
+     * Triggered whenever an entity collides with this block (enters into the block). Args: world, x, y, z, entity
+     */
+    public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
+    {
+        par5Entity.motionX *= 0.1D;
+        par5Entity.motionZ *= 0.1D;
+    }
 }

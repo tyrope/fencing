@@ -31,13 +31,7 @@ public class Fencing {
 	public static Common proxy;
 
 	public FencePoleItem fencePole;
-	public StringFenceBlock stringFence;
-	public IronFenceBlock ironFence;
-	public BarbedFenceBlock barbedFence;
-	public SillyFenceBlock sillyFence;
-
-	private int fencePoleID, stringFenceID, ironFenceID, sillyFenceID,
-			barbedFenceID;
+	public Block fenceBlock;
 
 	/**
 	 * This is code that is executed prior to your mod being initialized into of
@@ -51,17 +45,13 @@ public class Fencing {
 		Configuration config = new Configuration(
 				event.getSuggestedConfigurationFile());
 		config.load();
-		fencePoleID = config
-				.get(Configuration.CATEGORY_ITEM, "fencePole", 5000).getInt();
-		stringFenceID = config.get(Configuration.CATEGORY_BLOCK, "stringFence",
-				500).getInt();
-		ironFenceID = config
-				.get(Configuration.CATEGORY_BLOCK, "ironFence", 501).getInt();
-		sillyFenceID = config.get(Configuration.CATEGORY_BLOCK, "sillyFence",
-				502).getInt();
-		barbedFenceID = config.get(Configuration.CATEGORY_BLOCK, "barbedFence",
-				503).getInt();
+		int fencePoleID = config.get(Configuration.CATEGORY_ITEM, "fencePole",
+				5000).getInt();
+		int fenceBlockID = config.get(Configuration.CATEGORY_BLOCK,
+				"fenceBlock", 500).getInt();
 		config.save();
+		fencePole = new FencePoleItem(fencePoleID);
+		fenceBlock = new FenceBlock(fenceBlockID);
 	}
 
 	/**
@@ -73,42 +63,33 @@ public class Fencing {
 	 */
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		fencePole = new FencePoleItem(fencePoleID);
 		LanguageRegistry.addName(fencePole, "Fence Pole");
-		GameRegistry.addRecipe(new ItemStack(fencePole), "xx", "xx", "xx", 'x',
-				new ItemStack(Item.stick));
+		GameRegistry.addRecipe(new ItemStack(fencePole, 4), "xx", "xx", "xx",
+				'x', new ItemStack(Item.stick));
 
-		stringFence = new StringFenceBlock(stringFenceID);
-		MinecraftForge.setBlockHarvestLevel(stringFence, "axe", 0);
-		GameRegistry.registerBlock(stringFence, "stringFence");
-		LanguageRegistry.addName(stringFence, "String Fence");
-		GameRegistry.addRecipe(new ItemStack(stringFence), "xyx", 'x',
+		MinecraftForge.setBlockHarvestLevel(fenceBlock, "axe", 0);
+
+		// register block & TE
+		GameRegistry.registerBlock(fenceBlock, "FenceBlockItem");
+		GameRegistry.registerTileEntity(FenceEntity.class, "fenceBlock");
+
+		// Add names
+		final String[] fenceNames = { "String Fence", "Iron Fence",
+				"Silly String Fence", "Barbed Wire Fence" };
+		for (int ix = 0; ix < 4; ix++) {
+			ItemStack fenceStack = new ItemStack(fenceBlock, 1, ix);
+			LanguageRegistry.addName(fenceStack,
+					fenceNames[fenceStack.getItemDamage()]);
+		}
+
+		GameRegistry.addRecipe(new ItemStack(fenceBlock, 1, 0), "xyx", 'x',
 				new ItemStack(fencePole), 'y', new ItemStack(Item.silk));
-		GameRegistry.registerTileEntity(StringFenceEntity.class, "stringFence");
-
-		ironFence = new IronFenceBlock(ironFenceID);
-		MinecraftForge.setBlockHarvestLevel(ironFence, "pickaxe", 0);
-		GameRegistry.registerBlock(ironFence, "ironFence");
-		LanguageRegistry.addName(ironFence, "Iron Fence");
-		GameRegistry.addRecipe(new ItemStack(ironFence), "xyx", 'x',
+		GameRegistry.addRecipe(new ItemStack(fenceBlock, 1, 1), "xyx", 'x',
 				new ItemStack(fencePole), 'y', new ItemStack(Item.ingotIron));
-		GameRegistry.registerTileEntity(IronFenceEntity.class, "ironFence");
-
-		sillyFence = new SillyFenceBlock(sillyFenceID);
-		MinecraftForge.setBlockHarvestLevel(sillyFence, "axe", 0);
-		GameRegistry.registerBlock(sillyFence, "sillyFence");
-		LanguageRegistry.addName(sillyFence, "Silly String Fence");
-		GameRegistry.addShapelessRecipe(new ItemStack(sillyFence),
-				new ItemStack(Item.slimeBall), new ItemStack(stringFence));
-		GameRegistry.registerTileEntity(SillyFenceEntity.class, "sillyFence");
-
-		barbedFence = new BarbedFenceBlock(barbedFenceID);
-		MinecraftForge.setBlockHarvestLevel(barbedFence, "pickaxe", 0);
-		GameRegistry.registerBlock(barbedFence, "barbedFence");
-		LanguageRegistry.addName(barbedFence, "Barbed Wire Fence");
-		GameRegistry.addRecipe(new ItemStack(barbedFence), "xyx", 'x',
+		GameRegistry.addShapelessRecipe(new ItemStack(fenceBlock, 1, 2),
+				new ItemStack(Item.slimeBall), new ItemStack(fenceBlock));
+		GameRegistry.addRecipe(new ItemStack(fenceBlock, 1, 3), "xyx", 'x',
 				new ItemStack(fencePole), 'y', new ItemStack(Block.fenceIron));
-		GameRegistry.registerTileEntity(BarbedFenceEntity.class, "barbedFence");
 
 		proxy.registerRenderers();
 	}

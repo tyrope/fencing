@@ -9,16 +9,8 @@ public class Client extends Common {
 
 	@Override
 	public void registerRenderers() {
-		ClientRegistry.bindTileEntitySpecialRenderer(StringFenceEntity.class,
-				new BasicFenceRenderer("String"));
-
-		ClientRegistry.bindTileEntitySpecialRenderer(IronFenceEntity.class,
-				new BasicFenceRenderer("Iron"));
-		
-		ClientRegistry.bindTileEntitySpecialRenderer(BarbedFenceEntity.class,
-				new BasicFenceRenderer("Barbed"));
-
-		ClientRegistry.bindTileEntitySpecialRenderer(SillyFenceEntity.class,
-				new BasicFenceRenderer("Silly"));
+		//TODO: Add proper renderer for all different fences...
+		ClientRegistry.bindTileEntitySpecialRenderer(FenceEntity.class,
+				new FenceRenderer("String"));
 	}
 }

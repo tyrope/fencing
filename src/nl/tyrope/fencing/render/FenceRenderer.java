@@ -12,17 +12,17 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import nl.tyrope.fencing.Refs;
-import nl.tyrope.fencing.models.BasicFenceModel;
+import nl.tyrope.fencing.models.FenceModel;
 
-public class BasicFenceRenderer extends TileEntitySpecialRenderer {
+public class FenceRenderer extends TileEntitySpecialRenderer {
 
 	// The model of your block
-	private final BasicFenceModel model;
+	private final FenceModel model;
 	// The texture to use
 	private final ResourceLocation texture;
 
-	public BasicFenceRenderer(String texture) {
-		this.model = new BasicFenceModel();
+	public FenceRenderer(String texture) {
+		this.model = new FenceModel();
 		this.texture = new ResourceLocation(Refs.MODID + ":textures/blocks/"
 				+ texture + "Fence.png");
 	}
