@@ -21,7 +21,8 @@ public class FenceBlockItem extends ItemBlock {
 	public void registerIcons(IconRegister icon) {
 		Refs.FenceItemIcons = new Icon[4];
 		for (int i = 0; i < 4; i++) {
-			Refs.FenceItemIcons[i] = icon.registerIcon(Refs.MODID + ":iconFence" + i);
+			Refs.FenceItemIcons[i] = icon.registerIcon(Refs.MODID
+					+ ":iconFence" + i);
 		}
 	}
 
@@ -29,6 +30,12 @@ public class FenceBlockItem extends ItemBlock {
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(ItemStack i, int j) {
 		return Refs.FenceItemIcons[i.getItemDamage()];
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Icon getIconFromDamage(int dmg) {
+		return Refs.FenceItemIcons[dmg];
 	}
 
 	@Override

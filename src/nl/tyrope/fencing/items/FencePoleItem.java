@@ -11,7 +11,7 @@ public class FencePoleItem extends Item {
 
 		setMaxStackSize(64);
 		setUnlocalizedName("fencePole");
-		setCreativeTab(CreativeTabs.tabDecorations);
+		setCreativeTab(CreativeTabs.tabMaterials);
 		setTextureName(Refs.MODID + ":fencePole");
 	}
 

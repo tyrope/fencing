@@ -12,6 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeSubscribe;
 import nl.tyrope.fencing.Refs;
 import nl.tyrope.fencing.Refs.MetaValues;
 import nl.tyrope.fencing.tileEntities.FenceEntity;
@@ -47,12 +48,6 @@ public class FenceBlock extends BlockContainer {
 		}
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public Icon getIcon(int i, int j) {
-		return Refs.FenceItemIcons[j]; //FIXME Always renders metadata 0.
-	}
-
 	// Make sure you set this as your TileEntity class relevant for the block!
 	@Override
 	public TileEntity createNewTileEntity(World world) {
@@ -76,6 +71,19 @@ public class FenceBlock extends BlockContainer {
 		return false;
 	}
 
+	@Override
+	public void onBlockAdded(World world, int x, int y, int z) {
+		((FenceEntity) world.getBlockTileEntity(x, y, z)).blockUpdate();
+	}
+
+	// Block Update Detection
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z,
+			int blockID) {
+		((FenceEntity) world.getBlockTileEntity(x, y, z)).blockUpdate();
+	}
+
+	// Effects of touching the fence.
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z,
 			Entity entity) {
 		int meta = world.getBlockMetadata(x, y, z);

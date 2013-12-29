@@ -4,7 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class FenceModel extends ModelBase
+public class FenceStraightModel extends ModelBase
 {
   //fields
     ModelRenderer postLeft;
@@ -22,7 +22,7 @@ public class FenceModel extends ModelBase
     ModelRenderer bottomBottomMiddle;
     ModelRenderer bottomTopRight;
   
-  public FenceModel()
+  public FenceStraightModel()
   {
     textureWidth = 32;
     textureHeight = 32;
