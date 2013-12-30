@@ -14,8 +14,9 @@ public class Refs {
 	// Fence subnames
 	public final static String[] subNames = { "String", "Iron", "Silly",
 			"Barbed" };
-	
+
 	public static Icon[] FenceItemIcons;
+	public static float textureSize = 32;
 
 	public static class MetaValues {
 		// Fence metadata
