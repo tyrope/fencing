@@ -22,7 +22,7 @@ public class FenceBlockItem extends ItemBlock {
 		Refs.FenceItemIcons = new Icon[4];
 		for (int i = 0; i < 4; i++) {
 			Refs.FenceItemIcons[i] = icon.registerIcon(Refs.MODID
-					+ ":iconFence" + i);
+					+ ":iconFence" + Refs.subNames[i]);
 		}
 	}
 

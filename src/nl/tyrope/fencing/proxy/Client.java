@@ -10,10 +10,8 @@ public class Client extends Common {
 
 	@Override
 	public void registerRenderers(FenceBlock fenceBlock) {
-		int id = RenderingRegistry.getNextAvailableRenderId();
-		ISimpleBlockRenderingHandler fenceBlockRenderer = new FenceBlockRenderer(
-				id);
-		fenceBlock.renderId = id;
+		ISimpleBlockRenderingHandler fenceBlockRenderer = new FenceBlockRenderer();
+		fenceBlock.renderId = fenceBlockRenderer.getRenderId();
 		RenderingRegistry.registerBlockHandler(fenceBlock.getRenderType(),
 				fenceBlockRenderer);
 	}

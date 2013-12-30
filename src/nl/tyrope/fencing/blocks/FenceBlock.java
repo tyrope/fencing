@@ -66,7 +66,8 @@ public class FenceBlock extends BlockContainer {
 	public void registerIcons(IconRegister iconRegistry) {
 		textures = new Icon[4];
 		for (int i = 0; i < 4; i++) {
-			textures[i] = iconRegistry.registerIcon(Refs.MODID + ":fence" + i);
+			textures[i] = iconRegistry.registerIcon(Refs.MODID + ":fence"
+					+ Refs.subNames[i]);
 		}
 	}
 
