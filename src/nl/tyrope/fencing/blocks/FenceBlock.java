@@ -5,28 +5,69 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import nl.tyrope.fencing.Refs;
 import nl.tyrope.fencing.Refs.MetaValues;
-import nl.tyrope.fencing.tileEntities.FenceEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class FenceBlock extends BlockContainer {
 
+	public int renderId;
+	Icon[] textures;
+
 	public FenceBlock(int id) {
 		super(id, Material.wood);
 		setUnlocalizedName("fenceBlock");
+		setCreativeTab(CreativeTabs.tabDecorations);
 
 		setStepSound(Block.soundWoodFootstep);
-		setHardness(1.2F);
-		setBlockBounds(0.0F, 0.0F, 0.4375F, 1F, 1F, 0.5625F);
+		setHardness(1.2f);
 
-		setCreativeTab(CreativeTabs.tabDecorations);
+		// TODO Change bounds depending on direction... Somehow.
+		setBlockBounds(0.4375f, 0.0f, 0.0f, 0.5625f, 1f, 1f); // East/West
+	}
+
+	public int getRenderType() {
+		return renderId;
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World world) {
+		return null;
+	}
+
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
+
+	// Icon Rendering
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Icon getIcon(int side, int meta) {
+		return textures[meta];
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister iconRegistry) {
+		textures = new Icon[4];
+		for (int i = 0; i < 4; i++) {
+			textures[i] = iconRegistry.registerIcon(Refs.MODID + ":fence" + i);
+		}
 	}
 
 	// Make sure you give the proper block when you break it.
@@ -43,41 +84,6 @@ public class FenceBlock extends BlockContainer {
 			stack = new ItemStack(this, 1, ix);
 			subItems.add(stack);
 		}
-	}
-
-	// Make sure you set this as your TileEntity class relevant for the block!
-	@Override
-	public TileEntity createNewTileEntity(World world) {
-		return new FenceEntity();
-	}
-
-	// You don't want the normal render type, or it wont render properly.
-	@Override
-	public int getRenderType() {
-		return -1;
-	}
-
-	// It's not an opaque cube, so you need this.
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	// It's not a normal block, so you need this too.
-	public boolean renderAsNormalBlock() {
-		return false;
-	}
-
-	// Block Update Detection
-	@Override
-	public void onBlockAdded(World world, int x, int y, int z) {
-		((FenceEntity) world.getBlockTileEntity(x, y, z)).blockUpdate();
-	}
-
-	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z,
-			int blockID) {
-		((FenceEntity) world.getBlockTileEntity(x, y, z)).blockUpdate();
 	}
 
 	// Effects of touching the fence.

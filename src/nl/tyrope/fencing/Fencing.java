@@ -10,7 +10,6 @@ import nl.tyrope.fencing.blocks.FenceBlock;
 import nl.tyrope.fencing.items.FenceBlockItem;
 import nl.tyrope.fencing.items.FencePoleItem;
 import nl.tyrope.fencing.proxy.Common;
-import nl.tyrope.fencing.tileEntities.FenceEntity;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -31,8 +30,8 @@ public class Fencing {
 	@SidedProxy(clientSide = "nl.tyrope.fencing.proxy.Client", serverSide = "nl.tyrope.fencing.proxy.Common")
 	public static Common proxy;
 
-	public Item fencePole;
-	public Block fenceBlock;
+	public FencePoleItem fencePole;
+	public FenceBlock fenceBlock;
 
 	/**
 	 * This is code that is executed prior to your mod being initialized into of
@@ -72,7 +71,6 @@ public class Fencing {
 		// register block & TE
 		GameRegistry.registerBlock(fenceBlock, FenceBlockItem.class,
 				"FenceBlockItem");
-		GameRegistry.registerTileEntity(FenceEntity.class, "fenceBlock");
 
 		GameRegistry.addRecipe(new ItemStack(fenceBlock, 1, 0), "xyx", 'x',
 				new ItemStack(fencePole), 'y', new ItemStack(Item.silk));
@@ -86,7 +84,7 @@ public class Fencing {
 				MetaValues.FenceBarbed), "xyx", 'x', new ItemStack(fencePole),
 				'y', new ItemStack(Block.fenceIron));
 
-		proxy.registerRenderers();
+		proxy.registerRenderers(fenceBlock);
 	}
 
 	/**
