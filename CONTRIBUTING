@@ -1,0 +1,19 @@
+How to contribute
+=================
+
+Fencing welcomes patches from third parties. There are always things that can be improved, and we can't always do all of them ourselves. We love it when people help out.
+
+
+Submit Issues
+-------------
+It's very important to us that we know when our code is failing. As such, we greatly appreciate when users submit tickets on the GitHub issue tracker. Be sure to describe your issue clearly and concisely. You should include the version you're using in your reports; This can be found in the minecraft mods menu if you downloaded a compiled version. If you run straight from source, please use the commit (and repo, if not Tyrope/fencing) hash.
+
+Commit Code
+-----------
+We prefer code to be submitted through GitHub pull requests. We do require that code submitted to the project be licensed under the GNU Public Licence v3, the text of which was distributed with the source code.
+
+In order to make it easier for us to review and merge your code, it's important to write good commits, and good commit messages. Below are some things you should do when you want to submit code. These aren't hard and fast rules; we may still consider code that doesn't meet all of them. But doing the stuff below will make our lives easier, and by extension make us more likely to include your changes.
+
+* Commits should focus on one thing at a time. Do include whatever you need to make your change work, but avoid putting unrelated changes in the same commit. Preferably, one change in functionality should be in exactly one commit.
+* Test your code before you commit. We don't have a formal testing plan in place, but you should make sure your code works as promised before you commit.
+* Make your commit messages clear and explicative.
