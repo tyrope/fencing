@@ -39,9 +39,27 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		Tessellator tess = Tessellator.instance;
 		tess.addTranslation(x, y, z);
 
-		int type = 0; // TODO Determine type by neighbor blocks
+		int type = -1; // TODO Determine type by neighbor blocks
 
 		switch (type) {
+		case -1:
+			// Debug, render ALL THE THINGS.
+			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
+					ForgeDirection.NORTH);
+			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
+					ForgeDirection.SOUTH);
+			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
+					ForgeDirection.EAST);
+			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
+					ForgeDirection.WEST);
+			renderStraightWires(tess, u, v, U, v + dv * 2, ForgeDirection.EAST);
+			renderStraightWires(tess, u, v, U, v + dv * 2, ForgeDirection.NORTH);
+			if (meta == Refs.MetaValues.FenceBarbed) {
+				renderStraightSpikes(tess, u, v, U, v + dv * 2,
+						ForgeDirection.NORTH);
+				renderStraightSpikes(tess, u, v, U, v + dv * 2,
+						ForgeDirection.EAST);
+			}
 		case 0:
 			// Straight N/S
 			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
@@ -235,40 +253,61 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 	private void renderStraightWires(Tessellator t, float u, float v, float U,
 			float V, ForgeDirection dir) {
 
+		float wireTop = 0.8125f, wireBottom = 0.75f, xMin = 0, xMax = 0, zMin = 0, zMax = 0;
+
 		if (dir == ForgeDirection.NORTH || dir == ForgeDirection.SOUTH) {
-
+			xMin = 0.46875f;
+			xMax = 0.53125f;
+			zMin = 0.125f;
+			zMax = 0.875f;
 		} else if (dir == ForgeDirection.EAST || dir == ForgeDirection.WEST) {
-
+			xMin = 0.125f;
+			xMax = 0.875f;
+			zMin = 0.46875f;
+			zMax = 0.53125f;
 		} else {
 			// up and down are not supported... (yet??)
 			return;
 		}
 
-		float wireTop = 0.8125f, wireBottom = 0.75f;
 		for (int i = 0; i < 3; i++) {
 			// Top
-			t.addVertexWithUV(0.46875f, wireTop, 0.875f, u, v);
-			t.addVertexWithUV(0.53125f, wireTop, 0.875f, u, V);
-			t.addVertexWithUV(0.53125f, wireTop, 0.125f, U, V);
-			t.addVertexWithUV(0.46875f, wireTop, 0.125f, U, v);
+			t.addVertexWithUV(xMin, wireTop, zMax, u, v);
+			t.addVertexWithUV(xMax, wireTop, zMax, u, V);
+			t.addVertexWithUV(xMax, wireTop, zMin, U, V);
+			t.addVertexWithUV(xMin, wireTop, zMin, U, v);
 
 			// Bottom
-			t.addVertexWithUV(0.46875f, wireBottom, 0.125f, u, v);
-			t.addVertexWithUV(0.53125f, wireBottom, 0.125f, u, V);
-			t.addVertexWithUV(0.53125f, wireBottom, 0.875f, U, V);
-			t.addVertexWithUV(0.46875f, wireBottom, 0.875f, U, v);
+			t.addVertexWithUV(xMin, wireBottom, zMin, u, v);
+			t.addVertexWithUV(xMax, wireBottom, zMin, u, V);
+			t.addVertexWithUV(xMax, wireBottom, zMax, U, V);
+			t.addVertexWithUV(xMin, wireBottom, zMax, U, v);
 
 			// Front
-			t.addVertexWithUV(0.46875f, wireBottom, 0.875f, u, v);
-			t.addVertexWithUV(0.46875f, wireTop, 0.875f, u, V);
-			t.addVertexWithUV(0.46875f, wireTop, 0.125f, U, V);
-			t.addVertexWithUV(0.46875f, wireBottom, 0.125f, U, v);
+			if (dir == ForgeDirection.NORTH || dir == ForgeDirection.SOUTH) {
+				t.addVertexWithUV(xMin, wireBottom, zMax, u, v);
+				t.addVertexWithUV(xMin, wireTop, zMax, u, V);
+				t.addVertexWithUV(xMin, wireTop, zMin, U, V);
+				t.addVertexWithUV(xMin, wireBottom, zMin, U, v);
+			} else if (dir == ForgeDirection.EAST || dir == ForgeDirection.WEST) {
+				t.addVertexWithUV(xMin, wireBottom, zMin, u, v);
+				t.addVertexWithUV(xMin, wireTop, zMin, u, V);
+				t.addVertexWithUV(xMax, wireTop, zMin, U, V);
+				t.addVertexWithUV(xMax, wireBottom, zMin, U, v);
+			}
 
 			// Back
-			t.addVertexWithUV(0.53125f, wireBottom, 0.125f, u, v);
-			t.addVertexWithUV(0.53125f, wireTop, 0.125f, u, V);
-			t.addVertexWithUV(0.53125f, wireTop, 0.875f, U, V);
-			t.addVertexWithUV(0.53125f, wireBottom, 0.875f, U, v);
+			if (dir == ForgeDirection.NORTH || dir == ForgeDirection.SOUTH) {
+				t.addVertexWithUV(xMax, wireBottom, zMin, u, v);
+				t.addVertexWithUV(xMax, wireTop, zMin, u, V);
+				t.addVertexWithUV(xMax, wireTop, zMax, U, V);
+				t.addVertexWithUV(xMax, wireBottom, zMax, U, v);
+			} else if (dir == ForgeDirection.EAST || dir == ForgeDirection.WEST) {
+				t.addVertexWithUV(xMax, wireBottom, zMax, u, v);
+				t.addVertexWithUV(xMax, wireTop, zMax, u, V);
+				t.addVertexWithUV(xMin, wireTop, zMax, U, V);
+				t.addVertexWithUV(xMin, wireBottom, zMax, U, v);
+			}
 
 			wireTop = wireTop - 0.1875f;
 			wireBottom = wireBottom - 0.1875f;
@@ -277,6 +316,7 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 
 	private void renderStraightSpikes(Tessellator t, float u, float v, float U,
 			float V, ForgeDirection dir) {
+
 		/* Top Wire, Center Spike (top) */
 		// Top
 		t.addVertexWithUV(0.46875f, 0.875f, 0.53125f, u, v);
