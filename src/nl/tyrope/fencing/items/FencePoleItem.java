@@ -13,6 +13,7 @@ public class FencePoleItem extends Item {
 		setUnlocalizedName("fencePole");
 		setCreativeTab(CreativeTabs.tabMaterials);
 		setTextureName(Refs.MODID + ":fencePole");
-	}
 
+		Refs.PoleID = this.itemID; // Just in case it gets shifted.
+	}
 }

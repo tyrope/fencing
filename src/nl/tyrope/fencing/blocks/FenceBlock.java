@@ -12,9 +12,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import nl.tyrope.fencing.Refs;
 import nl.tyrope.fencing.Refs.MetaValues;
+import nl.tyrope.fencing.renderer.FenceBlockRenderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -31,16 +33,86 @@ public class FenceBlock extends BlockContainer {
 		setStepSound(Block.soundWoodFootstep);
 		setHardness(1.2f);
 
+		Refs.FenceID = this.blockID; // Just in case it gets shifted.
 	}
 
 	@Override
-	public void onBlockAdded(World world, int x, int y, int z) {
-		// TODO Change bounds depending on neighbors.
-		// setBlockBounds(0.4375f, 0.0f, 0.0f, 0.5625f, 1f, 1f); // North/South
+	public void setBlockBoundsBasedOnState(IBlockAccess iba, int x, int y, int z) {
+		// NESW
+		boolean[] connect = new boolean[] {
+				this.canConnectTo(iba, x, y, z - 1),
+				this.canConnectTo(iba, x + 1, y, z),
+				this.canConnectTo(iba, x, y, z + 1),
+				this.canConnectTo(iba, x - 1, y, z) };
+
+		int cc = 0;
+		for (boolean b : connect) {
+			if (b) {
+				cc++;
+			}
+		}
+
+		float f1 = 0.4375f, f2 = 0.5625f;
+		float xMin = 0f, zMin = 0f, xMax = 1f, zMax = 1f;
+
+		if (cc == 3) {
+			// T
+			if (!connect[0]) {
+				// No north
+				zMin = f1;
+			} else if (!connect[1]) {
+				// No east
+				xMax = f2;
+			} else if (!connect[2]) {
+				// No south
+				zMax = f2;
+			} else if (!connect[3]) {
+				// No east
+				xMin = f1;
+			}
+		} else if (cc == 2) {
+			// Straight... or corner.
+			if (!connect[0]) {
+				// No north
+				zMin = f1;
+			}
+			if (!connect[1]) {
+				// No east
+				xMax = f2;
+			}
+			if (!connect[2]) {
+				// No south
+				zMax = f2;
+			}
+			if (!connect[3]) {
+				// No east
+				xMin = f1;
+			}
+		} else if (cc == 1) {
+			// Straight.
+			if (connect[0] || connect[2]) {
+				// N/S
+				xMin = f1;
+				xMax = f2;
+			} else {
+				// E/W
+				zMin = f1;
+				zMax = f2;
+			}
+		} // if it's 0 or 4 it's an X and should keep the full bounding box.
+		this.setBlockBounds(xMin, 0f, zMin, xMax, 0.95f, zMax);
 	}
 
-	public void onNeighborBlockChange(World world, int x, int y, int z, int ID) {
-		// TODO Change bounds to fit new neighbors.
+	private boolean canConnectTo(IBlockAccess iba, int x, int y, int z) {
+		int BlockID = iba.getBlockId(x, y, z);
+		if (iba.isBlockNormalCube(x, y, z)) {
+			// We'll connect against full 1x1x1 blocks.
+			return true;
+		} else if (BlockID == this.blockID) {
+			// Of course we connect to our own.
+			return true;
+		}
+		return false;
 	}
 
 	public int getRenderType() {

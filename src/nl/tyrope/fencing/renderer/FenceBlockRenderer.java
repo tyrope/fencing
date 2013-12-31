@@ -36,71 +36,46 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		Tessellator tess = Tessellator.instance;
 		tess.addTranslation(x, y, z);
 
-		int type = -1; // TODO Determine type by neighbor blocks
+		int type = getRenderType(block);
 
 		switch (type) {
-		case -1: // DEBUG render ALL THE THINGS.
-			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
-					ForgeDirection.NORTH, ForgeDirection.SOUTH,
-					ForgeDirection.EAST, ForgeDirection.WEST });
-			renderWires(tess, u, v, du, dv, new ForgeDirection[][] {
-					new ForgeDirection[] { ForgeDirection.NORTH,
-							ForgeDirection.SOUTH },
-					new ForgeDirection[] { ForgeDirection.EAST,
-							ForgeDirection.WEST },
-					new ForgeDirection[] { ForgeDirection.NORTH,
-							ForgeDirection.EAST },
-					new ForgeDirection[] { ForgeDirection.NORTH,
-							ForgeDirection.WEST },
-					new ForgeDirection[] { ForgeDirection.SOUTH,
-							ForgeDirection.EAST },
-					new ForgeDirection[] { ForgeDirection.SOUTH,
-							ForgeDirection.WEST } });
-			break;
-		case 0:
-			// Straight N/S
+		case 0: // Straight N/S
 			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.NORTH, ForgeDirection.SOUTH });
 			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.NORTH, ForgeDirection.SOUTH });
 			break;
-		case 1:
-			// Straight E/W
+		case 1: // Straight E/W
 			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.EAST, ForgeDirection.WEST });
 			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.EAST, ForgeDirection.WEST });
 			break;
-		case 2:
-			// corner N/E
+		case 2: // corner N/E
 			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.NORTH, ForgeDirection.EAST });
 			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.NORTH, ForgeDirection.EAST });
 			break;
-		case 3:
-			// corner N/W
+		case 3: // corner N/W
 			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.NORTH, ForgeDirection.WEST });
 			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.NORTH, ForgeDirection.WEST });
 			break;
-		case 4:
-			// corner S/E
+		case 4: // corner S/E
 			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.SOUTH, ForgeDirection.EAST });
 			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.SOUTH, ForgeDirection.EAST });
 			break;
-		case 5:
-			// corner S/W
+		case 5: // corner S/W
 			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.SOUTH, ForgeDirection.WEST });
 			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.SOUTH, ForgeDirection.WEST });
 			break;
-		case 6:
-			// T-section NEW
+		case 6: // T-section NEW
 			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.NORTH, ForgeDirection.EAST,
 					ForgeDirection.WEST });
@@ -112,8 +87,7 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 					new ForgeDirection[] { ForgeDirection.NORTH,
 							ForgeDirection.WEST } });
 			break;
-		case 7:
-			// T-section NES
+		case 7: // T-section NES
 			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.NORTH, ForgeDirection.SOUTH,
 					ForgeDirection.EAST });
@@ -125,8 +99,7 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 					new ForgeDirection[] { ForgeDirection.SOUTH,
 							ForgeDirection.EAST } });
 			break;
-		case 8:
-			// T-section ESW
+		case 8: // T-section ESW
 			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.SOUTH, ForgeDirection.EAST,
 					ForgeDirection.WEST });
@@ -138,8 +111,7 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 					new ForgeDirection[] { ForgeDirection.SOUTH,
 							ForgeDirection.WEST } });
 			break;
-		case 9:
-			// T-section NSW
+		case 9: // T-section NSW
 			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.NORTH, ForgeDirection.SOUTH,
 					ForgeDirection.WEST });
@@ -151,19 +123,86 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 					new ForgeDirection[] { ForgeDirection.SOUTH,
 							ForgeDirection.WEST } });
 			break;
-		case 10:
-			// X-section
+		case 10: // X-section
 			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.NORTH, ForgeDirection.SOUTH,
 					ForgeDirection.EAST, ForgeDirection.WEST });
+			renderWires(tess, u, v, du, dv, new ForgeDirection[][] {
+					new ForgeDirection[] { ForgeDirection.NORTH,
+							ForgeDirection.SOUTH },
+					new ForgeDirection[] { ForgeDirection.EAST,
+							ForgeDirection.WEST } });
+			break;
 		default:
 			System.out
-					.println("[Fencing]EXCEPTION! Unknown rendering direction of fence on position ["
-							+ x + "," + y + "," + z + "].");
+					.println(String
+							.format("[Fencing]EXCEPTION! Unknown rendering direction %s of fence on position [%s,%s,%s].",
+									type, x, y, z));
 			break;
 		}
 		tess.addTranslation(-x, -y, -z);
 		return true;
+	}
+
+	private int getRenderType(Block block) {
+		double xMin = block.getBlockBoundsMinX();
+		double xMax = block.getBlockBoundsMaxX();
+		double zMin = block.getBlockBoundsMinZ();
+		double zMax = block.getBlockBoundsMaxZ();
+		int cc = 0; // Connection Count
+
+		// Count the amount of connections.
+		if (xMin == 0) {
+			cc++;
+		}
+		if (zMin == 0) {
+			cc++;
+		}
+		if (xMax == 1) {
+			cc++;
+		}
+		if (zMax == 1) {
+			cc++;
+		}
+
+		if (cc == 2) {
+			if (zMin == 0 && zMax == 1) {
+				// 0 Straight N/S
+				return 0;
+			} else if (xMin == 0 && xMax == 1) {
+				// 1 Straight E/W
+				return 1;
+			} else if (xMin == 0 && zMin == 0) {
+				// 2 corner N/E
+				return 2;
+			} else if (xMax == 1 && zMin == 0) {
+				// 3 corner N/W
+				return 3;
+			} else if (xMin == 0 && zMax == 1) {
+				// 4 corner S/E
+				return 4;
+			} else {
+				// 5 corner S/W
+				return 5;
+			}
+		} else if (cc == 3) {
+			if (zMax != 1) {
+				// 6 T-section NEW
+				return 6;
+			} else if (xMax != 1) {
+				// 7 T-section NES
+				return 7;
+			} else if (zMin != 0) {
+				// 8 T-section ESW
+				return 8;
+			} else {
+				// 9 T-section NSW
+				return 9;
+			}
+		} else {
+			// X section.
+			return 10;
+		}
 	}
 
 	/**
