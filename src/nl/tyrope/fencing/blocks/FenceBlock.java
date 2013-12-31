@@ -4,6 +4,9 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockFence;
+import net.minecraft.block.BlockPane;
+import net.minecraft.block.BlockWall;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -103,18 +106,17 @@ public class FenceBlock extends BlockContainer {
 	}
 
 	private boolean canConnectTo(IBlockAccess iba, int x, int y, int z) {
-		int BlockID = iba.getBlockId(x, y, z);
-		if (iba.isBlockNormalCube(x, y, z)) {
+		Block block = Block.blocksList[iba.getBlockId(x, y, z)];
+		if (block == null) {
+			return false;
+		} else if (block.blockMaterial.isOpaque()
+				&& block.renderAsNormalBlock()) {
 			// We'll connect against full 1x1x1 blocks.
 			return true;
-		} else if (BlockID == this.blockID) {
+		} else if (block instanceof FenceBlock || block instanceof BlockFence
+				|| block instanceof BlockPane || block instanceof BlockWall) {
 			// Of course we connect to our own.
-			return true;
-		} else if (BlockID == Block.fence.blockID
-				|| BlockID == Block.fenceIron.blockID
-				|| BlockID == Block.netherFence.blockID
-				|| BlockID == Block.thinGlass.blockID) {
-			// And to vanilla fences, iron bars and glass panes.
+			// And to vanilla fences, iron bars, glass panes and walls.
 			return true;
 		}
 		return false;
