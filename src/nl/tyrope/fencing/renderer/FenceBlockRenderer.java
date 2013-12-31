@@ -39,7 +39,7 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		int type = -1; // TODO Determine type by neighbor blocks
 
 		switch (type) {
-		case -1: // DEBUG, render ALL THE THINGS.
+		case -1: // DEBUG render ALL THE THINGS.
 			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.NORTH, ForgeDirection.SOUTH,
 					ForgeDirection.EAST, ForgeDirection.WEST });
@@ -56,21 +56,6 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 							ForgeDirection.EAST },
 					new ForgeDirection[] { ForgeDirection.SOUTH,
 							ForgeDirection.WEST } });
-			if (meta == Refs.MetaValues.FenceBarbed) {
-				renderSpikes(tess, u, v, du, dv, new ForgeDirection[][] {
-						new ForgeDirection[] { ForgeDirection.NORTH,
-								ForgeDirection.SOUTH },
-						new ForgeDirection[] { ForgeDirection.EAST,
-								ForgeDirection.WEST },
-						new ForgeDirection[] { ForgeDirection.NORTH,
-								ForgeDirection.EAST },
-						new ForgeDirection[] { ForgeDirection.NORTH,
-								ForgeDirection.WEST },
-						new ForgeDirection[] { ForgeDirection.SOUTH,
-								ForgeDirection.EAST },
-						new ForgeDirection[] { ForgeDirection.SOUTH,
-								ForgeDirection.WEST } });
-			}
 			break;
 		case 0:
 			// Straight N/S
@@ -78,10 +63,6 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 					ForgeDirection.NORTH, ForgeDirection.SOUTH });
 			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.NORTH, ForgeDirection.SOUTH });
-			if (meta == Refs.MetaValues.FenceBarbed) {
-				renderSpikes(tess, u, v, du, dv, new ForgeDirection[] {
-						ForgeDirection.NORTH, ForgeDirection.SOUTH });
-			}
 			break;
 		case 1:
 			// Straight E/W
@@ -89,10 +70,6 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 					ForgeDirection.EAST, ForgeDirection.WEST });
 			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.EAST, ForgeDirection.WEST });
-			if (meta == Refs.MetaValues.FenceBarbed) {
-				renderSpikes(tess, u, v, du, dv, new ForgeDirection[] {
-						ForgeDirection.EAST, ForgeDirection.WEST });
-			}
 			break;
 		case 2:
 			// corner N/E
@@ -100,10 +77,6 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 					ForgeDirection.NORTH, ForgeDirection.EAST });
 			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.NORTH, ForgeDirection.EAST });
-			if (meta == Refs.MetaValues.FenceBarbed) {
-				renderSpikes(tess, u, v, du, dv, new ForgeDirection[] {
-						ForgeDirection.NORTH, ForgeDirection.EAST });
-			}
 			break;
 		case 3:
 			// corner N/W
@@ -111,10 +84,6 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 					ForgeDirection.NORTH, ForgeDirection.WEST });
 			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.NORTH, ForgeDirection.WEST });
-			if (meta == Refs.MetaValues.FenceBarbed) {
-				renderSpikes(tess, u, v, du, dv, new ForgeDirection[] {
-						ForgeDirection.NORTH, ForgeDirection.WEST });
-			}
 			break;
 		case 4:
 			// corner S/E
@@ -122,10 +91,6 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 					ForgeDirection.SOUTH, ForgeDirection.EAST });
 			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.SOUTH, ForgeDirection.EAST });
-			if (meta == Refs.MetaValues.FenceBarbed) {
-				renderSpikes(tess, u, v, du, dv, new ForgeDirection[] {
-						ForgeDirection.SOUTH, ForgeDirection.EAST });
-			}
 			break;
 		case 5:
 			// corner S/W
@@ -133,10 +98,6 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 					ForgeDirection.SOUTH, ForgeDirection.WEST });
 			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.SOUTH, ForgeDirection.WEST });
-			if (meta == Refs.MetaValues.FenceBarbed) {
-				renderSpikes(tess, u, v, du, dv, new ForgeDirection[] {
-						ForgeDirection.SOUTH, ForgeDirection.WEST });
-			}
 			break;
 		case 6:
 			// T-section NEW
@@ -144,17 +105,12 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 					ForgeDirection.NORTH, ForgeDirection.EAST,
 					ForgeDirection.WEST });
 			renderWires(tess, u, v, du, dv, new ForgeDirection[][] {
+					new ForgeDirection[] { ForgeDirection.EAST,
+							ForgeDirection.WEST },
 					new ForgeDirection[] { ForgeDirection.NORTH,
 							ForgeDirection.EAST },
 					new ForgeDirection[] { ForgeDirection.NORTH,
 							ForgeDirection.WEST } });
-			if (meta == Refs.MetaValues.FenceBarbed) {
-				renderSpikes(tess, u, v, du, dv, new ForgeDirection[][] {
-						new ForgeDirection[] { ForgeDirection.NORTH,
-								ForgeDirection.EAST },
-						new ForgeDirection[] { ForgeDirection.NORTH,
-								ForgeDirection.WEST } });
-			}
 			break;
 		case 7:
 			// T-section NES
@@ -163,16 +119,11 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 					ForgeDirection.EAST });
 			renderWires(tess, u, v, du, dv, new ForgeDirection[][] {
 					new ForgeDirection[] { ForgeDirection.NORTH,
+							ForgeDirection.SOUTH },
+					new ForgeDirection[] { ForgeDirection.NORTH,
 							ForgeDirection.EAST },
 					new ForgeDirection[] { ForgeDirection.SOUTH,
 							ForgeDirection.EAST } });
-			if (meta == Refs.MetaValues.FenceBarbed) {
-				renderSpikes(tess, u, v, du, dv, new ForgeDirection[][] {
-						new ForgeDirection[] { ForgeDirection.NORTH,
-								ForgeDirection.EAST },
-						new ForgeDirection[] { ForgeDirection.SOUTH,
-								ForgeDirection.EAST } });
-			}
 			break;
 		case 8:
 			// T-section ESW
@@ -180,17 +131,12 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 					ForgeDirection.SOUTH, ForgeDirection.EAST,
 					ForgeDirection.WEST });
 			renderWires(tess, u, v, du, dv, new ForgeDirection[][] {
+					new ForgeDirection[] { ForgeDirection.EAST,
+							ForgeDirection.WEST },
 					new ForgeDirection[] { ForgeDirection.SOUTH,
 							ForgeDirection.EAST },
 					new ForgeDirection[] { ForgeDirection.SOUTH,
 							ForgeDirection.WEST } });
-			if (meta == Refs.MetaValues.FenceBarbed) {
-				renderSpikes(tess, u, v, du, dv, new ForgeDirection[][] {
-						new ForgeDirection[] { ForgeDirection.SOUTH,
-								ForgeDirection.EAST },
-						new ForgeDirection[] { ForgeDirection.SOUTH,
-								ForgeDirection.WEST } });
-			}
 			break;
 		case 9:
 			// T-section NSW
@@ -199,11 +145,11 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 					ForgeDirection.WEST });
 			renderWires(tess, u, v, du, dv, new ForgeDirection[][] {
 					new ForgeDirection[] { ForgeDirection.NORTH,
+							ForgeDirection.SOUTH },
+					new ForgeDirection[] { ForgeDirection.NORTH,
 							ForgeDirection.WEST },
 					new ForgeDirection[] { ForgeDirection.SOUTH,
 							ForgeDirection.WEST } });
-			if (meta == Refs.MetaValues.FenceBarbed) {
-			}
 			break;
 		case 10:
 			// X-section
@@ -265,30 +211,6 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 			float dv, ForgeDirection[][] dirs) {
 		for (ForgeDirection[] dir : dirs) {
 			renderWires(t, u, v, du, dv, dir);
-		}
-	}
-
-	/**
-	 * Render the wires between more than 2 posts.
-	 * 
-	 * @param t
-	 *            an instance of the minecraft tessellator
-	 * @param u
-	 *            lower U bound of the UV map's.
-	 * @param v
-	 *            lower V bound of the UV map.
-	 * @param du
-	 *            U size of 1 pixel on the texture.
-	 * @param dv
-	 *            V size of 1 pixel on the texture.
-	 * @param dirs
-	 *            The directions the wires should run. (Valid: any combination
-	 *            of 2 NORTH/EAST/SOUTH/WEST)
-	 */
-	private void renderSpikes(Tessellator t, float u, float v, float du,
-			float dv, ForgeDirection[][] dirs) {
-		for (ForgeDirection[] dir : dirs) {
-			renderSpikes(t, u, v, du, dv, dir);
 		}
 	}
 
@@ -413,12 +335,12 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 			dir = dirs[i];
 			switch (dir) {
 			case NORTH:
-				loc[i] = new float[] { 0.5f - wireWidth / 2.0f,
-						0.5f + wireWidth / 2.0f, wireWidth, wireWidth };
+				loc[i] = new float[] { 0.5f + wireWidth / 2.0f,
+						0.5f - wireWidth / 2.0f, wireWidth, wireWidth };
 				break;
 			case EAST:
 				loc[i] = new float[] { wireWidth, wireWidth,
-						0.5f - wireWidth / 2.0f, 0.5f + wireWidth / 2.0f };
+						0.5f + wireWidth / 2.0f, 0.5f - wireWidth / 2.0f };
 				break;
 			case SOUTH:
 				loc[i] = new float[] { 0.5f - wireWidth / 2.0f,
@@ -436,318 +358,31 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		for (int i = 0; i < 3; i++) {
 			// Top
 			t.addVertexWithUV(loc[1][1], wireTop, loc[1][2], u, v);
-			t.addVertexWithUV(loc[0][1], wireTop, loc[0][2], u, V);
-			t.addVertexWithUV(loc[0][0], wireTop, loc[0][3], U, V);
+			t.addVertexWithUV(loc[0][0], wireTop, loc[0][3], u, V);
+			t.addVertexWithUV(loc[0][1], wireTop, loc[0][2], U, V);
 			t.addVertexWithUV(loc[1][0], wireTop, loc[1][3], U, v);
+
+			// Bottom
+			t.addVertexWithUV(loc[1][1], wireBottom, loc[1][2], u, v);
+			t.addVertexWithUV(loc[1][0], wireBottom, loc[1][3], u, V);
+			t.addVertexWithUV(loc[0][1], wireBottom, loc[0][2], U, V);
+			t.addVertexWithUV(loc[0][0], wireBottom, loc[0][3], U, v);
+
+			// Front
+			t.addVertexWithUV(loc[1][1], wireBottom, loc[1][2], u, v);
+			t.addVertexWithUV(loc[0][0], wireBottom, loc[0][3], u, V);
+			t.addVertexWithUV(loc[0][0], wireTop, loc[0][3], U, V);
+			t.addVertexWithUV(loc[1][1], wireTop, loc[1][2], U, v);
+
+			// Back
+			t.addVertexWithUV(loc[1][0], wireTop, loc[1][3], u, v);
+			t.addVertexWithUV(loc[0][1], wireTop, loc[0][2], u, V);
+			t.addVertexWithUV(loc[0][1], wireBottom, loc[0][2], U, V);
+			t.addVertexWithUV(loc[1][0], wireBottom, loc[1][3], U, v);
 
 			wireTop = wireTop - 0.1875f;
 			wireBottom = wireBottom - 0.1875f;
 		}
-	}
-
-	/**
-	 * Render the spikes on the wires between 2 fence posts opposite (NS or EW).
-	 * Used for Barbed Wire Fences.
-	 * 
-	 * @param t
-	 *            an instance of the minecraft tessellator
-	 * @param u
-	 *            lower U bound of the UV map's.
-	 * @param v
-	 *            lower V bound of the UV map.
-	 * @param du
-	 *            U size of 1 pixel on the texture.
-	 * @param dv
-	 *            V size of 1 pixel on the texture.
-	 * @param dir
-	 *            The direction the wire should run. (Valid values:
-	 *            NORTH/SOUTH/EAST/WEST.)
-	 */
-	private void renderSpikes(Tessellator t, float u, float v, float du,
-			float dv, ForgeDirection[] dirs) {
-
-		// Prepare texture.
-		float U = u + dv * Refs.textureSize;
-		float V = v + dv * 2;
-
-		/* Top Wire, Center Spike (top) */
-		// Top
-		t.addVertexWithUV(0.46875f, 0.875f, 0.53125f, u, v);
-		t.addVertexWithUV(0.53125f, 0.875f, 0.53125f, u, V);
-		t.addVertexWithUV(0.53125f, 0.875f, 0.46875f, U, V);
-		t.addVertexWithUV(0.46875f, 0.875f, 0.46875f, U, v);
-
-		// Front
-		t.addVertexWithUV(0.46875f, 0.8125f, 0.53125f, u, v);
-		t.addVertexWithUV(0.46875f, 0.875f, 0.53125f, u, V);
-		t.addVertexWithUV(0.46875f, 0.875f, 0.46875f, U, V);
-		t.addVertexWithUV(0.46875f, 0.8125f, 0.46875f, U, v);
-
-		// Back
-		t.addVertexWithUV(0.53125f, 0.8125f, 0.46875f, u, v);
-		t.addVertexWithUV(0.53125f, 0.875f, 0.46875f, u, V);
-		t.addVertexWithUV(0.53125f, 0.875f, 0.53125f, U, V);
-		t.addVertexWithUV(0.53125f, 0.8125f, 0.53125f, U, v);
-
-		// Left
-		t.addVertexWithUV(0.46875f, 0.875f, 0.46875f, u, v);
-		t.addVertexWithUV(0.53125f, 0.875f, 0.46875f, u, V);
-		t.addVertexWithUV(0.53125f, 0.8125f, 0.46875f, U, V);
-		t.addVertexWithUV(0.46875f, 0.8125f, 0.46875f, U, v);
-
-		// Right
-		t.addVertexWithUV(0.46875f, 0.8125f, 0.53125f, u, v);
-		t.addVertexWithUV(0.53125f, 0.8125f, 0.53125f, u, V);
-		t.addVertexWithUV(0.53125f, 0.875f, 0.53125f, U, V);
-		t.addVertexWithUV(0.46875f, 0.875f, 0.53125f, U, v);
-
-		/* Top Wire, Left Spike (bottom) */
-		// Bottom
-		t.addVertexWithUV(0.53125f, 0.6875f, 0.3125f, u, v);
-		t.addVertexWithUV(0.46875f, 0.6875f, 0.3125f, u, V);
-		t.addVertexWithUV(0.46875f, 0.6875f, 0.25f, U, V);
-		t.addVertexWithUV(0.53125f, 0.6875f, 0.25f, U, v);
-
-		// Front
-		t.addVertexWithUV(0.46875f, 0.75f, 0.25f, u, v);
-		t.addVertexWithUV(0.46875f, 0.6875f, 0.25f, u, V);
-		t.addVertexWithUV(0.46875f, 0.6875f, 0.3125f, U, V);
-		t.addVertexWithUV(0.46875f, 0.75f, 0.3125f, U, v);
-
-		// Back
-		t.addVertexWithUV(0.53125f, 0.75f, 0.3125f, u, v);
-		t.addVertexWithUV(0.53125f, 0.6875f, 0.3125f, u, V);
-		t.addVertexWithUV(0.53125f, 0.6875f, 0.25f, U, V);
-		t.addVertexWithUV(0.53125f, 0.75f, 0.25f, U, v);
-
-		// Left
-		t.addVertexWithUV(0.46875f, 0.6875f, 0.3125f, u, v);
-		t.addVertexWithUV(0.53125f, 0.6875f, 0.3125f, u, V);
-		t.addVertexWithUV(0.53125f, 0.75f, 0.3125f, U, V);
-		t.addVertexWithUV(0.46875f, 0.75f, 0.3125f, U, v);
-
-		// Right
-		t.addVertexWithUV(0.46875f, 0.75f, 0.25f, u, v);
-		t.addVertexWithUV(0.53125f, 0.75f, 0.25f, u, V);
-		t.addVertexWithUV(0.53125f, 0.6875f, 0.25f, U, V);
-		t.addVertexWithUV(0.46875f, 0.6875f, 0.25f, U, v);
-
-		/* Top Wire, Right Spike (bottom) */
-		// Bottom
-		t.addVertexWithUV(0.53125f, 0.6875f, 0.6875f, u, v);
-		t.addVertexWithUV(0.46875f, 0.6875f, 0.6875f, u, V);
-		t.addVertexWithUV(0.46875f, 0.6875f, 0.625f, U, V);
-		t.addVertexWithUV(0.53125f, 0.6875f, 0.625f, U, v);
-
-		// Front
-		t.addVertexWithUV(0.46875f, 0.75f, 0.625f, u, v);
-		t.addVertexWithUV(0.46875f, 0.6875f, 0.625f, u, V);
-		t.addVertexWithUV(0.46875f, 0.6875f, 0.6875f, U, V);
-		t.addVertexWithUV(0.46875f, 0.75f, 0.6875f, U, v);
-
-		// Back
-		t.addVertexWithUV(0.53125f, 0.75f, 0.6875f, u, v);
-		t.addVertexWithUV(0.53125f, 0.6875f, 0.6875f, u, V);
-		t.addVertexWithUV(0.53125f, 0.6875f, 0.625f, U, V);
-		t.addVertexWithUV(0.53125f, 0.75f, 0.625f, U, v);
-
-		// Left
-		t.addVertexWithUV(0.46875f, 0.6875f, 0.6875f, u, v);
-		t.addVertexWithUV(0.53125f, 0.6875f, 0.6875f, u, V);
-		t.addVertexWithUV(0.53125f, 0.75f, 0.6875f, U, V);
-		t.addVertexWithUV(0.46875f, 0.75f, 0.6875f, U, v);
-
-		// Right
-		t.addVertexWithUV(0.46875f, 0.75f, 0.625f, u, v);
-		t.addVertexWithUV(0.53125f, 0.75f, 0.625f, u, V);
-		t.addVertexWithUV(0.53125f, 0.6875f, 0.625f, U, V);
-		t.addVertexWithUV(0.46875f, 0.6875f, 0.625f, U, v);
-
-		/* Middle Wire, Center Spike (top) */
-		// Top
-		t.addVertexWithUV(0.46875f, 0.6875f, 0.53125f, u, v);
-		t.addVertexWithUV(0.53125f, 0.6875f, 0.53125f, u, V);
-		t.addVertexWithUV(0.53125f, 0.6875f, 0.46875f, U, V);
-		t.addVertexWithUV(0.46875f, 0.6875f, 0.46875f, U, v);
-
-		// Front
-		t.addVertexWithUV(0.46875f, 0.625f, 0.53125f, u, v);
-		t.addVertexWithUV(0.46875f, 0.6875f, 0.53125f, u, V);
-		t.addVertexWithUV(0.46875f, 0.6875f, 0.46875f, U, V);
-		t.addVertexWithUV(0.46875f, 0.625f, 0.46875f, U, v);
-
-		// Back
-		t.addVertexWithUV(0.53125f, 0.625f, 0.46875f, u, v);
-		t.addVertexWithUV(0.53125f, 0.6875f, 0.46875f, u, V);
-		t.addVertexWithUV(0.53125f, 0.6875f, 0.53125f, U, V);
-		t.addVertexWithUV(0.53125f, 0.625f, 0.53125f, U, v);
-
-		// Left
-		t.addVertexWithUV(0.46875f, 0.6875f, 0.46875f, u, v);
-		t.addVertexWithUV(0.53125f, 0.6875f, 0.46875f, u, V);
-		t.addVertexWithUV(0.53125f, 0.625f, 0.46875f, U, V);
-		t.addVertexWithUV(0.46875f, 0.625f, 0.46875f, U, v);
-
-		// Right
-		t.addVertexWithUV(0.46875f, 0.625f, 0.53125f, u, v);
-		t.addVertexWithUV(0.53125f, 0.625f, 0.53125f, u, V);
-		t.addVertexWithUV(0.53125f, 0.6875f, 0.53125f, U, V);
-		t.addVertexWithUV(0.46875f, 0.6875f, 0.53125f, U, v);
-
-		/* Middle Wire, Left Spike (bottom) */
-		// Bottom
-		t.addVertexWithUV(0.53125f, 0.5f, 0.3125f, u, v);
-		t.addVertexWithUV(0.46875f, 0.5f, 0.3125f, u, V);
-		t.addVertexWithUV(0.46875f, 0.5f, 0.25f, U, V);
-		t.addVertexWithUV(0.53125f, 0.5f, 0.25f, U, v);
-
-		// Front
-		t.addVertexWithUV(0.46875f, 0.5625f, 0.25f, u, v);
-		t.addVertexWithUV(0.46875f, 0.5f, 0.25f, u, V);
-		t.addVertexWithUV(0.46875f, 0.5f, 0.3125f, U, V);
-		t.addVertexWithUV(0.46875f, 0.5625f, 0.3125f, U, v);
-
-		// Back
-		t.addVertexWithUV(0.53125f, 0.5625f, 0.3125f, u, v);
-		t.addVertexWithUV(0.53125f, 0.5f, 0.3125f, u, V);
-		t.addVertexWithUV(0.53125f, 0.5f, 0.25f, U, V);
-		t.addVertexWithUV(0.53125f, 0.5625f, 0.25f, U, v);
-
-		// Left
-		t.addVertexWithUV(0.46875f, 0.5f, 0.3125f, u, v);
-		t.addVertexWithUV(0.53125f, 0.5f, 0.3125f, u, V);
-		t.addVertexWithUV(0.53125f, 0.5625f, 0.3125f, U, V);
-		t.addVertexWithUV(0.46875f, 0.5625f, 0.3125f, U, v);
-
-		// Right
-		t.addVertexWithUV(0.46875f, 0.5625f, 0.25f, u, v);
-		t.addVertexWithUV(0.53125f, 0.5625f, 0.25f, u, V);
-		t.addVertexWithUV(0.53125f, 0.5f, 0.25f, U, V);
-		t.addVertexWithUV(0.46875f, 0.5f, 0.25f, U, v);
-
-		/* Middle Wire, Right Spike (bottom) */
-		// Bottom
-		t.addVertexWithUV(0.53125f, 0.5f, 0.6875f, u, v);
-		t.addVertexWithUV(0.46875f, 0.5f, 0.6875f, u, V);
-		t.addVertexWithUV(0.46875f, 0.5f, 0.625f, U, V);
-		t.addVertexWithUV(0.53125f, 0.5f, 0.625f, U, v);
-
-		// Front
-		t.addVertexWithUV(0.46875f, 0.5625f, 0.625f, u, v);
-		t.addVertexWithUV(0.46875f, 0.5f, 0.625f, u, V);
-		t.addVertexWithUV(0.46875f, 0.5f, 0.6875f, U, V);
-		t.addVertexWithUV(0.46875f, 0.5625f, 0.6875f, U, v);
-
-		// Back
-		t.addVertexWithUV(0.53125f, 0.5625f, 0.6875f, u, v);
-		t.addVertexWithUV(0.53125f, 0.5f, 0.6875f, u, V);
-		t.addVertexWithUV(0.53125f, 0.5f, 0.625f, U, V);
-		t.addVertexWithUV(0.53125f, 0.5625f, 0.625f, U, v);
-
-		// Left
-		t.addVertexWithUV(0.46875f, 0.5f, 0.6875f, u, v);
-		t.addVertexWithUV(0.53125f, 0.5f, 0.6875f, u, V);
-		t.addVertexWithUV(0.53125f, 0.5625f, 0.6875f, U, V);
-		t.addVertexWithUV(0.46875f, 0.5625f, 0.6875f, U, v);
-
-		// Right
-		t.addVertexWithUV(0.46875f, 0.5625f, 0.625f, u, v);
-		t.addVertexWithUV(0.53125f, 0.5625f, 0.625f, u, V);
-		t.addVertexWithUV(0.53125f, 0.5f, 0.625f, U, V);
-		t.addVertexWithUV(0.46875f, 0.5f, 0.625f, U, v);
-
-		/* Bottom Wire, Center Spike (top) */
-		// Top
-		t.addVertexWithUV(0.46875f, 0.5f, 0.53125f, u, v);
-		t.addVertexWithUV(0.53125f, 0.5f, 0.53125f, u, V);
-		t.addVertexWithUV(0.53125f, 0.5f, 0.46875f, U, V);
-		t.addVertexWithUV(0.46875f, 0.5f, 0.46875f, U, v);
-
-		// Front
-		t.addVertexWithUV(0.46875f, 0.4375f, 0.53125f, u, v);
-		t.addVertexWithUV(0.46875f, 0.5f, 0.53125f, u, V);
-		t.addVertexWithUV(0.46875f, 0.5f, 0.46875f, U, V);
-		t.addVertexWithUV(0.46875f, 0.4375f, 0.46875f, U, v);
-
-		// Back
-		t.addVertexWithUV(0.53125f, 0.4375f, 0.46875f, u, v);
-		t.addVertexWithUV(0.53125f, 0.5f, 0.46875f, u, V);
-		t.addVertexWithUV(0.53125f, 0.5f, 0.53125f, U, V);
-		t.addVertexWithUV(0.53125f, 0.4375f, 0.53125f, U, v);
-
-		// Left
-		t.addVertexWithUV(0.46875f, 0.5f, 0.46875f, u, v);
-		t.addVertexWithUV(0.53125f, 0.5f, 0.46875f, u, V);
-		t.addVertexWithUV(0.53125f, 0.4375f, 0.46875f, U, V);
-		t.addVertexWithUV(0.46875f, 0.4375f, 0.46875f, U, v);
-
-		// Right
-		t.addVertexWithUV(0.46875f, 0.4375f, 0.53125f, u, v);
-		t.addVertexWithUV(0.53125f, 0.4375f, 0.53125f, u, V);
-		t.addVertexWithUV(0.53125f, 0.5f, 0.53125f, U, V);
-		t.addVertexWithUV(0.46875f, 0.5f, 0.53125f, U, v);
-
-		/* Bottom Wire, Left Spike (bottom) */
-		// Bottom
-		t.addVertexWithUV(0.53125f, 0.3125f, 0.3125f, u, v);
-		t.addVertexWithUV(0.46875f, 0.3125f, 0.3125f, u, V);
-		t.addVertexWithUV(0.46875f, 0.3125f, 0.25f, U, V);
-		t.addVertexWithUV(0.53125f, 0.3125f, 0.25f, U, v);
-
-		// Front
-		t.addVertexWithUV(0.46875f, 0.375f, 0.25f, u, v);
-		t.addVertexWithUV(0.46875f, 0.3125f, 0.25f, u, V);
-		t.addVertexWithUV(0.46875f, 0.3125f, 0.3125f, U, V);
-		t.addVertexWithUV(0.46875f, 0.375f, 0.3125f, U, v);
-
-		// Back
-		t.addVertexWithUV(0.53125f, 0.375f, 0.3125f, u, v);
-		t.addVertexWithUV(0.53125f, 0.3125f, 0.3125f, u, V);
-		t.addVertexWithUV(0.53125f, 0.3125f, 0.25f, U, V);
-		t.addVertexWithUV(0.53125f, 0.375f, 0.25f, U, v);
-
-		// Left
-		t.addVertexWithUV(0.46875f, 0.3125f, 0.3125f, u, v);
-		t.addVertexWithUV(0.53125f, 0.3125f, 0.3125f, u, V);
-		t.addVertexWithUV(0.53125f, 0.375f, 0.3125f, U, V);
-		t.addVertexWithUV(0.46875f, 0.375f, 0.3125f, U, v);
-
-		// Right
-		t.addVertexWithUV(0.46875f, 0.375f, 0.25f, u, v);
-		t.addVertexWithUV(0.53125f, 0.375f, 0.25f, u, V);
-		t.addVertexWithUV(0.53125f, 0.3125f, 0.25f, U, V);
-		t.addVertexWithUV(0.46875f, 0.3125f, 0.25f, U, v);
-
-		/* Bottom Wire, Right Spike (bottom) */
-		// Bottom
-		t.addVertexWithUV(0.53125f, 0.3125f, 0.6875f, u, v);
-		t.addVertexWithUV(0.46875f, 0.3125f, 0.6875f, u, V);
-		t.addVertexWithUV(0.46875f, 0.3125f, 0.625f, U, V);
-		t.addVertexWithUV(0.53125f, 0.3125f, 0.625f, U, v);
-
-		// Front
-		t.addVertexWithUV(0.46875f, 0.375f, 0.625f, u, v);
-		t.addVertexWithUV(0.46875f, 0.3125f, 0.625f, u, V);
-		t.addVertexWithUV(0.46875f, 0.3125f, 0.6875f, U, V);
-		t.addVertexWithUV(0.46875f, 0.375f, 0.6875f, U, v);
-
-		// Back
-		t.addVertexWithUV(0.53125f, 0.375f, 0.6875f, u, v);
-		t.addVertexWithUV(0.53125f, 0.3125f, 0.6875f, u, V);
-		t.addVertexWithUV(0.53125f, 0.3125f, 0.625f, U, V);
-		t.addVertexWithUV(0.53125f, 0.375f, 0.625f, U, v);
-
-		// Left
-		t.addVertexWithUV(0.46875f, 0.3125f, 0.6875f, u, v);
-		t.addVertexWithUV(0.53125f, 0.3125f, 0.6875f, u, V);
-		t.addVertexWithUV(0.53125f, 0.375f, 0.6875f, U, V);
-		t.addVertexWithUV(0.46875f, 0.375f, 0.6875f, U, v);
-
-		// Right
-		t.addVertexWithUV(0.46875f, 0.375f, 0.625f, u, v);
-		t.addVertexWithUV(0.53125f, 0.375f, 0.625f, u, V);
-		t.addVertexWithUV(0.53125f, 0.3125f, 0.625f, U, V);
-		t.addVertexWithUV(0.46875f, 0.3125f, 0.625f, U, v);
 	}
 
 	@Override

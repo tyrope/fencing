@@ -36,7 +36,7 @@ public class FenceBlock extends BlockContainer {
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
 		// TODO Change bounds depending on neighbors.
-		setBlockBounds(0.4375f, 0.0f, 0.0f, 0.5625f, 1f, 1f); // North/South
+		// setBlockBounds(0.4375f, 0.0f, 0.0f, 0.5625f, 1f, 1f); // North/South
 	}
 
 	public void onNeighborBlockChange(World world, int x, int y, int z, int ID) {
