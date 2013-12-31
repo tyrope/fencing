@@ -1,6 +1,5 @@
 package nl.tyrope.fencing.renderer;
 
-import static org.lwjgl.opengl.GL11.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -28,13 +27,11 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		Icon c = block.getIcon(0, meta);
 		float u = c.getMinU();
 		float v = c.getMinV();
-		float U = c.getMaxU();
-		float V = c.getMaxV();
 
 		// Delta-u and Delta-v is the size of a 'pixel' on the UV map, add a
 		// multiplier of this to u or v to get a pixel count from origin.
-		float du = (U - u) / Refs.textureSize;
-		float dv = (V - v) / Refs.textureSize;
+		float du = (c.getMaxU() - u) / Refs.textureSize;
+		float dv = (c.getMaxV() - v) / Refs.textureSize;
 
 		Tessellator tess = Tessellator.instance;
 		tess.addTranslation(x, y, z);
@@ -42,142 +39,177 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		int type = -1; // TODO Determine type by neighbor blocks
 
 		switch (type) {
-		case -1:
-			// Debug, render ALL THE THINGS.
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.NORTH);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.SOUTH);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.EAST);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.WEST);
-			renderStraightWires(tess, u, v, U, v + dv * 2, ForgeDirection.EAST);
-			renderStraightWires(tess, u, v, U, v + dv * 2, ForgeDirection.NORTH);
+		case -1: // DEBUG, render ALL THE THINGS.
+			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.NORTH, ForgeDirection.SOUTH,
+					ForgeDirection.EAST, ForgeDirection.WEST });
+			renderWires(tess, u, v, du, dv, new ForgeDirection[][] {
+					new ForgeDirection[] { ForgeDirection.NORTH,
+							ForgeDirection.SOUTH },
+					new ForgeDirection[] { ForgeDirection.EAST,
+							ForgeDirection.WEST },
+					new ForgeDirection[] { ForgeDirection.NORTH,
+							ForgeDirection.EAST },
+					new ForgeDirection[] { ForgeDirection.NORTH,
+							ForgeDirection.WEST },
+					new ForgeDirection[] { ForgeDirection.SOUTH,
+							ForgeDirection.EAST },
+					new ForgeDirection[] { ForgeDirection.SOUTH,
+							ForgeDirection.WEST } });
 			if (meta == Refs.MetaValues.FenceBarbed) {
-				renderStraightSpikes(tess, u, v, U, v + dv * 2,
-						ForgeDirection.NORTH);
-				renderStraightSpikes(tess, u, v, U, v + dv * 2,
-						ForgeDirection.EAST);
+				renderSpikes(tess, u, v, du, dv, new ForgeDirection[][] {
+						new ForgeDirection[] { ForgeDirection.NORTH,
+								ForgeDirection.SOUTH },
+						new ForgeDirection[] { ForgeDirection.EAST,
+								ForgeDirection.WEST },
+						new ForgeDirection[] { ForgeDirection.NORTH,
+								ForgeDirection.EAST },
+						new ForgeDirection[] { ForgeDirection.NORTH,
+								ForgeDirection.WEST },
+						new ForgeDirection[] { ForgeDirection.SOUTH,
+								ForgeDirection.EAST },
+						new ForgeDirection[] { ForgeDirection.SOUTH,
+								ForgeDirection.WEST } });
 			}
+			break;
 		case 0:
 			// Straight N/S
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.NORTH);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.SOUTH);
-			renderStraightWires(tess, u, v, U, v + dv * 2, ForgeDirection.NORTH);
+			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.NORTH, ForgeDirection.SOUTH });
+			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.NORTH, ForgeDirection.SOUTH });
 			if (meta == Refs.MetaValues.FenceBarbed) {
-				renderStraightSpikes(tess, u, v, U, v + dv * 2,
-						ForgeDirection.NORTH);
+				renderSpikes(tess, u, v, du, dv, new ForgeDirection[] {
+						ForgeDirection.NORTH, ForgeDirection.SOUTH });
 			}
 			break;
 		case 1:
 			// Straight E/W
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.EAST);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.WEST);
-			renderStraightWires(tess, u, v, U, v + dv * 2, ForgeDirection.EAST);
+			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.EAST, ForgeDirection.WEST });
+			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.EAST, ForgeDirection.WEST });
 			if (meta == Refs.MetaValues.FenceBarbed) {
-				renderStraightSpikes(tess, u, v, U, v + dv * 2,
-						ForgeDirection.EAST);
+				renderSpikes(tess, u, v, du, dv, new ForgeDirection[] {
+						ForgeDirection.EAST, ForgeDirection.WEST });
 			}
 			break;
 		case 2:
 			// corner N/E
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.NORTH);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.EAST);
+			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.NORTH, ForgeDirection.EAST });
+			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.NORTH, ForgeDirection.EAST });
+			if (meta == Refs.MetaValues.FenceBarbed) {
+				renderSpikes(tess, u, v, du, dv, new ForgeDirection[] {
+						ForgeDirection.NORTH, ForgeDirection.EAST });
+			}
 			break;
 		case 3:
 			// corner N/W
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.NORTH);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.WEST);
+			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.NORTH, ForgeDirection.WEST });
+			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.NORTH, ForgeDirection.WEST });
+			if (meta == Refs.MetaValues.FenceBarbed) {
+				renderSpikes(tess, u, v, du, dv, new ForgeDirection[] {
+						ForgeDirection.NORTH, ForgeDirection.WEST });
+			}
 			break;
 		case 4:
 			// corner S/E
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.SOUTH);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.EAST);
+			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.SOUTH, ForgeDirection.EAST });
+			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.SOUTH, ForgeDirection.EAST });
+			if (meta == Refs.MetaValues.FenceBarbed) {
+				renderSpikes(tess, u, v, du, dv, new ForgeDirection[] {
+						ForgeDirection.SOUTH, ForgeDirection.EAST });
+			}
 			break;
 		case 5:
 			// corner S/W
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.SOUTH);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.WEST);
+			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.SOUTH, ForgeDirection.WEST });
+			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.SOUTH, ForgeDirection.WEST });
+			if (meta == Refs.MetaValues.FenceBarbed) {
+				renderSpikes(tess, u, v, du, dv, new ForgeDirection[] {
+						ForgeDirection.SOUTH, ForgeDirection.WEST });
+			}
 			break;
 		case 6:
 			// T-section NEW
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.NORTH);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.EAST);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.WEST);
-			renderStraightWires(tess, u, v, U, v + dv * 2, ForgeDirection.EAST);
+			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.NORTH, ForgeDirection.EAST,
+					ForgeDirection.WEST });
+			renderWires(tess, u, v, du, dv, new ForgeDirection[][] {
+					new ForgeDirection[] { ForgeDirection.NORTH,
+							ForgeDirection.EAST },
+					new ForgeDirection[] { ForgeDirection.NORTH,
+							ForgeDirection.WEST } });
 			if (meta == Refs.MetaValues.FenceBarbed) {
-				renderStraightSpikes(tess, u, v, U, v + dv * 2,
-						ForgeDirection.EAST);
+				renderSpikes(tess, u, v, du, dv, new ForgeDirection[][] {
+						new ForgeDirection[] { ForgeDirection.NORTH,
+								ForgeDirection.EAST },
+						new ForgeDirection[] { ForgeDirection.NORTH,
+								ForgeDirection.WEST } });
 			}
 			break;
 		case 7:
 			// T-section NES
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.NORTH);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.EAST);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.SOUTH);
-			renderStraightWires(tess, u, v, U, v + dv * 2, ForgeDirection.NORTH);
+			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.NORTH, ForgeDirection.SOUTH,
+					ForgeDirection.EAST });
+			renderWires(tess, u, v, du, dv, new ForgeDirection[][] {
+					new ForgeDirection[] { ForgeDirection.NORTH,
+							ForgeDirection.EAST },
+					new ForgeDirection[] { ForgeDirection.SOUTH,
+							ForgeDirection.EAST } });
 			if (meta == Refs.MetaValues.FenceBarbed) {
-				renderStraightSpikes(tess, u, v, U, v + dv * 2,
-						ForgeDirection.NORTH);
+				renderSpikes(tess, u, v, du, dv, new ForgeDirection[][] {
+						new ForgeDirection[] { ForgeDirection.NORTH,
+								ForgeDirection.EAST },
+						new ForgeDirection[] { ForgeDirection.SOUTH,
+								ForgeDirection.EAST } });
 			}
 			break;
 		case 8:
 			// T-section ESW
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.EAST);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.SOUTH);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.WEST);
-			renderStraightWires(tess, u, v, U, v + dv * 2, ForgeDirection.EAST);
+			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.SOUTH, ForgeDirection.EAST,
+					ForgeDirection.WEST });
+			renderWires(tess, u, v, du, dv, new ForgeDirection[][] {
+					new ForgeDirection[] { ForgeDirection.SOUTH,
+							ForgeDirection.EAST },
+					new ForgeDirection[] { ForgeDirection.SOUTH,
+							ForgeDirection.WEST } });
 			if (meta == Refs.MetaValues.FenceBarbed) {
-				renderStraightSpikes(tess, u, v, U, v + dv * 2,
-						ForgeDirection.EAST);
+				renderSpikes(tess, u, v, du, dv, new ForgeDirection[][] {
+						new ForgeDirection[] { ForgeDirection.SOUTH,
+								ForgeDirection.EAST },
+						new ForgeDirection[] { ForgeDirection.SOUTH,
+								ForgeDirection.WEST } });
 			}
 			break;
 		case 9:
 			// T-section NSW
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.NORTH);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.SOUTH);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.WEST);
-			renderStraightWires(tess, u, v, U, v + dv * 2, ForgeDirection.NORTH);
+			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.NORTH, ForgeDirection.SOUTH,
+					ForgeDirection.WEST });
+			renderWires(tess, u, v, du, dv, new ForgeDirection[][] {
+					new ForgeDirection[] { ForgeDirection.NORTH,
+							ForgeDirection.WEST },
+					new ForgeDirection[] { ForgeDirection.SOUTH,
+							ForgeDirection.WEST } });
 			if (meta == Refs.MetaValues.FenceBarbed) {
-				renderStraightSpikes(tess, u, v, U, v + dv * 2,
-						ForgeDirection.NORTH);
 			}
 			break;
 		case 10:
 			// X-section
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.NORTH);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.EAST);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.SOUTH);
-			renderPost(tess, u, v + dv * 2, u + du * 8, v + dv * 14,
-					ForgeDirection.WEST);
+			renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.NORTH, ForgeDirection.SOUTH,
+					ForgeDirection.EAST, ForgeDirection.WEST });
 		default:
 			System.out
 					.println("[Fencing]EXCEPTION! Unknown rendering direction of fence on position ["
@@ -188,10 +220,104 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		return true;
 	}
 
-	private void renderPost(Tessellator t, float u, float v, float U, float V,
-			ForgeDirection dir) {
+	/**
+	 * Render more than 1 fence post.
+	 * 
+	 * @param t
+	 *            an instance of the minecraft tessellator
+	 * @param u
+	 *            lower U bound of the UV map's.
+	 * @param v
+	 *            lower V bound of the UV map.
+	 * @param du
+	 *            U size of 1 pixel on the texture.
+	 * @param dv
+	 *            V size of 1 pixel on the texture.
+	 * @param dirs
+	 *            The directions the posts should face. (Valid:
+	 *            NORTH/EAST/SOUTH/WEST)
+	 */
+	private void renderPosts(Tessellator t, float u, float v, float du,
+			float dv, ForgeDirection[] dirs) {
+		for (ForgeDirection d : dirs) {
+			renderPost(t, u, v, du, dv, d);
+		}
+	}
+
+	/**
+	 * Render the wires between more than 2 posts.
+	 * 
+	 * @param t
+	 *            an instance of the minecraft tessellator
+	 * @param u
+	 *            lower U bound of the UV map's.
+	 * @param v
+	 *            lower V bound of the UV map.
+	 * @param du
+	 *            U size of 1 pixel on the texture.
+	 * @param dv
+	 *            V size of 1 pixel on the texture.
+	 * @param dirs
+	 *            The directions the wires should run. (Valid: any combination
+	 *            of 2 NORTH/EAST/SOUTH/WEST)
+	 */
+	private void renderWires(Tessellator t, float u, float v, float du,
+			float dv, ForgeDirection[][] dirs) {
+		for (ForgeDirection[] dir : dirs) {
+			renderWires(t, u, v, du, dv, dir);
+		}
+	}
+
+	/**
+	 * Render the wires between more than 2 posts.
+	 * 
+	 * @param t
+	 *            an instance of the minecraft tessellator
+	 * @param u
+	 *            lower U bound of the UV map's.
+	 * @param v
+	 *            lower V bound of the UV map.
+	 * @param du
+	 *            U size of 1 pixel on the texture.
+	 * @param dv
+	 *            V size of 1 pixel on the texture.
+	 * @param dirs
+	 *            The directions the wires should run. (Valid: any combination
+	 *            of 2 NORTH/EAST/SOUTH/WEST)
+	 */
+	private void renderSpikes(Tessellator t, float u, float v, float du,
+			float dv, ForgeDirection[][] dirs) {
+		for (ForgeDirection[] dir : dirs) {
+			renderSpikes(t, u, v, du, dv, dir);
+		}
+	}
+
+	/**
+	 * Render a fence post.
+	 * 
+	 * @param t
+	 *            an instance of the minecraft tessellator
+	 * @param u
+	 *            lower U bound of the UV map's.
+	 * @param v
+	 *            lower V bound of the UV map.
+	 * @param du
+	 *            U size of 1 pixel on the texture.
+	 * @param dv
+	 *            V size of 1 pixel on the texture.
+	 * @param dir
+	 *            The direction the posts should face. (Valid:
+	 *            NORTH/EAST/SOUTH/WEST)
+	 */
+	private void renderPost(Tessellator t, float u, float v, float du,
+			float dv, ForgeDirection dir) {
 
 		float postWidth = 0.125f, xMod, zMod;
+
+		// Prepare texture.
+		v = v + dv * 2;
+		float U = u + du * 8;
+		float V = v + dv * 14;
 
 		switch (dir) {
 		case NORTH:
@@ -250,72 +376,94 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		t.addVertexWithUV(xMod, 0, zMod + postWidth, U, v);
 	}
 
-	private void renderStraightWires(Tessellator t, float u, float v, float U,
-			float V, ForgeDirection dir) {
+	/**
+	 * Render the wires between 2 fence posts.
+	 * 
+	 * @param t
+	 *            an instance of the minecraft tessellator
+	 * @param u
+	 *            lower U bound of the UV map's.
+	 * @param v
+	 *            lower V bound of the UV map.
+	 * @param du
+	 *            U size of 1 pixel on the texture.
+	 * @param dv
+	 *            V size of 1 pixel on the texture.
+	 * @param dir
+	 *            The directions the wire should run. (Valid values:
+	 *            NORTH/SOUTH/EAST/WEST.)
+	 */
+	private void renderWires(Tessellator t, float u, float v, float du,
+			float dv, ForgeDirection[] dirs) {
 
-		float wireTop = 0.8125f, wireBottom = 0.75f, xMin = 0, xMax = 0, zMin = 0, zMax = 0;
+		float wireWidth = 0.0625f, wireTop = 0.8125f, wireBottom = 0.75f;
 
-		if (dir == ForgeDirection.NORTH || dir == ForgeDirection.SOUTH) {
-			xMin = 0.46875f;
-			xMax = 0.53125f;
-			zMin = 0.125f;
-			zMax = 0.875f;
-		} else if (dir == ForgeDirection.EAST || dir == ForgeDirection.WEST) {
-			xMin = 0.125f;
-			xMax = 0.875f;
-			zMin = 0.46875f;
-			zMax = 0.53125f;
-		} else {
-			// up and down are not supported... (yet??)
-			return;
+		// Prepare texture.
+		float U = u + du * Refs.textureSize;
+		float V = v + dv * 2;
+
+		float[][] loc = new float[2][4];
+		ForgeDirection dir;
+		for (int i = 0; i < 2; i++) {
+			dir = dirs[i];
+			switch (dir) {
+			case NORTH:
+				loc[i] = new float[] { 0.5f - wireWidth / 2.0f,
+						0.5f + wireWidth / 2.0f, wireWidth, wireWidth };
+				break;
+			case EAST:
+				loc[i] = new float[] { wireWidth, wireWidth,
+						0.5f - wireWidth / 2.0f, 0.5f + wireWidth / 2.0f };
+				break;
+			case SOUTH:
+				loc[i] = new float[] { 0.5f - wireWidth / 2.0f,
+						0.5f + wireWidth / 2.0f, 1 - wireWidth, 1 - wireWidth };
+				break;
+			case WEST:
+				loc[i] = new float[] { 1 - wireWidth, 1 - wireWidth,
+						0.5f - wireWidth / 2.0f, 0.5f + wireWidth / 2.0f };
+				break;
+			default:
+				return;
+			}
 		}
 
 		for (int i = 0; i < 3; i++) {
 			// Top
-			t.addVertexWithUV(xMin, wireTop, zMax, u, v);
-			t.addVertexWithUV(xMax, wireTop, zMax, u, V);
-			t.addVertexWithUV(xMax, wireTop, zMin, U, V);
-			t.addVertexWithUV(xMin, wireTop, zMin, U, v);
-
-			// Bottom
-			t.addVertexWithUV(xMin, wireBottom, zMin, u, v);
-			t.addVertexWithUV(xMax, wireBottom, zMin, u, V);
-			t.addVertexWithUV(xMax, wireBottom, zMax, U, V);
-			t.addVertexWithUV(xMin, wireBottom, zMax, U, v);
-
-			// Front
-			if (dir == ForgeDirection.NORTH || dir == ForgeDirection.SOUTH) {
-				t.addVertexWithUV(xMin, wireBottom, zMax, u, v);
-				t.addVertexWithUV(xMin, wireTop, zMax, u, V);
-				t.addVertexWithUV(xMin, wireTop, zMin, U, V);
-				t.addVertexWithUV(xMin, wireBottom, zMin, U, v);
-			} else if (dir == ForgeDirection.EAST || dir == ForgeDirection.WEST) {
-				t.addVertexWithUV(xMin, wireBottom, zMin, u, v);
-				t.addVertexWithUV(xMin, wireTop, zMin, u, V);
-				t.addVertexWithUV(xMax, wireTop, zMin, U, V);
-				t.addVertexWithUV(xMax, wireBottom, zMin, U, v);
-			}
-
-			// Back
-			if (dir == ForgeDirection.NORTH || dir == ForgeDirection.SOUTH) {
-				t.addVertexWithUV(xMax, wireBottom, zMin, u, v);
-				t.addVertexWithUV(xMax, wireTop, zMin, u, V);
-				t.addVertexWithUV(xMax, wireTop, zMax, U, V);
-				t.addVertexWithUV(xMax, wireBottom, zMax, U, v);
-			} else if (dir == ForgeDirection.EAST || dir == ForgeDirection.WEST) {
-				t.addVertexWithUV(xMax, wireBottom, zMax, u, v);
-				t.addVertexWithUV(xMax, wireTop, zMax, u, V);
-				t.addVertexWithUV(xMin, wireTop, zMax, U, V);
-				t.addVertexWithUV(xMin, wireBottom, zMax, U, v);
-			}
+			t.addVertexWithUV(loc[1][0], wireTop, loc[1][2], u, v);
+			t.addVertexWithUV(loc[0][0], wireTop, loc[0][2], u, V);
+			t.addVertexWithUV(loc[0][1], wireTop, loc[0][3], U, V);
+			t.addVertexWithUV(loc[1][1], wireTop, loc[1][3], U, v);
 
 			wireTop = wireTop - 0.1875f;
 			wireBottom = wireBottom - 0.1875f;
 		}
 	}
 
-	private void renderStraightSpikes(Tessellator t, float u, float v, float U,
-			float V, ForgeDirection dir) {
+	/**
+	 * Render the spikes on the wires between 2 fence posts opposite (NS or EW).
+	 * Used for Barbed Wire Fences.
+	 * 
+	 * @param t
+	 *            an instance of the minecraft tessellator
+	 * @param u
+	 *            lower U bound of the UV map's.
+	 * @param v
+	 *            lower V bound of the UV map.
+	 * @param du
+	 *            U size of 1 pixel on the texture.
+	 * @param dv
+	 *            V size of 1 pixel on the texture.
+	 * @param dir
+	 *            The direction the wire should run. (Valid values:
+	 *            NORTH/SOUTH/EAST/WEST.)
+	 */
+	private void renderSpikes(Tessellator t, float u, float v, float du,
+			float dv, ForgeDirection[] dirs) {
+
+		// Prepare texture.
+		float U = u + dv * Refs.textureSize;
+		float V = v + dv * 2;
 
 		/* Top Wire, Center Spike (top) */
 		// Top
