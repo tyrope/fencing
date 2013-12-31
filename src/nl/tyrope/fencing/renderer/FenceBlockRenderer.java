@@ -435,10 +435,10 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 
 		for (int i = 0; i < 3; i++) {
 			// Top
-			t.addVertexWithUV(loc[1][0], wireTop, loc[1][2], u, v);
-			t.addVertexWithUV(loc[0][0], wireTop, loc[0][2], u, V);
-			t.addVertexWithUV(loc[0][1], wireTop, loc[0][3], U, V);
-			t.addVertexWithUV(loc[1][1], wireTop, loc[1][3], U, v);
+			t.addVertexWithUV(loc[1][1], wireTop, loc[1][2], u, v);
+			t.addVertexWithUV(loc[0][1], wireTop, loc[0][2], u, V);
+			t.addVertexWithUV(loc[0][0], wireTop, loc[0][3], U, V);
+			t.addVertexWithUV(loc[1][0], wireTop, loc[1][3], U, v);
 
 			wireTop = wireTop - 0.1875f;
 			wireBottom = wireBottom - 0.1875f;
