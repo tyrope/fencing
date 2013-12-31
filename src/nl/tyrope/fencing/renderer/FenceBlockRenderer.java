@@ -36,6 +36,7 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		Tessellator tess = Tessellator.instance;
 		tess.addTranslation(x, y, z);
 		tess.setNormal(0, 1, 0);
+		tess.setColorRGBA(255, 255, 255, 255);
 		tess.setBrightness(block.getMixedBrightnessForBlock(world, x, y, z));
 
 		int type = getRenderType(block);
