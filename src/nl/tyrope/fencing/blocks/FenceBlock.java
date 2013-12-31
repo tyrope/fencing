@@ -16,7 +16,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import nl.tyrope.fencing.Refs;
 import nl.tyrope.fencing.Refs.MetaValues;
-import nl.tyrope.fencing.renderer.FenceBlockRenderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -110,6 +109,12 @@ public class FenceBlock extends BlockContainer {
 			return true;
 		} else if (BlockID == this.blockID) {
 			// Of course we connect to our own.
+			return true;
+		} else if (BlockID == Block.fence.blockID
+				|| BlockID == Block.fenceIron.blockID
+				|| BlockID == Block.netherFence.blockID
+				|| BlockID == Block.thinGlass.blockID) {
+			// And to vanilla fences, iron bars and glass panes.
 			return true;
 		}
 		return false;
