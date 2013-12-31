@@ -402,7 +402,12 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		float U = u + du * Refs.textureSize;
 		float V = v + dv * 2;
 
+		/**
+		 * { Start side: { x Min, x Max, z Min, z Max}, End side: {x Min, x Max,
+		 * z Min, z Max} }
+		 */
 		float[][] loc = new float[2][4];
+
 		ForgeDirection dir;
 		for (int i = 0; i < 2; i++) {
 			dir = dirs[i];
