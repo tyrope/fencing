@@ -1,8 +1,7 @@
-[size=5]Fencing[/size]
 [img]https://raw.github.com/tyrope/fencing/master/docs/img/header.png[/img]
 Does exactly what it says on the tin, fence off any area you want!
 
-Items, blocks and crafting recipes:
+[size=5]Items, blocks and crafting recipes[/size]
 [spoiler]
 [list][*]Fence Post
 [img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_post.png[/img]
@@ -25,7 +24,7 @@ Upgrade your string fences with some slime, instant stickyness!
 For those areas you really don't want anybody (or anything) to be near.[/list]
 [/spoiler]
 
-In-world screenshots:
+[size=5]Screenshots[/size]
 [spoiler]
 [img]https://raw.github.com/tyrope/fencing/master/docs/img/inworld_fenceWall.png[/img]
 [img]https://raw.github.com/tyrope/fencing/master/docs/img/inworld_connections.png[/img]
@@ -34,7 +33,7 @@ Due to the blocks being (a very tiny amount under) 1 block high, you need double
 Special animal-containment fences may come in the future, feedback welcome.
 [/spoiler]
 
-Download:
+[size=5]Download[/size]
 Versions are written as such: PublicName (Major.Minor.Bugfix.Build). PublicName is usually Major.Minor.
 [url=https://github.com/tyrope/fencing/releases/download/0.1/fencing-0.1.jar]Version 0.1(0.1.0.1)[/url]
 
