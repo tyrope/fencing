@@ -1,40 +1,42 @@
 [size=5]Fencing[/size]
-[img]https://github.com/tyrope/fencing/blob/master/docs/img/header.png[/img]
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/header.png[/img]
 Does exactly what it says on the tin, fence off any area you want!
 
 Items, blocks and crafting recipes:
 [spoiler]
 [list][*]Fence Post
-[img]https://github.com/tyrope/fencing/blob/master/docs/img/craft_post.png[/img]
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_post.png[/img]
 Reinforced sticks for a sturdy base.
 
 [*]String Fence
-[img]https://github.com/tyrope/fencing/blob/master/docs/img/craft_string.png[/img]
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_string.png[/img]
 Cheap and simple. Keep things out (or in) of your area.
 
 [*]Iron Fence
-[img]https://github.com/tyrope/fencing/blob/master/docs/img/craft_iron.png[/img]
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_iron.png[/img]
 Slightly more expensive, slightly more blast resistant.
 
 [*]Silly String Fence
-[img]https://github.com/tyrope/fencing/blob/master/docs/img/craft_silly.png[/img]
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_silly.png[/img]
 Upgrade your string fences with some slime, instant stickyness!
 
 [*]Barbed Wire Fence
-[img]https://github.com/tyrope/fencing/blob/master/docs/img/craft_barbed.png[/img]
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_barbed.png[/img]
 For those areas you really don't want anybody (or anything) to be near.[/list]
 [/spoiler]
 
 In-world screenshots:
 [spoiler]
-[img]https://github.com/tyrope/fencing/blob/master/docs/img/inworld_fenceWall.png[/img]
-[img]https://github.com/tyrope/fencing/blob/master/docs/img/inworld_connections.png[/img]
-[img]https://github.com/tyrope/fencing/blob/master/docs/img/inworld_animalpen.png[/img]
-(Due to the blocks being (a very tiny amount under) 1 block high, you need double fences for animal pens. Special animal-containment fences may come in the future, feedback welcome.)
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/inworld_fenceWall.png[/img]
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/inworld_connections.png[/img]
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/inworld_animalpen.png[/img]
+Due to the blocks being (a very tiny amount under) 1 block high, you need double fences for animal pens.
+Special animal-containment fences may come in the future, feedback welcome.
 [/spoiler]
 
 Download:
-Not available, yet. But you can compile the source code (linked below)
+Versions are written as such: PublicName (Major.Minor.Bugfix.Build). PublicName is usually Major.Minor.
+[url=https://github.com/tyrope/fencing/releases/download/0.1/fencing-0.1.jar]Version 0.1(0.1.0.1)[/url]
 
 [url=https://github.com/tyrope/fencing/blob/master/LICENSE]Licenced under the GNU General Public License v3.[/url]
 [url=https://github.com/tyrope/fencing]Source Code hosted on github.[/url]
