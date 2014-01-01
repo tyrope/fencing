@@ -68,7 +68,7 @@ public class Fencing {
 
 		MinecraftForge.setBlockHarvestLevel(fenceBlock, "axe", 0);
 
-		// register block & TE
+		// register block
 		GameRegistry.registerBlock(fenceBlock, FenceBlockItem.class,
 				"FenceBlockItem");
 

@@ -278,11 +278,6 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 
 		float postWidth = 0.125f, xMod, zMod;
 
-		// Prepare texture.
-		v = v + dv * 2;
-		float U = u + du * 8;
-		float V = v + dv * 14;
-
 		switch (dir) {
 		case NORTH:
 			xMod = (1 - postWidth) / 2f;
@@ -303,41 +298,58 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		default:
 			return;
 		}
+
+		// Prepare texture for top/bottom.
+		// Position
+		u = u + du * 8;
+		v = v + dv * 24;
+		// Size
+		float U = u + du * 8;
+		float V = v + dv * 8;
+
 		// Top
 		t.addVertexWithUV(xMod, 1, zMod + postWidth, u, v);
 		t.addVertexWithUV(xMod + postWidth, 1, zMod + postWidth, u, V);
 		t.addVertexWithUV(xMod + postWidth, 1, zMod, U, V);
 		t.addVertexWithUV(xMod, 1, zMod, U, v);
 
-		// Front
-		t.addVertexWithUV(xMod + postWidth, 1, zMod + postWidth, u, v);
-		t.addVertexWithUV(xMod + postWidth, 0, zMod + postWidth, u, V);
-		t.addVertexWithUV(xMod + postWidth, 0, zMod, U, V);
-		t.addVertexWithUV(xMod + postWidth, 1, zMod, U, v);
-
-		// Back
-		t.addVertexWithUV(xMod, 0, zMod + postWidth, u, v);
-		t.addVertexWithUV(xMod, 1, zMod + postWidth, u, V);
-		t.addVertexWithUV(xMod, 1, zMod, U, V);
-		t.addVertexWithUV(xMod, 0, zMod, U, v);
-
-		// Out
-		t.addVertexWithUV(xMod, 0, zMod + postWidth, u, v);
-		t.addVertexWithUV(xMod + postWidth, 0, zMod + postWidth, u, V);
-		t.addVertexWithUV(xMod + postWidth, 1, zMod + postWidth, U, V);
-		t.addVertexWithUV(xMod, 1, zMod + postWidth, U, v);
-
-		// In
-		t.addVertexWithUV(xMod, 1, zMod, u, v);
-		t.addVertexWithUV(xMod + postWidth, 1, zMod, u, V);
-		t.addVertexWithUV(xMod + postWidth, 0, zMod, U, V);
-		t.addVertexWithUV(xMod, 0, zMod, U, v);
-
 		// Bottom
 		t.addVertexWithUV(xMod, 0, zMod, u, v);
 		t.addVertexWithUV(xMod + postWidth, 0, zMod, u, V);
 		t.addVertexWithUV(xMod + postWidth, 0, zMod + postWidth, U, V);
 		t.addVertexWithUV(xMod, 0, zMod + postWidth, U, v);
+
+		// Prepare texture for sides.
+		// Position
+		u = u - du * 8;
+		v = v - dv * 20;
+		// Size
+		U = u + du * 8;
+		V = v + dv * (Refs.textureSize - 4);
+
+		// East
+		t.addVertexWithUV(xMod + postWidth, 1, zMod + postWidth, u, v);
+		t.addVertexWithUV(xMod + postWidth, 0, zMod + postWidth, u, V);
+		t.addVertexWithUV(xMod + postWidth, 0, zMod, U, V);
+		t.addVertexWithUV(xMod + postWidth, 1, zMod, U, v);
+
+		// West
+		t.addVertexWithUV(xMod, 0, zMod + postWidth, U, V);
+		t.addVertexWithUV(xMod, 1, zMod + postWidth, u, v);
+		t.addVertexWithUV(xMod, 1, zMod, u, v);
+		t.addVertexWithUV(xMod, 0, zMod, u, V);
+
+		// South
+		t.addVertexWithUV(xMod, 0, zMod + postWidth, u, V);
+		t.addVertexWithUV(xMod + postWidth, 0, zMod + postWidth, U, V);
+		t.addVertexWithUV(xMod + postWidth, 1, zMod + postWidth, U, v);
+		t.addVertexWithUV(xMod, 1, zMod + postWidth, u, v);
+
+		// North
+		t.addVertexWithUV(xMod, 1, zMod, U, v);
+		t.addVertexWithUV(xMod + postWidth, 1, zMod, u, v);
+		t.addVertexWithUV(xMod + postWidth, 0, zMod, u, V);
+		t.addVertexWithUV(xMod, 0, zMod, U, V);
 	}
 
 	/**
@@ -399,28 +411,28 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 
 		for (int i = 0; i < 3; i++) {
 			// Top
-			t.addVertexWithUV(loc[1][1], wireTop, loc[1][2], u, v);
-			t.addVertexWithUV(loc[0][0], wireTop, loc[0][3], u, V);
-			t.addVertexWithUV(loc[0][1], wireTop, loc[0][2], U, V);
-			t.addVertexWithUV(loc[1][0], wireTop, loc[1][3], U, v);
+			t.addVertexWithUV(loc[1][1], wireTop, loc[1][2], u, V);
+			t.addVertexWithUV(loc[0][0], wireTop, loc[0][3], U, V);
+			t.addVertexWithUV(loc[0][1], wireTop, loc[0][2], U, v);
+			t.addVertexWithUV(loc[1][0], wireTop, loc[1][3], u, v);
 
 			// Bottom
-			t.addVertexWithUV(loc[1][1], wireBottom, loc[1][2], u, v);
-			t.addVertexWithUV(loc[1][0], wireBottom, loc[1][3], u, V);
-			t.addVertexWithUV(loc[0][1], wireBottom, loc[0][2], U, V);
-			t.addVertexWithUV(loc[0][0], wireBottom, loc[0][3], U, v);
+			t.addVertexWithUV(loc[1][1], wireBottom, loc[1][2], U, V);
+			t.addVertexWithUV(loc[1][0], wireBottom, loc[1][3], U, v);
+			t.addVertexWithUV(loc[0][1], wireBottom, loc[0][2], u, v);
+			t.addVertexWithUV(loc[0][0], wireBottom, loc[0][3], u, V);
 
 			// Front
-			t.addVertexWithUV(loc[1][1], wireBottom, loc[1][2], u, v);
-			t.addVertexWithUV(loc[0][0], wireBottom, loc[0][3], u, V);
-			t.addVertexWithUV(loc[0][0], wireTop, loc[0][3], U, V);
-			t.addVertexWithUV(loc[1][1], wireTop, loc[1][2], U, v);
+			t.addVertexWithUV(loc[1][1], wireBottom, loc[1][2], u, V);
+			t.addVertexWithUV(loc[0][0], wireBottom, loc[0][3], U, V);
+			t.addVertexWithUV(loc[0][0], wireTop, loc[0][3], U, v);
+			t.addVertexWithUV(loc[1][1], wireTop, loc[1][2], u, v);
 
 			// Back
-			t.addVertexWithUV(loc[1][0], wireTop, loc[1][3], u, v);
-			t.addVertexWithUV(loc[0][1], wireTop, loc[0][2], u, V);
-			t.addVertexWithUV(loc[0][1], wireBottom, loc[0][2], U, V);
-			t.addVertexWithUV(loc[1][0], wireBottom, loc[1][3], U, v);
+			t.addVertexWithUV(loc[1][0], wireTop, loc[1][3], u, V);
+			t.addVertexWithUV(loc[0][1], wireTop, loc[0][2], U, V);
+			t.addVertexWithUV(loc[0][1], wireBottom, loc[0][2], U, v);
+			t.addVertexWithUV(loc[1][0], wireBottom, loc[1][3], u, v);
 
 			wireTop = wireTop - 0.1875f;
 			wireBottom = wireBottom - 0.1875f;
