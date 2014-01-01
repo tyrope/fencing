@@ -39,6 +39,19 @@ public class FenceBlock extends BlockContainer {
 	}
 
 	@Override
+	public float getExplosionResistance(Entity entity, World world, int x,
+			int y, int z, double explosionX, double explosionY,
+			double explosionZ) {
+		int meta = world.getBlockMetadata(x, y, z);
+		if (meta == Refs.MetaValues.FenceIron
+				|| meta == Refs.MetaValues.FenceBarbed) {
+			return 20;
+		} else {
+			return 10;
+		}
+	}
+
+	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess iba, int x, int y, int z) {
 		// NESW
 		boolean[] connect = new boolean[] {
