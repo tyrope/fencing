@@ -1,6 +1,11 @@
 bin/
 *.class
 
+# Build files #
+.gradle/
+build/
+build.gradle
+
 # eclipse files #
 .classpath
 .project
