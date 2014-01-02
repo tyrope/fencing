@@ -1,11 +1,13 @@
 package nl.tyrope.fencing;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import nl.tyrope.fencing.Refs.MetaValues;
+import nl.tyrope.fencing.blocks.BlockPaneEx;
 import nl.tyrope.fencing.blocks.FenceBlock;
 import nl.tyrope.fencing.items.FenceBlockItem;
 import nl.tyrope.fencing.items.FencePoleItem;
@@ -52,6 +54,16 @@ public class Fencing {
 		config.save();
 		fencePole = new FencePoleItem(Refs.PoleID);
 		fenceBlock = new FenceBlock(Refs.FenceID);
+
+		// This might potentially break other mods...
+		int replaceID = Block.fenceIron.blockID;
+		Block.blocksList[replaceID] = null;
+		Block.blocksList[replaceID] = new BlockPaneEx(replaceID, "iron_bars",
+				"iron_bars", Material.iron, true);
+		replaceID = Block.thinGlass.blockID;
+		Block.blocksList[replaceID] = null;
+		Block.blocksList[replaceID] = new BlockPaneEx(Block.thinGlass.blockID,
+				"glass", "glass_pane_top", Material.glass, false);
 	}
 
 	/**
