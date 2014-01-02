@@ -3,7 +3,6 @@ package nl.tyrope.fencing.blocks;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockPane;
 import net.minecraft.block.BlockWall;
@@ -12,7 +11,6 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
@@ -22,7 +20,7 @@ import nl.tyrope.fencing.Refs.MetaValues;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class FenceBlock extends BlockContainer {
+public class FenceBlock extends Block {
 
 	public int renderId;
 	Icon[] textures;
@@ -137,11 +135,6 @@ public class FenceBlock extends BlockContainer {
 
 	public int getRenderType() {
 		return renderId;
-	}
-
-	@Override
-	public TileEntity createNewTileEntity(World world) {
-		return null;
 	}
 
 	@Override
