@@ -1,7 +1,5 @@
 package nl.tyrope.fencing;
 
-import net.minecraft.util.Icon;
-
 public class Refs {
 	// Forge needs these.
 	public final static String MODID = "fencing";
@@ -15,7 +13,6 @@ public class Refs {
 	public final static String[] subNames = { "String", "Iron", "Silly",
 			"Barbed" };
 
-	public static Icon[] FenceItemIcons;
 	public static float textureSize = 32;
 
 	public static class MetaValues {

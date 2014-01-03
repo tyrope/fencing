@@ -45,10 +45,8 @@ public class Fencing {
 		Configuration config = new Configuration(
 				event.getSuggestedConfigurationFile());
 		config.load();
-		Refs.PoleID = config
-				.get(Configuration.CATEGORY_ITEM, "fencePole", 5000).getInt();
-		Refs.FenceID = config.get(Configuration.CATEGORY_BLOCK, "fenceBlock",
-				500).getInt();
+		Refs.PoleID = config.getItem("fencePole", 5000).getInt();
+		Refs.FenceID = config.getBlock("fenceBlock", 500).getInt();
 		config.save();
 		fencePole = new FencePoleItem(Refs.PoleID);
 		fenceBlock = new FenceBlock(Refs.FenceID);

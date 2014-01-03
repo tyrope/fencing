@@ -10,6 +10,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class FenceBlockItem extends ItemBlock {
 
+	public static Icon[] FenceItemIcons;
+
 	public FenceBlockItem(int id) {
 		super(id);
 		setHasSubtypes(true);
@@ -19,9 +21,9 @@ public class FenceBlockItem extends ItemBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister icon) {
-		Refs.FenceItemIcons = new Icon[4];
+		FenceItemIcons = new Icon[4];
 		for (int i = 0; i < 4; i++) {
-			Refs.FenceItemIcons[i] = icon.registerIcon(Refs.MODID
+			FenceItemIcons[i] = icon.registerIcon(Refs.MODID
 					+ ":iconFence" + Refs.subNames[i]);
 		}
 	}
@@ -29,13 +31,13 @@ public class FenceBlockItem extends ItemBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(ItemStack i, int j) {
-		return Refs.FenceItemIcons[i.getItemDamage()];
+		return FenceItemIcons[i.getItemDamage()];
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getIconFromDamage(int dmg) {
-		return Refs.FenceItemIcons[dmg];
+		return FenceItemIcons[dmg];
 	}
 
 	@Override
