@@ -1,3 +1,3 @@
-sed 's/BUILDNO/9/' <build.template >build.gradle
+sed 's/BUILDNO/'+$BUILD_NUMBER+'/' <build.template >build.gradle
 ./gradlew build
 
