@@ -15,3 +15,6 @@ build.gradle
 *.jar
 *.war
 *.ear
+
+# Branch Specific. #
+docs/
