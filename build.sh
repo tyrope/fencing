@@ -1,5 +1,5 @@
 echo "        STATUS: Preparing build file"
-sed 's/BUILDNO/'+$BUILD_NUMBER+'/' <build.template >build.gradle
+sed 's/BUILDNO/'$BUILD_NUMBER'/' <build.template >build.gradle
 
 echo "        STATUS: Building"
 ./gradlew build
