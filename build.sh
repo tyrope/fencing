@@ -1,9 +1,11 @@
-echo "preparing build file."
+echo "        STATUS: Preparing build file"
 sed 's/BUILDNO/'+$BUILD_NUMBER+'/' <build.template >build.gradle
 
-echo "Building"
+echo "        STATUS: Building"
 ./gradlew build
 
-echo "cleanup"
-rm -fr build
+echo "        STATUS: Moving release file"
+mv -uf build/libs/* .
 
+echo "        STATUS: Cleanup"
+rm -fr build
