@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import nl.tyrope.fencing.Refs;
 import nl.tyrope.fencing.Refs.MetaValues;
@@ -70,23 +71,23 @@ public class FenceBlock extends Block {
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x,
 			int y, int z) {
-		return gethitBox(world, x, y, z);
+		return getHitBox(world, x, y, z);
 	}
 
 	// Wireframe
 	@Override
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x,
 			int y, int z) {
-		return gethitBox(world, x, y, z);
+		return getHitBox(world, x, y, z);
 	}
 
-	private AxisAlignedBB gethitBox(World world, int x, int y, int z) {
+	public AxisAlignedBB getHitBox(IBlockAccess iba, int x, int y, int z) {
 		// NESW
 		boolean[] connect = new boolean[] {
-				this.canConnectTo(world, x, y, z - 1),
-				this.canConnectTo(world, x + 1, y, z),
-				this.canConnectTo(world, x, y, z + 1),
-				this.canConnectTo(world, x - 1, y, z) };
+				this.canConnectTo(iba, x, y, z - 1),
+				this.canConnectTo(iba, x + 1, y, z),
+				this.canConnectTo(iba, x, y, z + 1),
+				this.canConnectTo(iba, x - 1, y, z) };
 
 		int cc = 0;
 		for (boolean b : connect) {
@@ -147,8 +148,8 @@ public class FenceBlock extends Block {
 				x + xMax, y + 1, z + zMax);
 	}
 
-	private boolean canConnectTo(World world, int x, int y, int z) {
-		Block block = Block.blocksList[world.getBlockId(x, y, z)];
+	private boolean canConnectTo(IBlockAccess iba, int x, int y, int z) {
+		Block block = Block.blocksList[iba.getBlockId(x, y, z)];
 		if (block == null) {
 			return false;
 		} else if (block.blockMaterial.isOpaque()

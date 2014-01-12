@@ -6,9 +6,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import nl.tyrope.fencing.Refs;
+import nl.tyrope.fencing.blocks.FenceBlock;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
@@ -22,10 +22,10 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 	}
 
 	@Override
-	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
+	public boolean renderWorldBlock(IBlockAccess iba, int x, int y, int z,
 			Block block, int modelId, RenderBlocks renderer) {
 
-		int meta = world.getBlockMetadata(x, y, z);
+		int meta = iba.getBlockMetadata(x, y, z);
 		Icon c = block.getIcon(0, meta);
 		float u = c.getMinU();
 		float v = c.getMinV();
@@ -39,9 +39,9 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		tess.addTranslation(x, y, z);
 		tess.setNormal(0, 1, 0);
 		tess.setColorRGBA(255, 255, 255, 255);
-		tess.setBrightness(block.getMixedBrightnessForBlock(world, x, y, z));
+		tess.setBrightness(block.getMixedBrightnessForBlock(iba, x, y, z));
 
-		int type = getRenderType(world, x, y, z, block);
+		int type = getRenderType(iba, x, y, z, (FenceBlock) block);
 
 		switch (type) {
 		case 0: // Straight N/S
@@ -149,40 +149,41 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		return true;
 	}
 
-	private int getRenderType(IBlockAccess world, int x, int y, int z,
-			Block block) {
-		AxisAlignedBB bb = block.getCollisionBoundingBoxFromPool(world,
-				x, y, z);
+	private int getRenderType(IBlockAccess iba, int x, int y, int z,
+			FenceBlock block) {
+		AxisAlignedBB bb = block.getHitBox(iba, x, y, z);
+		double minX = bb.minX - x, maxX = bb.maxX - x, minZ = bb.minZ - z, maxZ = bb.maxZ
+				- z;
 		int cc = 0; // Connection Count
 
 		// Count the amount of connections.
-		if (bb.minX == 0) {
+		if (minX == 0) {
 			cc++;
 		}
-		if (bb.minZ == 0) {
+		if (minZ == 0) {
 			cc++;
 		}
-		if (bb.maxX == 1) {
+		if (maxX == 1) {
 			cc++;
 		}
-		if (bb.maxZ == 1) {
+		if (maxZ == 1) {
 			cc++;
 		}
 
 		if (cc == 2) {
-			if (bb.minZ == 0 && bb.maxZ == 1) {
+			if (minZ == 0 && maxZ == 1) {
 				// 0 Straight N/S
 				return 0;
-			} else if (bb.minX == 0 && bb.maxX == 1) {
+			} else if (minX == 0 && maxX == 1) {
 				// 1 Straight E/W
 				return 1;
-			} else if (bb.minX == 0 && bb.minZ == 0) {
+			} else if (minX == 0 && minZ == 0) {
 				// 2 corner N/E
 				return 2;
-			} else if (bb.maxX == 1 && bb.minZ == 0) {
+			} else if (maxX == 1 && minZ == 0) {
 				// 3 corner N/W
 				return 3;
-			} else if (bb.minX == 0 && bb.maxZ == 1) {
+			} else if (minX == 0 && maxZ == 1) {
 				// 4 corner S/E
 				return 4;
 			} else {
@@ -190,13 +191,13 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 				return 5;
 			}
 		} else if (cc == 3) {
-			if (bb.maxZ != 1) {
+			if (maxZ != 1) {
 				// 6 T-section NEW
 				return 6;
-			} else if (bb.maxX != 1) {
+			} else if (maxX != 1) {
 				// 7 T-section NES
 				return 7;
-			} else if (bb.minZ != 0) {
+			} else if (minZ != 0) {
 				// 8 T-section ESW
 				return 8;
 			} else {
