@@ -16,17 +16,7 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 
 	public static int renderID = RenderingRegistry.getNextAvailableRenderId();
 
-	@Override
-	public void renderInventoryBlock(Block block, int metadata, int modelID,
-			RenderBlocks renderer) {
-	}
-
-	@Override
-	public boolean renderWorldBlock(IBlockAccess iba, int x, int y, int z,
-			Block block, int modelId, RenderBlocks renderer) {
-
-		int meta = iba.getBlockMetadata(x, y, z);
-		Icon c = block.getIcon(0, meta);
+	private float[] getTexCoords(Icon c) {
 		float u = c.getMinU();
 		float v = c.getMinV();
 
@@ -34,14 +24,45 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		// multiplier of this to u or v to get a pixel count from origin.
 		float du = (c.getMaxU() - u) / Refs.textureSize;
 		float dv = (c.getMaxV() - v) / Refs.textureSize;
+		return new float[] { u, v, du, dv };
+	}
+
+	@Override
+	public void renderInventoryBlock(Block block, int metadata, int modelID,
+			RenderBlocks renderer) {
+
+		Icon c = block.getIcon(0, metadata);
+		float[] tex = getTexCoords(c);
+		float u = tex[0], v = tex[1], du = tex[2], dv = tex[3];
+
+		Tessellator tess = Tessellator.instance;
+		tess.startDrawingQuads();
+		tess.setNormal(0, 1, 0);
+		tess.setColorRGBA(255, 255, 255, 255);
+
+		renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
+				ForgeDirection.NORTH, ForgeDirection.EAST });
+		renderWires(tess, u, v, du, dv, new ForgeDirection[] {
+				ForgeDirection.NORTH, ForgeDirection.EAST });
+
+		tess.draw();
+	}
+
+	@Override
+	public boolean renderWorldBlock(IBlockAccess iba, int x, int y, int z,
+			Block block, int modelId, RenderBlocks renderer) {
+
+		Icon c = block.getIcon(0, iba.getBlockMetadata(x, y, z));
+		float[] tex = getTexCoords(c);
+		float u = tex[0], v = tex[1], du = tex[2], dv = tex[3];
+
+		int type = getRenderType(iba, x, y, z, (FenceBlock) block);
 
 		Tessellator tess = Tessellator.instance;
 		tess.addTranslation(x, y, z);
 		tess.setNormal(0, 1, 0);
 		tess.setColorRGBA(255, 255, 255, 255);
 		tess.setBrightness(block.getMixedBrightnessForBlock(iba, x, y, z));
-
-		int type = getRenderType(iba, x, y, z, (FenceBlock) block);
 
 		switch (type) {
 		case 0: // Straight N/S
