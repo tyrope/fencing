@@ -3,7 +3,6 @@ package nl.tyrope.fencing.blocks;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockPane;
 import net.minecraft.block.BlockWall;
@@ -12,7 +11,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
@@ -22,7 +21,7 @@ import nl.tyrope.fencing.Refs.MetaValues;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class FenceBlock extends BlockContainer {
+public class FenceBlock extends Block {
 
 	public int renderId;
 	Icon[] textures;
@@ -52,7 +51,37 @@ public class FenceBlock extends BlockContainer {
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess iba, int x, int y, int z) {
+	/**
+	 * Adds all intersecting collision boxes to a list. (Be sure to only add boxes to the list if they intersect the
+	 * mask.) Parameters: World, X, Y, Z, mask, list, colliding entity
+	 */
+	public void addCollisionBoxesToList(World par1World, int par2, int par3,
+			int par4, AxisAlignedBB par5AxisAlignedBB, List par6List,
+			Entity par7Entity) {
+		AxisAlignedBB axisalignedbb1 = this.getCollisionBoundingBoxFromPool(
+				par1World, par2, par3, par4);
+
+		if (axisalignedbb1 != null
+				&& par5AxisAlignedBB.intersectsWith(axisalignedbb1)) {
+			par6List.add(axisalignedbb1);
+		}
+	}
+
+	// Hitbox
+	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x,
+			int y, int z) {
+		return getHitBox(world, x, y, z);
+	}
+
+	// Wireframe
+	@Override
+	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x,
+			int y, int z) {
+		return getHitBox(world, x, y, z);
+	}
+
+	public AxisAlignedBB getHitBox(IBlockAccess iba, int x, int y, int z) {
 		// NESW
 		boolean[] connect = new boolean[] {
 				this.canConnectTo(iba, x, y, z - 1),
@@ -68,7 +97,7 @@ public class FenceBlock extends BlockContainer {
 		}
 
 		float f1 = 0.4375f, f2 = 0.5625f;
-		float xMin = 0f, zMin = 0f, xMax = 1f, zMax = 1f;
+		float xMin = 0, zMin = 0, xMax = 1, zMax = 1;
 
 		if (cc == 3) {
 			// T
@@ -115,7 +144,8 @@ public class FenceBlock extends BlockContainer {
 				zMax = f2;
 			}
 		} // if it's 0 or 4 it's an X and should keep the full bounding box.
-		this.setBlockBounds(xMin, 0f, zMin, xMax, 0.95f, zMax);
+		return AxisAlignedBB.getAABBPool().getAABB(x + xMin, y, z + zMin,
+				x + xMax, y + 1, z + zMax);
 	}
 
 	private boolean canConnectTo(IBlockAccess iba, int x, int y, int z) {
@@ -137,11 +167,6 @@ public class FenceBlock extends BlockContainer {
 
 	public int getRenderType() {
 		return renderId;
-	}
-
-	@Override
-	public TileEntity createNewTileEntity(World world) {
-		return null;
 	}
 
 	@Override
@@ -190,8 +215,15 @@ public class FenceBlock extends BlockContainer {
 	// Effects of touching the fence.
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z,
 			Entity entity) {
-		int meta = world.getBlockMetadata(x, y, z);
+		affectEntity(world.getBlockMetadata(x, y, z), entity);
+	}
 
+	// Effects of walking on the fence.
+	public void onEntityWalking(World world, int x, int y, int z, Entity entity) {
+		affectEntity(world.getBlockMetadata(x, y, z), entity);
+	}
+
+	private void affectEntity(int meta, Entity entity) {
 		if (meta == MetaValues.FenceSilly) {
 			entity.motionX *= 0.1D;
 			entity.motionZ *= 0.1D;

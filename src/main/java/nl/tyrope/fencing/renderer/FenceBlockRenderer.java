@@ -3,10 +3,12 @@ package nl.tyrope.fencing.renderer;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.ForgeDirection;
 import nl.tyrope.fencing.Refs;
+import nl.tyrope.fencing.blocks.FenceBlock;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
@@ -14,17 +16,7 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 
 	public static int renderID = RenderingRegistry.getNextAvailableRenderId();
 
-	@Override
-	public void renderInventoryBlock(Block block, int metadata, int modelID,
-			RenderBlocks renderer) {
-	}
-
-	@Override
-	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
-			Block block, int modelId, RenderBlocks renderer) {
-
-		int meta = world.getBlockMetadata(x, y, z);
-		Icon c = block.getIcon(0, meta);
+	private float[] getTexCoords(Icon c) {
 		float u = c.getMinU();
 		float v = c.getMinV();
 
@@ -32,14 +24,45 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		// multiplier of this to u or v to get a pixel count from origin.
 		float du = (c.getMaxU() - u) / Refs.textureSize;
 		float dv = (c.getMaxV() - v) / Refs.textureSize;
+		return new float[] { u, v, du, dv };
+	}
+
+	@Override
+	public void renderInventoryBlock(Block block, int metadata, int modelID,
+			RenderBlocks renderer) {
+
+		Icon c = block.getIcon(0, metadata);
+		float[] tex = getTexCoords(c);
+		float u = tex[0], v = tex[1], du = tex[2], dv = tex[3];
+
+		Tessellator tess = Tessellator.instance;
+		tess.startDrawingQuads();
+		tess.setNormal(0, 1, 0);
+		tess.setColorRGBA(255, 255, 255, 255);
+
+		renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
+				ForgeDirection.NORTH, ForgeDirection.EAST });
+		renderWires(tess, u, v, du, dv, new ForgeDirection[] {
+				ForgeDirection.NORTH, ForgeDirection.EAST });
+
+		tess.draw();
+	}
+
+	@Override
+	public boolean renderWorldBlock(IBlockAccess iba, int x, int y, int z,
+			Block block, int modelId, RenderBlocks renderer) {
+
+		Icon c = block.getIcon(0, iba.getBlockMetadata(x, y, z));
+		float[] tex = getTexCoords(c);
+		float u = tex[0], v = tex[1], du = tex[2], dv = tex[3];
+
+		int type = getRenderType(iba, x, y, z, (FenceBlock) block);
 
 		Tessellator tess = Tessellator.instance;
 		tess.addTranslation(x, y, z);
 		tess.setNormal(0, 1, 0);
 		tess.setColorRGBA(255, 255, 255, 255);
-		tess.setBrightness(block.getMixedBrightnessForBlock(world, x, y, z));
-
-		int type = getRenderType(block);
+		tess.setBrightness(block.getMixedBrightnessForBlock(iba, x, y, z));
 
 		switch (type) {
 		case 0: // Straight N/S
@@ -147,41 +170,41 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		return true;
 	}
 
-	private int getRenderType(Block block) {
-		double xMin = block.getBlockBoundsMinX();
-		double xMax = block.getBlockBoundsMaxX();
-		double zMin = block.getBlockBoundsMinZ();
-		double zMax = block.getBlockBoundsMaxZ();
+	private int getRenderType(IBlockAccess iba, int x, int y, int z,
+			FenceBlock block) {
+		AxisAlignedBB bb = block.getHitBox(iba, x, y, z);
+		double minX = bb.minX - x, maxX = bb.maxX - x, minZ = bb.minZ - z, maxZ = bb.maxZ
+				- z;
 		int cc = 0; // Connection Count
 
 		// Count the amount of connections.
-		if (xMin == 0) {
+		if (minX == 0) {
 			cc++;
 		}
-		if (zMin == 0) {
+		if (minZ == 0) {
 			cc++;
 		}
-		if (xMax == 1) {
+		if (maxX == 1) {
 			cc++;
 		}
-		if (zMax == 1) {
+		if (maxZ == 1) {
 			cc++;
 		}
 
 		if (cc == 2) {
-			if (zMin == 0 && zMax == 1) {
+			if (minZ == 0 && maxZ == 1) {
 				// 0 Straight N/S
 				return 0;
-			} else if (xMin == 0 && xMax == 1) {
+			} else if (minX == 0 && maxX == 1) {
 				// 1 Straight E/W
 				return 1;
-			} else if (xMin == 0 && zMin == 0) {
+			} else if (minX == 0 && minZ == 0) {
 				// 2 corner N/E
 				return 2;
-			} else if (xMax == 1 && zMin == 0) {
+			} else if (maxX == 1 && minZ == 0) {
 				// 3 corner N/W
 				return 3;
-			} else if (xMin == 0 && zMax == 1) {
+			} else if (minX == 0 && maxZ == 1) {
 				// 4 corner S/E
 				return 4;
 			} else {
@@ -189,13 +212,13 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 				return 5;
 			}
 		} else if (cc == 3) {
-			if (zMax != 1) {
+			if (maxZ != 1) {
 				// 6 T-section NEW
 				return 6;
-			} else if (xMax != 1) {
+			} else if (maxX != 1) {
 				// 7 T-section NES
 				return 7;
-			} else if (zMin != 0) {
+			} else if (minZ != 0) {
 				// 8 T-section ESW
 				return 8;
 			} else {
