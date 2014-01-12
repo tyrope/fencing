@@ -33,6 +33,9 @@ Due to the blocks being (a very tiny amount under) 1 block high, you need double
 Special animal-containment fences may come in the future, feedback welcome.
 [/spoiler]
 
+[size=5]Videos[/size]
+[spoiler]none, yet. Want your video here? Post it below![/spoiler]
+
 [size=5]Download[/size]
 Versions are written as such: Major.Minor.Bugfix (Build).
 [url=https://github.com/tyrope/fencing/releases/download/0.1/fencing-0.1.jar]Version 0.1.0 (Build 1) for Minecraft 1.6.4[/url]
@@ -40,11 +43,19 @@ Versions are written as such: Major.Minor.Bugfix (Build).
 Latest development build: [color=red]WARNING: Potentially game-breaking, back up your saves before installing these.[/color]
 [url=http://willie.dftba.net/jenkins/job/Fencing/lastSuccessfulBuild/artifact/fencing-nightly.jar]I agree that this link can destroy my saves.[/url]
 
-[url=https://github.com/tyrope/fencing/blob/master/LICENSE]Licenced under the GNU General Public License v3.[/url]
 [url=https://github.com/tyrope/fencing]Source Code[/url]  & [url=https://github.com/tyrope/fencing/issues]Bug tracking[/url] hosted on github. Please post bugs there!
 Support channel: [url=https://webchat.esper.net/?channels=fluffymods]irc.esper.net#fluffymods[/url]
 
+[size=5]Legal things[/size]
+[url=https://github.com/tyrope/fencing/blob/master/LICENSE]Licenced under the GNU General Public License v3.[/url]
 Modpacks: I hereby grant you permission to use my mod in your modpack, if it follows the following simple rules:
 [list][*]You have permission for all other mods in your pack.
 [*]Credit for all mods in your pack is given to it's original authors.
 [*]The download includes a link to this post or the github repository linked above.[/list]
+
+Let's-players (Incl. reviewers): I hereby grant you permission to use my mod in your media, if it follows the following simple rules:
+[list][*]You have permission for all other mods in your video or stream.
+[*]On recorded products specifically about Fencing, a link is provided to this post or the github repository.
+[*]You are allowed to monetize your video using YouTube's Partner program, if above criteria are met.[/list]
+
+NOTE: Above permissions can be modified with or without prior warning by the Fencing developers.

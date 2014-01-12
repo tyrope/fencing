@@ -1,6 +1,7 @@
 Fencing
 =======
 A minecraft mod adding all kinds of new fences (and possibly more in the future!)
+Full gameplay details are on the Minecraft forum thread linked below.
 
 
 Credits
