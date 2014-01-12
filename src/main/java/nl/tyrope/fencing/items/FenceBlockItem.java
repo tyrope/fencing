@@ -21,8 +21,8 @@ public class FenceBlockItem extends ItemBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister icon) {
-		FenceItemIcons = new Icon[4];
-		for (int i = 0; i < 4; i++) {
+		FenceItemIcons = new Icon[Refs.subNames.length];
+		for (int i = 0; i < Refs.subNames.length; i++) {
 			FenceItemIcons[i] = icon.registerIcon(Refs.MODID
 					+ ":iconFence" + Refs.subNames[i]);
 		}

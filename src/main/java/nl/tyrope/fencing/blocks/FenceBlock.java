@@ -189,8 +189,8 @@ public class FenceBlock extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegistry) {
-		textures = new Icon[4];
-		for (int i = 0; i < 4; i++) {
+		textures = new Icon[Refs.subNames.length];
+		for (int i = 0; i < Refs.subNames.length; i++) {
 			textures[i] = iconRegistry.registerIcon(Refs.MODID + ":fence"
 					+ Refs.subNames[i]);
 		}
@@ -206,7 +206,7 @@ public class FenceBlock extends Block {
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int unknown, CreativeTabs tab, List subItems) {
 		ItemStack stack;
-		for (int ix = 0; ix < 4; ix++) {
+		for (int ix = 0; ix < Refs.subNames.length; ix++) {
 			stack = new ItemStack(this, 1, ix);
 			subItems.add(stack);
 		}

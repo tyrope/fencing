@@ -70,17 +70,22 @@ public class Fencing {
 		GameRegistry.registerBlock(fenceBlock, FenceBlockItem.class,
 				"FenceBlockItem");
 
+		ItemStack pole = new ItemStack(fencePole);
+
 		GameRegistry.addRecipe(new ItemStack(fenceBlock, 1, 0), "xyx", 'x',
-				new ItemStack(fencePole), 'y', new ItemStack(Item.silk));
+				pole, 'y', new ItemStack(Item.silk));
 		GameRegistry.addRecipe(new ItemStack(fenceBlock, 1,
-				MetaValues.FenceIron), "xyx", 'x', new ItemStack(fencePole),
-				'y', new ItemStack(Item.ingotIron));
+				MetaValues.FenceIron), "xyx", 'x', pole, 'y', new ItemStack(
+				Item.ingotIron));
 		GameRegistry.addShapelessRecipe(new ItemStack(fenceBlock, 1,
 				MetaValues.FenceSilly), new ItemStack(Item.slimeBall),
 				new ItemStack(fenceBlock));
 		GameRegistry.addRecipe(new ItemStack(fenceBlock, 1,
-				MetaValues.FenceBarbed), "xyx", 'x', new ItemStack(fencePole),
-				'y', new ItemStack(Block.fenceIron));
+				MetaValues.FenceBarbed), "xyx", 'x', pole, 'y', new ItemStack(
+				Block.fenceIron));
+		GameRegistry.addRecipe(new ItemStack(fenceBlock, 1,
+				MetaValues.FenceWood), "xyx", 'x', pole, 'y', new ItemStack(
+				Item.stick));
 
 		proxy.registerRenderers(fenceBlock);
 	}

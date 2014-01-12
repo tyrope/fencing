@@ -4,3 +4,4 @@ tile.fenceBlockString.name=Schnurzaun
 tile.fenceBlockIron.name=Eisenzaun
 tile.fenceBlockSilly.name=Klebriger Schnurzaun
 tile.fenceBlockBarbed.name=Stacheldrahtzaun
+tile.fenceBlockWood.name=Hölzerner Zaun

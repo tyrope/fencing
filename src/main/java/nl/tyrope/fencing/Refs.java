@@ -11,7 +11,7 @@ public class Refs {
 
 	// Fence subnames
 	public final static String[] subNames = { "String", "Iron", "Silly",
-			"Barbed" };
+			"Barbed", "Wood" };
 
 	public static float textureSize = 32;
 
@@ -21,6 +21,6 @@ public class Refs {
 		public static final int FenceIron = 1;
 		public static final int FenceSilly = 2;
 		public static final int FenceBarbed = 3;
-
+		public static final int FenceWood = 4;
 	}
 }
