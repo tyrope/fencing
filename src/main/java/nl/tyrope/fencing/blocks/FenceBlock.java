@@ -71,7 +71,7 @@ public class FenceBlock extends Block {
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x,
 			int y, int z) {
-		return getHitBox(world, x, y, z);
+		return getHitBox(world, x, y, z).expand(0, 0.3f, 0);
 	}
 
 	// Wireframe
