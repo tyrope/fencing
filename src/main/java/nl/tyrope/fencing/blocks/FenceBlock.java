@@ -33,8 +33,6 @@ public class FenceBlock extends Block {
 
 		setStepSound(Block.soundWoodFootstep);
 		setHardness(1.2f);
-
-		Refs.FenceID = this.blockID; // Just in case it gets shifted.
 	}
 
 	@Override
