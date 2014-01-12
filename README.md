@@ -10,7 +10,7 @@ See CREDITS file for the full list
 
 Downloads
 -------
-Versions are written as such: Major.Minor.Bugfix (Build).
+Versions are written as Major.Minor.Bugfix.Build
 
 Recommended: [0.2.0(Build 22)](https://github.com/tyrope/fencing/releases/download/0.2.0/fencing-0.2.0.22.jar)
 
