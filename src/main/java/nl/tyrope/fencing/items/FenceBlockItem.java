@@ -13,18 +13,22 @@ public class FenceBlockItem extends ItemBlock {
 	public static Icon[] FenceItemIcons;
 
 	public FenceBlockItem(int id) {
+		this(id, "fenceBlock");
+	}
+
+	public FenceBlockItem(int id, String unlocalizedName) {
 		super(id);
 		setHasSubtypes(true);
-		setUnlocalizedName("fenceBlock");
+		setUnlocalizedName(unlocalizedName);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister icon) {
-		FenceItemIcons = new Icon[Refs.subNames.length];
-		for (int i = 0; i < Refs.subNames.length; i++) {
-			FenceItemIcons[i] = icon.registerIcon(Refs.MODID
-					+ ":iconFence" + Refs.subNames[i]);
+		FenceItemIcons = new Icon[Refs.fenceSubNames.length];
+		for (int i = 0; i < Refs.fenceSubNames.length; i++) {
+			FenceItemIcons[i] = icon.registerIcon(Refs.MODID + ":iconFence"
+					+ Refs.fenceSubNames[i]);
 		}
 	}
 
@@ -47,6 +51,7 @@ public class FenceBlockItem extends ItemBlock {
 
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack) {
-		return getUnlocalizedName() + Refs.subNames[itemstack.getItemDamage()];
+		return getUnlocalizedName()
+				+ Refs.fenceSubNames[itemstack.getItemDamage()];
 	}
 }

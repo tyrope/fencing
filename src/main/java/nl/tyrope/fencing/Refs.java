@@ -11,8 +11,9 @@ public class Refs {
 	public static int ElecFenceID;
 
 	// Fence subnames
-	public final static String[] subNames = { "String", "Iron", "Silly",
+	public final static String[] fenceSubNames = { "String", "Iron", "Silly",
 			"Barbed", "Wood" };
+	public final static String[] elecFenceSubNames = { "Copper", "Tin" };
 
 	public static float textureSize = 32;
 
@@ -23,5 +24,8 @@ public class Refs {
 		public static final int FenceSilly = 2;
 		public static final int FenceBarbed = 3;
 		public static final int FenceWood = 4;
+
+		public static final int FenceElectricTin = 0;
+		public static final int FenceElectricCopper = 1;
 	}
 }

@@ -142,6 +142,7 @@ public class FenceBlock extends Block {
 				zMax = f2;
 			}
 		} // if it's 0 or 4 it's an X and should keep the full bounding box.
+
 		return AxisAlignedBB.getAABBPool().getAABB(x + xMin, y, z + zMin,
 				x + xMax, y + 1, z + zMax);
 	}
@@ -187,10 +188,10 @@ public class FenceBlock extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegistry) {
-		textures = new Icon[Refs.subNames.length];
-		for (int i = 0; i < Refs.subNames.length; i++) {
+		textures = new Icon[Refs.fenceSubNames.length];
+		for (int i = 0; i < Refs.fenceSubNames.length; i++) {
 			textures[i] = iconRegistry.registerIcon(Refs.MODID + ":fence"
-					+ Refs.subNames[i]);
+					+ Refs.fenceSubNames[i]);
 		}
 	}
 
@@ -204,7 +205,7 @@ public class FenceBlock extends Block {
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int unknown, CreativeTabs tab, List subItems) {
 		ItemStack stack;
-		for (int ix = 0; ix < Refs.subNames.length; ix++) {
+		for (int ix = 0; ix < Refs.fenceSubNames.length; ix++) {
 			stack = new ItemStack(this, 1, ix);
 			subItems.add(stack);
 		}

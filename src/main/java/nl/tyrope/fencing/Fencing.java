@@ -8,9 +8,11 @@ import net.minecraftforge.common.MinecraftForge;
 import nl.tyrope.fencing.Refs.MetaValues;
 import nl.tyrope.fencing.blocks.FenceBlock;
 import nl.tyrope.fencing.blocks.FenceBlockElectric;
+import nl.tyrope.fencing.items.FenceBlockElectricItem;
 import nl.tyrope.fencing.items.FenceBlockItem;
 import nl.tyrope.fencing.items.FencePoleItem;
 import nl.tyrope.fencing.proxy.Common;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -95,8 +97,39 @@ public class Fencing {
 		GameRegistry.addRecipe(new ItemStack(fenceBlock, 1,
 				MetaValues.FenceWood), "xyx", 'x', pole, 'y', new ItemStack(
 				Item.stick));
+		if (Loader.isModLoaded("IC2")) {
+			System.out.println("IndustrialCraft 2 detected: ");
 
-		proxy.registerRenderers(fenceBlock);
+			// register block
+			GameRegistry.registerBlock(fenceBlockElectric,
+					FenceBlockElectricItem.class, "FenceBlockElectricItem");
+			System.out.println("  Electric Fence registered.");
+
+			System.out.print("  Loading electric fence recipes... ");
+
+			// Load items
+			ItemStack cableTin = ic2.api.item.Items.getItem("tinCableItem");
+			if (cableTin != null) {
+				System.out.print("Tin loaded. ");
+				GameRegistry.addRecipe(new ItemStack(fenceBlockElectric, 1,
+						MetaValues.FenceElectricTin), "xyx", 'x', pole, 'y',
+						cableTin);
+			}
+			ItemStack cableCopper = ic2.api.item.Items
+					.getItem("copperCableItem");
+			if (cableCopper != null) {
+				System.out.print("Copper loaded. ");
+				GameRegistry.addRecipe(new ItemStack(fenceBlockElectric, 1,
+						MetaValues.FenceElectricCopper), "xyx", 'x', pole, 'y',
+						cableCopper);
+			}
+			System.out.println("Complete.");
+
+			proxy.registerRenderers(new FenceBlock[] { fenceBlock,
+					fenceBlockElectric });
+		} else {
+			proxy.registerRenderers(new FenceBlock[] { fenceBlock });
+		}
 	}
 
 	/**
