@@ -6,12 +6,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import nl.tyrope.fencing.Refs.MetaValues;
+import nl.tyrope.fencing.blocks.ElectricFenceBlock;
 import nl.tyrope.fencing.blocks.FenceBlock;
-import nl.tyrope.fencing.blocks.FenceBlockElectric;
-import nl.tyrope.fencing.items.FenceBlockElectricItem;
+import nl.tyrope.fencing.items.ElectricFenceBlockItem;
 import nl.tyrope.fencing.items.FenceBlockItem;
 import nl.tyrope.fencing.items.FencePoleItem;
 import nl.tyrope.fencing.proxy.Common;
+import nl.tyrope.fencing.tileEntity.ElectricFenceEntity;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -35,7 +36,7 @@ public class Fencing {
 
 	public FencePoleItem fencePole;
 	public FenceBlock fenceBlock;
-	public FenceBlockElectric fenceBlockElectric;
+	public ElectricFenceBlock electricFenceBlock;
 
 	/**
 	 * This is code that is executed prior to your mod being initialized into of
@@ -55,12 +56,11 @@ public class Fencing {
 		config.save();
 		fencePole = new FencePoleItem(Refs.PoleID);
 		fenceBlock = new FenceBlock(Refs.FenceID);
-		fenceBlockElectric = new FenceBlockElectric(Refs.ElecFenceID);
+		electricFenceBlock = new ElectricFenceBlock(Refs.ElecFenceID);
 
 		// Just in case it gets shifted.
 		Refs.FenceID = fenceBlock.blockID;
-		Refs.ElecFenceID = fenceBlockElectric.blockID;
-
+		Refs.ElecFenceID = electricFenceBlock.blockID;
 	}
 
 	/**
@@ -101,9 +101,13 @@ public class Fencing {
 			System.out.println("IndustrialCraft 2 detected: ");
 
 			// register block
-			GameRegistry.registerBlock(fenceBlockElectric,
-					FenceBlockElectricItem.class, "FenceBlockElectricItem");
-			System.out.println("  Electric Fence registered.");
+			MinecraftForge.setBlockHarvestLevel(electricFenceBlock, "axe", 0);
+			GameRegistry.registerBlock(electricFenceBlock,
+					ElectricFenceBlockItem.class, "ElectricFenceBlockItem");
+			System.out.println("  Electric Fence Block registered.");
+			GameRegistry.registerTileEntity(ElectricFenceEntity.class,
+					"ElectricFenceEntity");
+			System.out.println("  Electric Fence Entity registered.");
 
 			System.out.print("  Loading electric fence recipes... ");
 
@@ -111,7 +115,7 @@ public class Fencing {
 			ItemStack cableTin = ic2.api.item.Items.getItem("tinCableItem");
 			if (cableTin != null) {
 				System.out.print("Tin loaded. ");
-				GameRegistry.addRecipe(new ItemStack(fenceBlockElectric, 1,
+				GameRegistry.addRecipe(new ItemStack(electricFenceBlock, 1,
 						MetaValues.FenceElectricTin), "xyx", 'x', pole, 'y',
 						cableTin);
 			}
@@ -119,14 +123,14 @@ public class Fencing {
 					.getItem("copperCableItem");
 			if (cableCopper != null) {
 				System.out.print("Copper loaded. ");
-				GameRegistry.addRecipe(new ItemStack(fenceBlockElectric, 1,
+				GameRegistry.addRecipe(new ItemStack(electricFenceBlock, 1,
 						MetaValues.FenceElectricCopper), "xyx", 'x', pole, 'y',
 						cableCopper);
 			}
 			System.out.println("Complete.");
 
 			proxy.registerRenderers(new FenceBlock[] { fenceBlock,
-					fenceBlockElectric });
+					electricFenceBlock });
 		} else {
 			proxy.registerRenderers(new FenceBlock[] { fenceBlock });
 		}

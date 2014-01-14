@@ -7,21 +7,20 @@ import nl.tyrope.fencing.Refs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class FenceBlockElectricItem extends FenceBlockItem {
+public class ElectricFenceBlockItem extends FenceBlockItem {
 
-	public static Icon[] FenceItemIcons;
-
-	public FenceBlockElectricItem(int id) {
-		super(id, "fenceBlockElectric");
+	public ElectricFenceBlockItem(int id) {
+		super(id);
+		setUnlocalizedName("fenceBlockElectric");
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister icon) {
-		FenceItemIcons = new Icon[Refs.elecFenceSubNames.length];
+		this.FenceItemIcons = new Icon[Refs.elecFenceSubNames.length];
 		for (int i = 0; i < Refs.elecFenceSubNames.length; i++) {
-			FenceItemIcons[i] = icon.registerIcon(Refs.MODID + ":iconFenceElec"
-					+ Refs.elecFenceSubNames[i]);
+			this.FenceItemIcons[i] = icon.registerIcon(Refs.MODID
+					+ ":iconFenceElec" + Refs.elecFenceSubNames[i]);
 		}
 	}
 

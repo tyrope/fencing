@@ -10,16 +10,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class FenceBlockItem extends ItemBlock {
 
-	public static Icon[] FenceItemIcons;
+	public Icon[] FenceItemIcons;
 
 	public FenceBlockItem(int id) {
-		this(id, "fenceBlock");
-	}
-
-	public FenceBlockItem(int id, String unlocalizedName) {
 		super(id);
 		setHasSubtypes(true);
-		setUnlocalizedName(unlocalizedName);
+		setUnlocalizedName("fenceBlock");
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package nl.tyrope.fencing.blocks;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockPane;
 import net.minecraft.block.BlockWall;
@@ -11,6 +12,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
@@ -21,7 +23,7 @@ import nl.tyrope.fencing.Refs.MetaValues;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class FenceBlock extends Block {
+public class FenceBlock extends BlockContainer {
 
 	public int renderId;
 	Icon[] textures;
@@ -33,6 +35,11 @@ public class FenceBlock extends Block {
 
 		setStepSound(Block.soundWoodFootstep);
 		setHardness(1.2f);
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World world) {
+		return null;
 	}
 
 	@Override
@@ -147,7 +154,7 @@ public class FenceBlock extends Block {
 				x + xMax, y + 1, z + zMax);
 	}
 
-	private boolean canConnectTo(IBlockAccess iba, int x, int y, int z) {
+	protected boolean canConnectTo(IBlockAccess iba, int x, int y, int z) {
 		Block block = Block.blocksList[iba.getBlockId(x, y, z)];
 		if (block == null) {
 			return false;
@@ -222,7 +229,7 @@ public class FenceBlock extends Block {
 		affectEntity(world.getBlockMetadata(x, y, z), entity);
 	}
 
-	private void affectEntity(int meta, Entity entity) {
+	protected void affectEntity(int meta, Entity entity) {
 		if (meta == MetaValues.FenceSilly) {
 			entity.motionX *= 0.1D;
 			entity.motionZ *= 0.1D;
