@@ -6,51 +6,45 @@ import ic2.api.energy.tile.IEnergyConductor;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import nl.tyrope.fencing.Refs;
 
 public class ElectricFenceEntity extends TileEntity implements IEnergyConductor {
 
 	private boolean initialized;
+	private long totalSunk;
 
 	public ElectricFenceEntity() {
 		super();
 		initialized = false;
+		totalSunk = 0;
 	}
 
-	public void initialize() {
-		if (!initialized) {
+	private void initialize() {
+		if (!initialized && !this.worldObj.isRemote) {
 			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
 			initialized = true;
-			System.out.println(String.format(
-					"Electric fence entity initialized at [%s,%s,%s]", xCoord,
-					yCoord, zCoord));
 		}
 	}
 
-	public void uninitialize() {
-		// MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
-		initialized = false;
-		System.out.println(String.format(
-				"Electric fence entity UN-initialized at [%s,%s,%s]", xCoord,
-				yCoord, zCoord));
+	private void uninitialize() {
+		if (initialized && !this.worldObj.isRemote) {
+			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+			initialized = false;
+		}
 	}
 
 	@Override
-	@SideOnly(Side.SERVER)
 	public void updateEntity() {
 		initialize();
 	}
 
 	@Override
-	@SideOnly(Side.SERVER)
 	public void invalidate() {
 		uninitialize();
 		super.invalidate();
 	}
 
 	@Override
-	@SideOnly(Side.SERVER)
 	public void onChunkUnload() {
 		uninitialize();
 		super.onChunkUnload();
@@ -86,17 +80,31 @@ public class ElectricFenceEntity extends TileEntity implements IEnergyConductor 
 
 	@Override
 	public int getInsulationEnergyAbsorption() {
-		return 0;
+		switch (this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord)) {
+		case Refs.MetaValues.FenceElectricTin:
+			return 16;
+		case Refs.MetaValues.FenceElectricCopper:
+			return 64;
+		default:
+			return 0;
+		}
 	}
 
 	@Override
 	public int getInsulationBreakdownEnergy() {
-		return 64;
+		return getInsulationEnergyAbsorption() + 64;
 	}
 
 	@Override
 	public int getConductorBreakdownEnergy() {
-		return 1024;
+		switch (this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord)) {
+		case Refs.MetaValues.FenceElectricTin:
+			return 32;
+		case Refs.MetaValues.FenceElectricCopper:
+			return 128;
+		default:
+			return 0;
+		}
 	}
 
 	@Override
@@ -105,5 +113,17 @@ public class ElectricFenceEntity extends TileEntity implements IEnergyConductor 
 
 	@Override
 	public void removeConductor() {
+		worldObj.destroyBlock(xCoord, yCoord, zCoord, false);
+	}
+
+	public float hasPower() {
+		long oldSunk = totalSunk;
+		try {
+			totalSunk = ic2.api.energy.EnergyNet.instance
+					.getTotalEnergySunken(this);
+		} catch (NullPointerException e) {
+			totalSunk = 0;
+		}
+		return totalSunk - oldSunk;
 	}
 }

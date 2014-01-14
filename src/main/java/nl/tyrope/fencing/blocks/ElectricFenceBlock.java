@@ -86,9 +86,25 @@ public class ElectricFenceBlock extends FenceBlock {
 		}
 	}
 
+	// Effects of touching the fence.
 	@Override
-	protected void affectEntity(int meta, Entity entity) {
-		// Change to IC2 equivalent if possible.
-		entity.attackEntityFrom(DamageSource.generic, 1.0F);
+	public void onEntityCollidedWithBlock(World world, int x, int y, int z,
+			Entity entity) {
+		shock((ElectricFenceEntity) world.getBlockTileEntity(x, y, z), entity);
+	}
+
+	// Effects of walking on the fence.
+	@Override
+	public void onEntityWalking(World world, int x, int y, int z, Entity entity) {
+		shock((ElectricFenceEntity) world.getBlockTileEntity(x, y, z), entity);
+	}
+
+	private void shock(ElectricFenceEntity fence, Entity target) {
+		// TODO Create electric damage source.
+		DamageSource src = DamageSource.generic;
+		float dmg = fence.hasPower();
+		if (dmg > 0f) {
+			target.attackEntityFrom(src, dmg);
+		}
 	}
 }
