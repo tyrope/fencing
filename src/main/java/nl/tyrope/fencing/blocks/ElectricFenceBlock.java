@@ -7,7 +7,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -17,6 +16,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ElectricFenceBlock extends FenceBlock {
+
 	public ElectricFenceBlock(int id) {
 		super(id);
 		setUnlocalizedName("fenceBlockElectric");
@@ -100,11 +100,7 @@ public class ElectricFenceBlock extends FenceBlock {
 	}
 
 	private void shock(ElectricFenceEntity fence, Entity target) {
-		// TODO Create electric damage source.
-		DamageSource src = DamageSource.generic;
-		float dmg = 1f; // FIXME get damage from fence.
-		if (dmg > 0f) {
-			target.attackEntityFrom(src, dmg);
-		}
+		float dmg = fence.zap() * (Refs.dmgMulti / 100f);
+		target.attackEntityFrom(Refs.DmgSrcs.electric, dmg);
 	}
 }

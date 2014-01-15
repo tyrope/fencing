@@ -14,7 +14,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -31,7 +30,7 @@ public class FenceBlock extends BlockContainer {
 	public FenceBlock(int id) {
 		super(id, Material.wood);
 		setUnlocalizedName("fenceBlock");
-		setCreativeTab(CreativeTabs.tabDecorations);
+		setCreativeTab(Refs.creativeTab);
 
 		setStepSound(Block.soundWoodFootstep);
 		setHardness(1.2f);
@@ -234,7 +233,7 @@ public class FenceBlock extends BlockContainer {
 			entity.motionX *= 0.1D;
 			entity.motionZ *= 0.1D;
 		} else if (meta == MetaValues.FenceBarbed) {
-			entity.attackEntityFrom(DamageSource.cactus, 1.0F);
+			entity.attackEntityFrom(Refs.DmgSrcs.barbed, Refs.dmgMulti / 100f);
 		}
 	}
 }

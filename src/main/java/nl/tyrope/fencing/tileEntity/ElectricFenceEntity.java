@@ -117,4 +117,10 @@ public class ElectricFenceEntity extends TileEntity implements IEnergySink,
 			return 0;
 		}
 	}
+
+	public float zap() {
+		float ret = (float) (charge / 64);
+		charge = 0;
+		return ret;
+	}
 }

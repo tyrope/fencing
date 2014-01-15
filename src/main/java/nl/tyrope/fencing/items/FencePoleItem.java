@@ -1,6 +1,5 @@
 package nl.tyrope.fencing.items;
 
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import nl.tyrope.fencing.Refs;
 
@@ -11,7 +10,7 @@ public class FencePoleItem extends Item {
 
 		setMaxStackSize(64);
 		setUnlocalizedName("fencePole");
-		setCreativeTab(CreativeTabs.tabMaterials);
+		setCreativeTab(Refs.creativeTab);
 		setTextureName(Refs.MODID + ":fencePole");
 
 		Refs.PoleID = this.itemID; // Just in case it gets shifted.

@@ -5,6 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
+import nl.tyrope.creativetab.FencingTab;
 import nl.tyrope.fencing.Refs.MetaValues;
 import nl.tyrope.fencing.blocks.ElectricFenceBlock;
 import nl.tyrope.fencing.blocks.FenceBlock;
@@ -13,6 +14,8 @@ import nl.tyrope.fencing.items.FenceBlockItem;
 import nl.tyrope.fencing.items.FencePoleItem;
 import nl.tyrope.fencing.proxy.Common;
 import nl.tyrope.fencing.tileEntity.ElectricFenceEntity;
+import nl.tyrope.fencing.util.BarbedDmg;
+import nl.tyrope.fencing.util.ElecDmg;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -47,20 +50,35 @@ public class Fencing {
 	 */
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+
+		// Create creative tab.
+		Refs.creativeTab = new FencingTab();
+
+		// Load configuration file.
 		Configuration config = new Configuration(
 				event.getSuggestedConfigurationFile());
 		config.load();
+
+		// Fetch values.
 		Refs.PoleID = config.getItem("fencePole", 5000).getInt();
 		Refs.FenceID = config.getBlock("fenceBlock", 500).getInt();
 		Refs.ElecFenceID = config.getBlock("fenceBlockElectric", 501).getInt();
+		Refs.dmgMulti = config.get("misc", "damage_percent", 100).getInt();
+
+		// Save them in case they weren't set before.
 		config.save();
+
+		// Make blocks
 		fencePole = new FencePoleItem(Refs.PoleID);
 		fenceBlock = new FenceBlock(Refs.FenceID);
 		electricFenceBlock = new ElectricFenceBlock(Refs.ElecFenceID);
-
 		// Just in case it gets shifted.
 		Refs.FenceID = fenceBlock.blockID;
 		Refs.ElecFenceID = electricFenceBlock.blockID;
+
+		// Make damage objects.
+		Refs.DmgSrcs.barbed = new BarbedDmg();
+		Refs.DmgSrcs.electric = new ElecDmg();
 	}
 
 	/**

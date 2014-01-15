@@ -1,5 +1,8 @@
 package nl.tyrope.fencing;
 
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.util.DamageSource;
+
 public class Refs {
 	// Forge needs these.
 	public final static String MODID = "fencing";
@@ -14,8 +17,15 @@ public class Refs {
 	public final static String[] fenceSubNames = { "String", "Iron", "Silly",
 			"Barbed", "Wood" };
 	public final static String[] elecFenceSubNames = { "Tin", "Copper" };
+	public static CreativeTabs creativeTab;
 
 	public static float textureSize = 32;
+	public static int dmgMulti;
+
+	public static class DmgSrcs {
+		public static DamageSource barbed;
+		public static DamageSource electric;
+	}
 
 	public static class MetaValues {
 		// Fence metadata
