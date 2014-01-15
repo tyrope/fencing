@@ -1,7 +1,18 @@
+#Creative Tab
+itemGroup.Fencing=Fencing
+
+# Items
 item.fencePole.name=Zaunpfahl
 
+# Blocks
 tile.fenceBlockString.name=Schnurzaun
 tile.fenceBlockIron.name=Eisenzaun
 tile.fenceBlockSilly.name=Klebriger Schnurzaun
 tile.fenceBlockBarbed.name=Stacheldrahtzaun
-tile.fenceBlockWood.name=Hölzerner Zaun
+tile.fenceBlockWood.name=HÃ¶lzerner Zaun
+tile.fenceBlockElectricCopper.name=Elektrischer Kupferzaun
+tile.fenceBlockElectricTin.name=Elektrischer Zinnzaun
+
+# Death messages
+death.attack.barbedWire=%1$s verhedderte sich im Stacheldrahtzaun.
+death.attack.electric=%1$s hat einen Elektrozaun angefasst.
