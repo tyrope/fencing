@@ -1,22 +1,24 @@
 package nl.tyrope.fencing.tileEntity;
 
+import ic2.api.energy.EnergyNet;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
-import ic2.api.energy.tile.IEnergyConductor;
+import ic2.api.energy.tile.IEnergySink;
+import ic2.api.energy.tile.IEnergySource;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import nl.tyrope.fencing.Refs;
 
-public class ElectricFenceEntity extends TileEntity implements IEnergyConductor {
+public class ElectricFenceEntity extends TileEntity implements IEnergySink,
+		IEnergySource {
 
 	private boolean initialized;
-	private long totalSunk;
+	private double buffer, charge;
 
 	public ElectricFenceEntity() {
 		super();
 		initialized = false;
-		totalSunk = 0;
+		charge = 0;
 	}
 
 	private void initialize() {
@@ -56,6 +58,7 @@ public class ElectricFenceEntity extends TileEntity implements IEnergyConductor 
 		switch (direction) {
 		case UNKNOWN:
 		case UP:
+		case DOWN:
 			return false;
 		default:
 			return true;
@@ -67,6 +70,7 @@ public class ElectricFenceEntity extends TileEntity implements IEnergyConductor 
 		switch (direction) {
 		case UNKNOWN:
 		case UP:
+		case DOWN:
 			return false;
 		default:
 			return true;
@@ -74,56 +78,43 @@ public class ElectricFenceEntity extends TileEntity implements IEnergyConductor 
 	}
 
 	@Override
-	public double getConductionLoss() {
-		return 0.1;
+	public double getOfferedEnergy() {
+		return Math.min(buffer, getVoltage());
 	}
 
 	@Override
-	public int getInsulationEnergyAbsorption() {
-		switch (this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord)) {
-		case Refs.MetaValues.FenceElectricTin:
-			return 16;
-		case Refs.MetaValues.FenceElectricCopper:
-			return 64;
-		default:
-			return 0;
+	public void drawEnergy(double amount) {
+		buffer = buffer - amount;
+	}
+
+	@Override
+	public double demandedEnergyUnits() {
+		return Math.max(0, getVoltage() - buffer);
+	}
+
+	@Override
+	public double injectEnergyUnits(ForgeDirection directionFrom, double amount) {
+		if (charge != getVoltage()) {
+			// Charge the fence.
+			double need = getVoltage() - charge;
+			charge = Math.max(charge + amount, getVoltage());
+			amount = Math.max(amount - need, 0);
 		}
+		buffer = buffer + amount;
+		return 0;
 	}
 
 	@Override
-	public int getInsulationBreakdownEnergy() {
-		return getInsulationEnergyAbsorption() + 64;
+	public int getMaxSafeInput() {
+		return getVoltage();
 	}
 
-	@Override
-	public int getConductorBreakdownEnergy() {
-		switch (this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord)) {
-		case Refs.MetaValues.FenceElectricTin:
-			return 32;
-		case Refs.MetaValues.FenceElectricCopper:
-			return 128;
-		default:
-			return 0;
-		}
-	}
-
-	@Override
-	public void removeInsulation() {
-	}
-
-	@Override
-	public void removeConductor() {
-		worldObj.destroyBlock(xCoord, yCoord, zCoord, false);
-	}
-
-	public float hasPower() {
-		long oldSunk = totalSunk;
+	private int getVoltage() {
 		try {
-			totalSunk = ic2.api.energy.EnergyNet.instance
-					.getTotalEnergySunken(this);
-		} catch (NullPointerException e) {
-			totalSunk = 0;
+			return EnergyNet.instance.getPowerFromTier(blockMetadata + 1);
+		} catch (NullPointerException ArrayIndexOutOfBoundsException) {
+			// Can't get power from tier, probably an invalid block...
+			return 0;
 		}
-		return totalSunk - oldSunk;
 	}
 }

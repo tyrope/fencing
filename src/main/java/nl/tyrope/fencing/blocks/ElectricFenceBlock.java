@@ -102,7 +102,7 @@ public class ElectricFenceBlock extends FenceBlock {
 	private void shock(ElectricFenceEntity fence, Entity target) {
 		// TODO Create electric damage source.
 		DamageSource src = DamageSource.generic;
-		float dmg = fence.hasPower();
+		float dmg = 1f; // FIXME get damage from fence.
 		if (dmg > 0f) {
 			target.attackEntityFrom(src, dmg);
 		}
