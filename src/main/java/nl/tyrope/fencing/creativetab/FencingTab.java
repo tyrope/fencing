@@ -1,4 +1,4 @@
-package nl.tyrope.creativetab;
+package nl.tyrope.fencing.creativetab;
 
 import net.minecraft.creativetab.CreativeTabs;
 import nl.tyrope.fencing.Refs;
