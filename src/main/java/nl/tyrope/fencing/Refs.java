@@ -13,7 +13,7 @@ public class Refs {
 	// Fence subnames
 	public final static String[] fenceSubNames = { "String", "Iron", "Silly",
 			"Barbed", "Wood" };
-	public final static String[] elecFenceSubNames = { "Copper", "Tin" };
+	public final static String[] elecFenceSubNames = { "Tin", "Copper" };
 
 	public static float textureSize = 32;
 
