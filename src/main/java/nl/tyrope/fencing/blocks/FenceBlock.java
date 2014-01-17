@@ -196,7 +196,7 @@ public class FenceBlock extends BlockContainer {
 	public void registerIcons(IconRegister iconRegistry) {
 		textures = new Icon[Refs.fenceSubNames.length];
 		for (int i = 0; i < Refs.fenceSubNames.length; i++) {
-			textures[i] = iconRegistry.registerIcon(Refs.MODID + ":fence"
+			textures[i] = iconRegistry.registerIcon("fencing:fence"
 					+ Refs.fenceSubNames[i]);
 		}
 	}
@@ -233,7 +233,7 @@ public class FenceBlock extends BlockContainer {
 			entity.motionX *= 0.1D;
 			entity.motionZ *= 0.1D;
 		} else if (meta == MetaValues.FenceBarbed) {
-			entity.attackEntityFrom(Refs.DmgSrcs.barbed, Refs.dmgMulti / 100f);
+			entity.attackEntityFrom(Refs.DmgSrcs.barbed, Refs.dmgMulti);
 		}
 	}
 }

@@ -70,7 +70,7 @@ public class ElectricFenceBlock extends FenceBlock {
 	public void registerIcons(IconRegister iconRegistry) {
 		textures = new Icon[Refs.elecFenceSubNames.length];
 		for (int i = 0; i < Refs.elecFenceSubNames.length; i++) {
-			textures[i] = iconRegistry.registerIcon(Refs.MODID + ":fenceElec"
+			textures[i] = iconRegistry.registerIcon("fencing:fenceElec"
 					+ Refs.elecFenceSubNames[i]);
 		}
 	}
@@ -100,7 +100,7 @@ public class ElectricFenceBlock extends FenceBlock {
 	}
 
 	private void shock(ElectricFenceEntity fence, Entity target) {
-		float dmg = fence.zap() * (Refs.dmgMulti / 100f);
+		float dmg = (float) (fence.zap() * Refs.dmgMulti);
 		target.attackEntityFrom(Refs.DmgSrcs.electric, dmg);
 	}
 }

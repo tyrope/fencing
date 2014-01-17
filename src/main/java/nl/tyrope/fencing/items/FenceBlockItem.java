@@ -23,7 +23,7 @@ public class FenceBlockItem extends ItemBlock {
 	public void registerIcons(IconRegister icon) {
 		FenceItemIcons = new Icon[Refs.fenceSubNames.length];
 		for (int i = 0; i < Refs.fenceSubNames.length; i++) {
-			FenceItemIcons[i] = icon.registerIcon(Refs.MODID + ":iconFence"
+			FenceItemIcons[i] = icon.registerIcon("fencing:iconFence"
 					+ Refs.fenceSubNames[i]);
 		}
 	}

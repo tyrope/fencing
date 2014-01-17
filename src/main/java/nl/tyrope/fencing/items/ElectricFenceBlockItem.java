@@ -19,8 +19,8 @@ public class ElectricFenceBlockItem extends FenceBlockItem {
 	public void registerIcons(IconRegister icon) {
 		this.FenceItemIcons = new Icon[Refs.elecFenceSubNames.length];
 		for (int i = 0; i < Refs.elecFenceSubNames.length; i++) {
-			this.FenceItemIcons[i] = icon.registerIcon(Refs.MODID
-					+ ":iconFenceElec" + Refs.elecFenceSubNames[i]);
+			this.FenceItemIcons[i] = icon.registerIcon("fencing:iconFenceElec"
+					+ Refs.elecFenceSubNames[i]);
 		}
 	}
 

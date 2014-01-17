@@ -11,7 +11,7 @@ public class FencePoleItem extends Item {
 		setMaxStackSize(64);
 		setUnlocalizedName("fencePole");
 		setCreativeTab(Refs.creativeTab);
-		setTextureName(Refs.MODID + ":fencePole");
+		setTextureName("fencing:fencePole");
 
 		Refs.PoleID = this.itemID; // Just in case it gets shifted.
 	}

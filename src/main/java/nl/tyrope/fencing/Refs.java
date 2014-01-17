@@ -4,10 +4,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.DamageSource;
 
 public class Refs {
-	// Forge needs these.
-	public final static String MODID = "fencing";
-	public final static String VERSION = "0.3.0";
-
 	// Item IDs for future use.
 	public static int PoleID;
 	public static int FenceID;

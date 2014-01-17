@@ -27,11 +27,11 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-@Mod(modid = Refs.MODID, version = Refs.VERSION)
+@Mod(modid = "fencing", name = "Fencing", version = "0.3.0", dependencies = "after:IC2")
 @NetworkMod(clientSideRequired = true)
 public class Fencing {
 
-	@Instance(value = Refs.MODID)
+	@Instance(value = "fencing")
 	public static Fencing instance;
 
 	@SidedProxy(clientSide = "nl.tyrope.fencing.proxy.Client", serverSide = "nl.tyrope.fencing.proxy.Common")
@@ -63,22 +63,28 @@ public class Fencing {
 		Refs.PoleID = config.getItem("fencePole", 5000).getInt();
 		Refs.FenceID = config.getBlock("fenceBlock", 500).getInt();
 		Refs.ElecFenceID = config.getBlock("fenceBlockElectric", 501).getInt();
-		Refs.dmgMulti = config.get("misc", "damage_percent", 100).getInt();
+		Refs.dmgMulti = config.get(
+				"misc",
+				"damage_multiplier",
+				1,
+				"Multiplier for fence-inflicted damage."
+						+ System.lineSeparator() + "Default: (1x)"
+						+ System.lineSeparator() + "0.5hearts for barbed,"
+						+ System.lineSeparator() + "max. 1 heart for tin &"
+						+ System.lineSeparator() + "max. 2 hearts for copper.")
+				.getInt();
 
 		// Save them in case they weren't set before.
 		config.save();
 
-		// Make blocks
+		// Make items and blocks
 		fencePole = new FencePoleItem(Refs.PoleID);
 		fenceBlock = new FenceBlock(Refs.FenceID);
-		electricFenceBlock = new ElectricFenceBlock(Refs.ElecFenceID);
 		// Just in case it gets shifted.
 		Refs.FenceID = fenceBlock.blockID;
-		Refs.ElecFenceID = electricFenceBlock.blockID;
 
 		// Make damage objects.
 		Refs.DmgSrcs.barbed = new BarbedDmg();
-		Refs.DmgSrcs.electric = new ElecDmg();
 	}
 
 	/**
@@ -117,6 +123,14 @@ public class Fencing {
 				Item.stick));
 		if (Loader.isModLoaded("IC2")) {
 			System.out.println("IndustrialCraft 2 detected: ");
+
+			// Make block
+			electricFenceBlock = new ElectricFenceBlock(Refs.ElecFenceID);
+			// Just in case it gets shifted.
+			Refs.ElecFenceID = electricFenceBlock.blockID;
+
+			// Register damage source
+			Refs.DmgSrcs.electric = new ElecDmg();
 
 			// register block
 			MinecraftForge.setBlockHarvestLevel(electricFenceBlock, "axe", 0);
