@@ -23,6 +23,8 @@ public class ElectricFenceEntity extends TileEntity implements IEnergySink,
 
 	private void initialize() {
 		if (!initialized && !this.worldObj.isRemote) {
+			System.out.println(String.format("[%s,%s,%s]initialized.", xCoord,
+					yCoord, zCoord));
 			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
 			initialized = true;
 		}
@@ -30,6 +32,8 @@ public class ElectricFenceEntity extends TileEntity implements IEnergySink,
 
 	private void uninitialize() {
 		if (initialized && !this.worldObj.isRemote) {
+			System.out.println(String.format("[%s,%s,%s]uninitialized.",
+					xCoord, yCoord, zCoord));
 			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
 			initialized = false;
 		}
@@ -79,21 +83,40 @@ public class ElectricFenceEntity extends TileEntity implements IEnergySink,
 
 	@Override
 	public double getOfferedEnergy() {
-		return Math.min(buffer, getVoltage());
+		double ret = Math.min(buffer, getVoltage());
+		System.out.println(String.format(
+				"[%s,%s,%s]getOfferedEnergy. buffer: %s, return value: %s",
+				xCoord, yCoord, zCoord, buffer, ret));
+		return ret;
 	}
 
 	@Override
 	public void drawEnergy(double amount) {
+		System.out
+				.println(String
+						.format("[%s,%s,%s]drawEnergy. buffer: %s, amount: %s, buffer-amount: %s",
+								xCoord, yCoord, zCoord, buffer, amount, buffer
+										- amount));
 		buffer = buffer - amount;
 	}
 
 	@Override
 	public double demandedEnergyUnits() {
-		return Math.max(0, getVoltage() - buffer);
+		double ret = Math.max(0, getVoltage() - buffer);
+		System.out
+				.println(String
+						.format("[%s,%s,%s]demandedEnergyUnits. buffer: %s, getVoltage(): %s, output: %s",
+								xCoord, yCoord, zCoord, buffer, getVoltage(),
+								ret));
+		return ret;
 	}
 
 	@Override
 	public double injectEnergyUnits(ForgeDirection directionFrom, double amount) {
+		System.out
+				.println(String
+						.format("[%s,%s,%s]injectEnergyUnits. amount: %s, charge: %s, buffer: %s",
+								xCoord, yCoord, zCoord, amount, charge, buffer));
 		if (charge != getVoltage()) {
 			// Charge the fence.
 			double need = getVoltage() - charge;
