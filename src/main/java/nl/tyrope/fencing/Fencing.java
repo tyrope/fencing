@@ -68,11 +68,14 @@ public class Fencing {
 				"damage_multiplier",
 				1,
 				"Multiplier for fence-inflicted damage."
-						+ System.lineSeparator() + "Default: (1x)"
-						+ System.lineSeparator() + "0.5hearts for barbed,"
-						+ System.lineSeparator() + "max. 1 heart for tin &"
-						+ System.lineSeparator() + "max. 2 hearts for copper.")
-				.getInt();
+						+ System.getProperty("line.separator")
+						+ "Default: (1x)"
+						+ System.getProperty("line.separator")
+						+ "0.5hearts for barbed,"
+						+ System.getProperty("line.separator")
+						+ "max. 1 heart for tin &"
+						+ System.getProperty("line.separator")
+						+ "max. 2 hearts for copper.").getInt();
 
 		// Save them in case they weren't set before.
 		config.save();
