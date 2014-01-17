@@ -148,6 +148,7 @@ public class FenceBlock extends BlockContainer {
 				zMax = f2;
 			}
 		} // if it's 0 or 4 it's an X and should keep the full bounding box.
+
 		return AxisAlignedBB.getAABBPool().getAABB(x + xMin, y, z + zMin,
 				x + xMax, y + 1, z + zMax);
 	}

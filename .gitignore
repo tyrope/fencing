@@ -1,5 +1,5 @@
 bin/
-*.class
+src/main/*.class
 
 # Build files #
 .gradle/
@@ -9,8 +9,6 @@ build.gradle
 gradlew
 
 # eclipse files #
-.classpath
-.project
 .settings/
 
 # Package Files #

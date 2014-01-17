@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path=""/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Minecraft"/>
-	<classpathentry kind="lib" path="D:/Programming/Minecraft/eclipse/mods/industrialcraft-2-dev-deobf_2.0.367-experimental.jar"/>
-	<classpathentry kind="output" path=""/>
+	<classpathentry kind="lib" path="src/api/java"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
