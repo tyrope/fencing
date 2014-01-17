@@ -10,7 +10,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class FenceBlockItem extends ItemBlock {
 
-	public static Icon[] FenceItemIcons;
+	public Icon[] FenceItemIcons;
 
 	public FenceBlockItem(int id) {
 		super(id);
@@ -21,10 +21,10 @@ public class FenceBlockItem extends ItemBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister icon) {
-		FenceItemIcons = new Icon[4];
-		for (int i = 0; i < 4; i++) {
-			FenceItemIcons[i] = icon.registerIcon(Refs.MODID
-					+ ":iconFence" + Refs.subNames[i]);
+		FenceItemIcons = new Icon[Refs.fenceSubNames.length];
+		for (int i = 0; i < Refs.fenceSubNames.length; i++) {
+			FenceItemIcons[i] = icon.registerIcon("fencing:iconFence"
+					+ Refs.fenceSubNames[i]);
 		}
 	}
 
@@ -47,6 +47,7 @@ public class FenceBlockItem extends ItemBlock {
 
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack) {
-		return getUnlocalizedName() + Refs.subNames[itemstack.getItemDamage()];
+		return getUnlocalizedName()
+				+ Refs.fenceSubNames[itemstack.getItemDamage()];
 	}
 }

@@ -1,6 +1,18 @@
+#Creative Tab
+itemGroup.Fencing=Fencing
+
+# Items
 item.fencePole.name=Fence Post
 
+# Blocks
 tile.fenceBlockString.name=String Fence
 tile.fenceBlockIron.name=Iron Fence
 tile.fenceBlockSilly.name=Silly String Fence
 tile.fenceBlockBarbed.name=Barbed Wire Fence
+tile.fenceBlockWood.name=Wooden Fence
+tile.fenceBlockElectricCopper.name=Copper Electric Fence
+tile.fenceBlockElectricTin.name=Tin Electric Fence
+
+# Death messages
+death.attack.barbedWire=%1$s got stabbed to death by barbed wire.
+death.attack.electric=%1$s got zapped by an electric fence.

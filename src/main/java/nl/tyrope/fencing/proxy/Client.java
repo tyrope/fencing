@@ -8,10 +8,12 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 public class Client extends Common {
 
 	@Override
-	public void registerRenderers(FenceBlock fenceBlock) {
+	public void registerRenderers(FenceBlock[] blocks) {
 		ISimpleBlockRenderingHandler fenceBlockRenderer = new FenceBlockRenderer();
-		fenceBlock.renderId = fenceBlockRenderer.getRenderId();
-		RenderingRegistry.registerBlockHandler(fenceBlock.getRenderType(),
-				fenceBlockRenderer);
+		for (FenceBlock block : blocks) {
+			block.renderId = fenceBlockRenderer.getRenderId();
+			RenderingRegistry.registerBlockHandler(block.getRenderType(),
+					fenceBlockRenderer);
+		}
 	}
 }

@@ -10,10 +10,13 @@ See CREDITS file for the full list
 
 Downloads
 -------
-Versions are written as such: Major.Minor.Bugfix (Build).
-[0.1.0(Build 1)](https://github.com/tyrope/fencing/releases/download/0.1/fencing-0.1.jar)
+Versions are written as Major.Minor.Bugfix.Build
+
+Recommended: [0.2.0(Build 22)](https://github.com/tyrope/fencing/releases/download/0.2.0/fencing-0.2.0.22.jar)
 
 Warning, potentially gamebreakingly unstable: [Latest development build](http://willie.dftba.net/jenkins/job/Fencing/lastSuccessfulBuild/artifact/fencing-nightly.jar)
+
+For older versions, see [The release page](https://github.com/tyrope/fencing/releases)
 
 Links
 -------

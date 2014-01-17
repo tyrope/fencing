@@ -3,6 +3,7 @@ package nl.tyrope.fencing.blocks;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockPane;
 import net.minecraft.block.BlockWall;
@@ -11,8 +12,8 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -21,7 +22,7 @@ import nl.tyrope.fencing.Refs.MetaValues;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class FenceBlock extends Block {
+public class FenceBlock extends BlockContainer {
 
 	public int renderId;
 	Icon[] textures;
@@ -29,12 +30,15 @@ public class FenceBlock extends Block {
 	public FenceBlock(int id) {
 		super(id, Material.wood);
 		setUnlocalizedName("fenceBlock");
-		setCreativeTab(CreativeTabs.tabDecorations);
+		setCreativeTab(Refs.creativeTab);
 
 		setStepSound(Block.soundWoodFootstep);
 		setHardness(1.2f);
+	}
 
-		Refs.FenceID = this.blockID; // Just in case it gets shifted.
+	@Override
+	public TileEntity createNewTileEntity(World world) {
+		return null;
 	}
 
 	@Override
@@ -71,7 +75,7 @@ public class FenceBlock extends Block {
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x,
 			int y, int z) {
-		return getHitBox(world, x, y, z);
+		return getHitBox(world, x, y, z).expand(0, 0.3f, 0);
 	}
 
 	// Wireframe
@@ -148,7 +152,7 @@ public class FenceBlock extends Block {
 				x + xMax, y + 1, z + zMax);
 	}
 
-	private boolean canConnectTo(IBlockAccess iba, int x, int y, int z) {
+	protected boolean canConnectTo(IBlockAccess iba, int x, int y, int z) {
 		Block block = Block.blocksList[iba.getBlockId(x, y, z)];
 		if (block == null) {
 			return false;
@@ -189,10 +193,10 @@ public class FenceBlock extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegistry) {
-		textures = new Icon[4];
-		for (int i = 0; i < 4; i++) {
-			textures[i] = iconRegistry.registerIcon(Refs.MODID + ":fence"
-					+ Refs.subNames[i]);
+		textures = new Icon[Refs.fenceSubNames.length];
+		for (int i = 0; i < Refs.fenceSubNames.length; i++) {
+			textures[i] = iconRegistry.registerIcon("fencing:fence"
+					+ Refs.fenceSubNames[i]);
 		}
 	}
 
@@ -206,7 +210,7 @@ public class FenceBlock extends Block {
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int unknown, CreativeTabs tab, List subItems) {
 		ItemStack stack;
-		for (int ix = 0; ix < 4; ix++) {
+		for (int ix = 0; ix < Refs.fenceSubNames.length; ix++) {
 			stack = new ItemStack(this, 1, ix);
 			subItems.add(stack);
 		}
@@ -220,15 +224,16 @@ public class FenceBlock extends Block {
 
 	// Effects of walking on the fence.
 	public void onEntityWalking(World world, int x, int y, int z, Entity entity) {
+		// FIXME Not triggered due to heightened hitbox.
 		affectEntity(world.getBlockMetadata(x, y, z), entity);
 	}
 
-	private void affectEntity(int meta, Entity entity) {
+	protected void affectEntity(int meta, Entity entity) {
 		if (meta == MetaValues.FenceSilly) {
 			entity.motionX *= 0.1D;
 			entity.motionZ *= 0.1D;
 		} else if (meta == MetaValues.FenceBarbed) {
-			entity.attackEntityFrom(DamageSource.cactus, 1.0F);
+			entity.attackEntityFrom(Refs.DmgSrcs.barbed, Refs.dmgMulti);
 		}
 	}
 }
