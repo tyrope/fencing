@@ -8,23 +8,21 @@ import ic2.api.energy.tile.IEnergySource;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import nl.tyrope.fencing.Refs;
 
 public class ElectricFenceEntity extends TileEntity implements IEnergySink,
 		IEnergySource {
 
 	private boolean initialized;
-	private double buffer, charge;
+	private double buffer;
 
 	public ElectricFenceEntity() {
 		super();
 		initialized = false;
-		charge = 0;
 	}
 
 	private void initialize() {
 		if (!initialized && !this.worldObj.isRemote) {
-			System.out.println(String.format("[%s,%s,%s]initialized.", xCoord,
-					yCoord, zCoord));
 			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
 			initialized = true;
 		}
@@ -32,8 +30,6 @@ public class ElectricFenceEntity extends TileEntity implements IEnergySink,
 
 	private void uninitialize() {
 		if (initialized && !this.worldObj.isRemote) {
-			System.out.println(String.format("[%s,%s,%s]uninitialized.",
-					xCoord, yCoord, zCoord));
 			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
 			initialized = false;
 		}
@@ -83,47 +79,22 @@ public class ElectricFenceEntity extends TileEntity implements IEnergySink,
 
 	@Override
 	public double getOfferedEnergy() {
-		double ret = Math.min(buffer, getVoltage());
-		System.out.println(String.format(
-				"[%s,%s,%s]getOfferedEnergy. buffer: %s, return value: %s",
-				xCoord, yCoord, zCoord, buffer, ret));
-		return ret;
+		return Math.max(0, buffer - getVoltage());
 	}
 
 	@Override
 	public void drawEnergy(double amount) {
-		System.out
-				.println(String
-						.format("[%s,%s,%s]drawEnergy. buffer: %s, amount: %s, buffer-amount: %s",
-								xCoord, yCoord, zCoord, buffer, amount, buffer
-										- amount));
-		buffer = buffer - amount;
+		buffer -= amount;
 	}
 
 	@Override
 	public double demandedEnergyUnits() {
-		double ret = Math.max(0, getVoltage() - buffer);
-		System.out
-				.println(String
-						.format("[%s,%s,%s]demandedEnergyUnits. buffer: %s, getVoltage(): %s, output: %s",
-								xCoord, yCoord, zCoord, buffer, getVoltage(),
-								ret));
-		return ret;
+		return Math.max(0, getVoltage() * 2 - buffer);
 	}
 
 	@Override
 	public double injectEnergyUnits(ForgeDirection directionFrom, double amount) {
-		System.out
-				.println(String
-						.format("[%s,%s,%s]injectEnergyUnits. amount: %s, charge: %s, buffer: %s",
-								xCoord, yCoord, zCoord, amount, charge, buffer));
-		if (charge != getVoltage()) {
-			// Charge the fence.
-			double need = getVoltage() - charge;
-			charge = Math.max(charge + amount, getVoltage());
-			amount = Math.max(amount - need, 0);
-		}
-		buffer = buffer + amount;
+		buffer += amount;
 		return 0;
 	}
 
@@ -141,9 +112,13 @@ public class ElectricFenceEntity extends TileEntity implements IEnergySink,
 		}
 	}
 
-	public float zap() {
-		float ret = (float) (charge / 64);
-		charge = 0;
-		return ret;
+	public double zap() {
+		double ret = Math.min(getVoltage(), buffer);
+		drawEnergy(ret);
+		if (blockMetadata == Refs.MetaValues.FenceElectricTin) {
+			return ret / 16.0;
+		} else {
+			return ret / 32.0;
+		}
 	}
 }

@@ -96,6 +96,7 @@ public class ElectricFenceBlock extends FenceBlock {
 	// Effects of walking on the fence.
 	@Override
 	public void onEntityWalking(World world, int x, int y, int z, Entity entity) {
+		//FIXME Not triggered due to heightened hitbox.
 		shock((ElectricFenceEntity) world.getBlockTileEntity(x, y, z), entity);
 	}
 

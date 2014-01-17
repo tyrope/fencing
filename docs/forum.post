@@ -26,6 +26,14 @@ For those areas you really don't want anybody (or anything) to be near.
 [*]Wooden Fence
 [img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_wooden.png[/img]
 For when you're out of string, or prefer a brown look.
+
+[*]Tin Electric Fence
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_elecTin.png[/img]
+Low power, but shockingly effective. Only available when IC2 is installed.
+
+[*]Copper Electric Fence
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_elecCopper.png[/img]
+Who know that putting electrical power through copper fences had such a stunning effect. Only available when IC2 is installed.
 [/list][/spoiler]
 
 [size=5]Screenshots[/size]
@@ -33,8 +41,6 @@ For when you're out of string, or prefer a brown look.
 [img]https://raw.github.com/tyrope/fencing/master/docs/img/inworld_fenceWall.png[/img]
 [img]https://raw.github.com/tyrope/fencing/master/docs/img/inworld_connections.png[/img]
 [img]https://raw.github.com/tyrope/fencing/master/docs/img/inworld_animalpen.png[/img]
-Due to the blocks being (a very tiny amount under) 1 block high, you need double fences for animal pens.
-Special animal-containment fences may come in the future, feedback welcome.
 [/spoiler]
 
 [size=5]Videos[/size]
@@ -45,7 +51,7 @@ JailBrokenByT2 reviews Fencing 0.1.
 
 [size=5]Download[/size]
 Versions are written as Major.Minor.Bugfix.Build
-[url=https://github.com/tyrope/fencing/releases/download/0.2.0/fencing-0.2.0.22.jar]Version 0.2.0.22 for Minecraft 1.6.4[/url]
+[url=https://github.com/tyrope/fencing/releases/download/0.3.0/fencing-0.3.0.22.jar]Version 0.3.0.22 for Minecraft 1.6.4[/url]
 For older versions, see [url=https://github.com/tyrope/fencing/releases]The GitHub releases page[/url]
 
 
