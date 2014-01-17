@@ -1,0 +1,76 @@
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/header.png[/img]
+Does exactly what it says on the tin, fence off any area you want!
+
+[size=5]Items, blocks and crafting recipes[/size]
+[spoiler]
+[list][*]Fence Post
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_post.png[/img]
+Reinforced sticks for a sturdy base.
+
+[*]String Fence
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_string.png[/img]
+Cheap and simple. Keep things out (or in) of your area.
+
+[*]Iron Fence
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_iron.png[/img]
+Slightly more expensive, slightly more blast resistant.
+
+[*]Silly String Fence
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_silly.png[/img]
+Upgrade your string fences with some slime, instant stickyness!
+
+[*]Barbed Wire Fence
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_barbed.png[/img]
+For those areas you really don't want anybody (or anything) to be near.
+
+[*]Wooden Fence
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_wooden.png[/img]
+For when you're out of string, or prefer a brown look.
+
+[*]Tin Electric Fence
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_elecTin.png[/img]
+Low power, but shockingly effective. Only available when IC2 is installed.
+
+[*]Copper Electric Fence
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_elecCopper.png[/img]
+Who know that putting electrical power through copper fences had such a stunning effect. Only available when IC2 is installed.
+[/list][/spoiler]
+
+[size=5]Screenshots[/size]
+[spoiler]
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/inworld_fenceWall.png[/img]
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/inworld_connections.png[/img]
+[img]https://raw.github.com/tyrope/fencing/master/docs/img/inworld_animalpen.png[/img]
+[/spoiler]
+
+[size=5]Videos[/size]
+[spoiler]
+JailBrokenByT2 reviews Fencing 0.1.
+[media]http://youtu.be/ftyRy4FxcKM[/media]
+[/spoiler]
+
+[size=5]Download[/size]
+Versions are written as Major.Minor.Bugfix.Build
+[url=https://github.com/tyrope/fencing/releases/download/0.3.0/fencing-0.3.0.22.jar]Version 0.3.0.22 for Minecraft 1.6.4[/url]
+For older versions, see [url=https://github.com/tyrope/fencing/releases]The GitHub releases page[/url]
+
+
+Latest development build: [color=red]WARNING: Potentially game-breaking, back up your saves before installing these.[/color]
+[url=http://willie.dftba.net/jenkins/job/Fencing/lastSuccessfulBuild/artifact/fencing-nightly.jar]I agree that this link can destroy my saves.[/url]
+
+[url=https://github.com/tyrope/fencing]Source Code[/url]  & [url=https://github.com/tyrope/fencing/issues]Bug tracking[/url] hosted on github. Please post bugs there!
+Support channel: [url=https://webchat.esper.net/?channels=fluffymods]irc.esper.net#fluffymods[/url]
+
+[size=5]Legal things[/size]
+[url=https://github.com/tyrope/fencing/blob/master/LICENSE]Licenced under the GNU General Public License v3.[/url]
+Modpacks: I hereby grant you permission to use my mod in your modpack, if it follows the following simple rules:
+[list][*]You have permission for all other mods in your pack.
+[*]Credit for all mods in your pack is given to it's original authors.
+[*]The download includes a link to this post or the github repository linked above.[/list]
+
+Let's-players (Incl. reviewers): I hereby grant you permission to use my mod in your media, if it follows the following simple rules:
+[list][*]You have permission for all other mods in your video or stream.
+[*]On recorded products specifically about Fencing, a link is provided to this post or the github repository.
+[*]You are allowed to monetize your video using YouTube's Partner program, if above criteria are met.[/list]
+
+NOTE: Above permissions can be modified with or without prior warning by the Fencing developers.

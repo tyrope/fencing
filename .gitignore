@@ -16,6 +16,3 @@ gradlew
 *.war
 *.ear
 
-# Branch Specific. #
-docs/
-
