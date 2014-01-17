@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>fencing.cfg</name>
+			<type>1</type>
+			<locationURI>WORKSPACE_LOC/config/fencing.cfg</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
