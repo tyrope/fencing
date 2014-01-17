@@ -9,11 +9,10 @@ build.gradle
 gradlew
 
 # eclipse files #
-.classpath
-.project
 .settings/
 
 # Package Files #
 *.jar
 *.war
 *.ear
+
