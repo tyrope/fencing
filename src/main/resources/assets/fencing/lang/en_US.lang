@@ -10,8 +10,11 @@ tile.fenceBlockIron.name=Iron Fence
 tile.fenceBlockSilly.name=Silly String Fence
 tile.fenceBlockBarbed.name=Barbed Wire Fence
 tile.fenceBlockWood.name=Wooden Fence
+
 tile.fenceBlockElectricCopper.name=Copper Electric Fence
 tile.fenceBlockElectricTin.name=Tin Electric Fence
+
+tile.fenceBlockPainted.name=Painted Wooden Fence (%s)
 
 # Death messages
 death.attack.barbedWire=%1$s got stabbed to death by barbed wire.

@@ -8,6 +8,7 @@ public class Refs {
 	public static int PoleID;
 	public static int FenceID;
 	public static int ElecFenceID;
+	public static int PaintedFenceID;
 
 	// Fence subnames
 	public final static String[] fenceSubNames = { "String", "Iron", "Silly",

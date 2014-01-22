@@ -8,10 +8,12 @@ import net.minecraftforge.common.MinecraftForge;
 import nl.tyrope.fencing.Refs.MetaValues;
 import nl.tyrope.fencing.blocks.ElectricFenceBlock;
 import nl.tyrope.fencing.blocks.FenceBlock;
+import nl.tyrope.fencing.blocks.PaintedFenceBlock;
 import nl.tyrope.fencing.creativetab.FencingTab;
 import nl.tyrope.fencing.items.ElectricFenceBlockItem;
 import nl.tyrope.fencing.items.FenceBlockItem;
 import nl.tyrope.fencing.items.FencePoleItem;
+import nl.tyrope.fencing.items.PaintedFenceBlockItem;
 import nl.tyrope.fencing.proxy.Common;
 import nl.tyrope.fencing.tileEntity.ElectricFenceEntity;
 import nl.tyrope.fencing.util.BarbedDmg;
@@ -40,6 +42,7 @@ public class Fencing {
 	public FencePoleItem fencePole;
 	public FenceBlock fenceBlock;
 	public ElectricFenceBlock electricFenceBlock;
+	public PaintedFenceBlock paintedFenceBlock;
 
 	/**
 	 * This is code that is executed prior to your mod being initialized into of
@@ -63,6 +66,8 @@ public class Fencing {
 		Refs.PoleID = config.getItem("fencePole", 5000).getInt();
 		Refs.FenceID = config.getBlock("fenceBlock", 500).getInt();
 		Refs.ElecFenceID = config.getBlock("fenceBlockElectric", 501).getInt();
+		Refs.PaintedFenceID = config.getBlock("fenceBlockPainted", 502)
+				.getInt();
 		Refs.dmgMulti = config.get(
 				"misc",
 				"damage_multiplier",
@@ -83,8 +88,11 @@ public class Fencing {
 		// Make items and blocks
 		fencePole = new FencePoleItem(Refs.PoleID);
 		fenceBlock = new FenceBlock(Refs.FenceID);
+		paintedFenceBlock = new PaintedFenceBlock(Refs.PaintedFenceID);
+
 		// Just in case it gets shifted.
 		Refs.FenceID = fenceBlock.blockID;
+		Refs.PaintedFenceID = paintedFenceBlock.blockID;
 
 		// Make damage objects.
 		Refs.DmgSrcs.barbed = new BarbedDmg();
@@ -107,6 +115,8 @@ public class Fencing {
 		// register block
 		GameRegistry.registerBlock(fenceBlock, FenceBlockItem.class,
 				"FenceBlockItem");
+		GameRegistry.registerBlock(paintedFenceBlock,
+				PaintedFenceBlockItem.class, "PaintedFenceBlockItem");
 
 		ItemStack pole = new ItemStack(fencePole);
 
@@ -124,6 +134,14 @@ public class Fencing {
 		GameRegistry.addRecipe(new ItemStack(fenceBlock, 1,
 				MetaValues.FenceWood), "xyx", 'x', pole, 'y', new ItemStack(
 				Item.stick));
+
+		for (int i = 0; i < 16; i++) {
+			GameRegistry.addShapelessRecipe(new ItemStack(paintedFenceBlock, 1,
+					i), new ItemStack(fenceBlock, 1, MetaValues.FenceWood),
+					new ItemStack(Item.dyePowder, 1, i));
+		}
+
+		// Intermod compatibility.
 		if (Loader.isModLoaded("IC2")) {
 			System.out.println("IndustrialCraft 2 detected: ");
 
@@ -165,9 +183,10 @@ public class Fencing {
 			System.out.println("Complete.");
 
 			proxy.registerRenderers(new FenceBlock[] { fenceBlock,
-					electricFenceBlock });
+					paintedFenceBlock, electricFenceBlock });
 		} else {
-			proxy.registerRenderers(new FenceBlock[] { fenceBlock });
+			proxy.registerRenderers(new FenceBlock[] { fenceBlock,
+					paintedFenceBlock });
 		}
 	}
 
