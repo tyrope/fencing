@@ -27,7 +27,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-@Mod(modid = "fencing", name = "Fencing", version = "0.3.1", dependencies = "after:IC2")
+@Mod(modid = "fencing", name = "Fencing", version = "0.4.dev", dependencies = "after:IC2")
 @NetworkMod(clientSideRequired = true)
 public class Fencing {
 
