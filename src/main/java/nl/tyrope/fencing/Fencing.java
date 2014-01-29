@@ -138,7 +138,7 @@ public class Fencing {
 		for (int i = 0; i < 16; i++) {
 			GameRegistry.addShapelessRecipe(new ItemStack(paintedFenceBlock, 1,
 					i), new ItemStack(fenceBlock, 1, MetaValues.FenceWood),
-					new ItemStack(Item.dyePowder, 1, i));
+					new ItemStack(Item.dyePowder, 1, 15 - i));
 		}
 
 		// Intermod compatibility.

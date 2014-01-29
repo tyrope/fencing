@@ -14,7 +14,22 @@ tile.fenceBlockWood.name=Wooden Fence
 tile.fenceBlockElectricCopper.name=Copper Electric Fence
 tile.fenceBlockElectricTin.name=Tin Electric Fence
 
-tile.fenceBlockPainted.name=Painted Wooden Fence (%s)
+tile.fenceBlockPainted.black.name=Painted Wooden Fence (Black)
+tile.fenceBlockPainted.red.name=Painted Wooden Fence (Red)
+tile.fenceBlockPainted.green.name=Painted Wooden Fence (Green)
+tile.fenceBlockPainted.brown.name=Painted Wooden Fence (Brown)
+tile.fenceBlockPainted.blue.name=Painted Wooden Fence (Blue)
+tile.fenceBlockPainted.purple.name=Painted Wooden Fence (Purple)
+tile.fenceBlockPainted.cyan.name=Painted Wooden Fence (Cyan)
+tile.fenceBlockPainted.silver.name=Painted Wooden Fence (Light Gray)
+tile.fenceBlockPainted.gray.name=Painted Wooden Fence (Gray)
+tile.fenceBlockPainted.pink.name=Painted Wooden Fence (Pink)
+tile.fenceBlockPainted.lime.name=Painted Wooden Fence (Lime)
+tile.fenceBlockPainted.yellow.name=Painted Wooden Fence (Yellow)
+tile.fenceBlockPainted.lightBlue.name=Painted Wooden Fence (Light Blue)
+tile.fenceBlockPainted.magenta.name=Painted Wooden Fence (Magenta)
+tile.fenceBlockPainted.orange.name=Painted Wooden Fence (Orange)
+tile.fenceBlockPainted.white.name=Painted Wooden Fence (White)
 
 # Death messages
 death.attack.barbedWire=%1$s got stabbed to death by barbed wire.

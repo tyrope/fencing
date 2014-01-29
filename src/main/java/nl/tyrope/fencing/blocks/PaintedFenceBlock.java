@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
@@ -29,7 +30,8 @@ public class PaintedFenceBlock extends FenceBlock {
 		textures = new Icon[16];
 		for (int i = 0; i < 16; i++) {
 			textures[i] = iconRegistry.registerIcon("fencing:fencePainted"
-					+ ItemDye.dyeColorNames[i]);
+					+ ItemDye.dyeColorNames[ItemDye.dyeColorNames.length - 1
+							- i]);
 		}
 	}
 
@@ -41,5 +43,9 @@ public class PaintedFenceBlock extends FenceBlock {
 			stack = new ItemStack(this, 1, ix);
 			subItems.add(stack);
 		}
+	}
+
+	@Override
+	protected void affectEntity(int meta, Entity entity) {
 	}
 }

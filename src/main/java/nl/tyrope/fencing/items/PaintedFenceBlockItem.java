@@ -4,7 +4,6 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
-import nl.tyrope.fencing.Refs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -20,7 +19,8 @@ public class PaintedFenceBlockItem extends FenceBlockItem {
 		FenceItemIcons = new Icon[16];
 		for (int i = 0; i < 16; i++) {
 			FenceItemIcons[i] = icon.registerIcon("fencing:iconFencePainted"
-					+ ItemDye.dyeColorNames[i]);
+					+ ItemDye.dyeColorNames[ItemDye.dyeColorNames.length - 1
+							- i]);
 		}
 	}
 
