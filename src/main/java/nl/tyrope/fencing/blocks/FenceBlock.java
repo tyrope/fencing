@@ -11,6 +11,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -37,6 +39,49 @@ public class FenceBlock extends BlockContainer {
 	}
 
 	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z,
+			EntityPlayer player, int par6, float par7, float par8, float par9) {
+		if (player.getCurrentEquippedItem() == null) {
+			// Be gone, Null Pointer Exception!
+			return false;
+		}
+		if (world.getBlockMetadata(x, y, z) != MetaValues.FenceCut) {
+			// Cut the fence.
+			if (player.getCurrentEquippedItem().itemID == Item.shears.itemID) {
+				// player is using shears.
+				world.setBlock(x, y, z, Refs.FenceID, MetaValues.FenceCut, 3);
+				ItemStack is = player.getCurrentEquippedItem();
+				// XXX Damage amount depends on fence type.
+				// TODO Don't damage items of creative players
+				is.damageItem(1, player);
+				player.setCurrentItemOrArmor(0, is);
+				// TODO Drop center item. (configurable)
+				return true;
+			}
+			return false;
+		} else {
+			// Repair fence.
+			if (player.getCurrentEquippedItem().itemID == Item.silk.itemID) {
+				world.setBlock(x, y, z, Refs.FenceID, MetaValues.FenceString, 3);
+			} else if (player.getCurrentEquippedItem().itemID == Item.ingotIron.itemID) {
+				world.setBlock(x, y, z, Refs.FenceID, MetaValues.FenceIron, 3);
+			} else if (player.getCurrentEquippedItem().itemID == Block.fenceIron.blockID) {
+				world.setBlock(x, y, z, Refs.FenceID, MetaValues.FenceBarbed, 3);
+			} else {
+				// Invalid item. continue as if nothing happened. Because
+				// nothing happened.
+				return false;
+			}
+			// Valid item, remove one from the stack.
+			// TODO Don't take items from creative players
+			ItemStack is = player.getCurrentEquippedItem();
+			is.stackSize = is.stackSize - 1;
+			player.setCurrentItemOrArmor(0, is);
+			return true;
+		}
+	}
+
+	@Override
 	public TileEntity createNewTileEntity(World world) {
 		return null;
 	}
@@ -59,15 +104,13 @@ public class FenceBlock extends BlockContainer {
 	 * Adds all intersecting collision boxes to a list. (Be sure to only add boxes to the list if they intersect the
 	 * mask.) Parameters: World, X, Y, Z, mask, list, colliding entity
 	 */
-	public void addCollisionBoxesToList(World par1World, int par2, int par3,
-			int par4, AxisAlignedBB par5AxisAlignedBB, List par6List,
-			Entity par7Entity) {
+	public void addCollisionBoxesToList(World world, int x, int y, int z,
+			AxisAlignedBB abb, List list, Entity entity) {
 		AxisAlignedBB axisalignedbb1 = this.getCollisionBoundingBoxFromPool(
-				par1World, par2, par3, par4);
+				world, x, y, z);
 
-		if (axisalignedbb1 != null
-				&& par5AxisAlignedBB.intersectsWith(axisalignedbb1)) {
-			par6List.add(axisalignedbb1);
+		if (axisalignedbb1 != null && abb.intersectsWith(axisalignedbb1)) {
+			list.add(axisalignedbb1);
 		}
 	}
 
@@ -75,7 +118,12 @@ public class FenceBlock extends BlockContainer {
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x,
 			int y, int z) {
-		return getHitBox(world, x, y, z).expand(0, 0.3f, 0);
+		if (world.getBlockMetadata(x, y, z) == Refs.MetaValues.FenceCut) {
+			// /XXX Hitbox at [0,-1, 0] might cause issues later.
+			return AxisAlignedBB.getAABBPool().getAABB(0, -1, 0, 0, -1, 0);
+		} else {
+			return getHitBox(world, x, y, z).expand(0, 0.3f, 0);
+		}
 	}
 
 	// Wireframe

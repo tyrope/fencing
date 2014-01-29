@@ -12,7 +12,7 @@ public class Refs {
 
 	// Fence subnames
 	public final static String[] fenceSubNames = { "String", "Iron", "Silly",
-			"Barbed", "Wood" };
+			"Barbed", "Wood", "Cut" };
 	public final static String[] elecFenceSubNames = { "Tin", "Copper" };
 	public static CreativeTabs creativeTab;
 
@@ -31,6 +31,7 @@ public class Refs {
 		public static final int FenceSilly = 2;
 		public static final int FenceBarbed = 3;
 		public static final int FenceWood = 4;
+		public static final int FenceCut = 5;
 
 		public static final int FenceElectricTin = 0;
 		public static final int FenceElectricCopper = 1;

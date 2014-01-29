@@ -120,8 +120,10 @@ public class Fencing {
 
 		ItemStack pole = new ItemStack(fencePole);
 
-		GameRegistry.addRecipe(new ItemStack(fenceBlock, 1, 0), "xyx", 'x',
-				pole, 'y', new ItemStack(Item.silk));
+		// Regular pole/X/pole crafting
+		GameRegistry.addRecipe(new ItemStack(fenceBlock, 1,
+				MetaValues.FenceString), "xyx", 'x', pole, 'y', new ItemStack(
+				Item.silk));
 		GameRegistry.addRecipe(new ItemStack(fenceBlock, 1,
 				MetaValues.FenceIron), "xyx", 'x', pole, 'y', new ItemStack(
 				Item.ingotIron));
@@ -134,6 +136,20 @@ public class Fencing {
 		GameRegistry.addRecipe(new ItemStack(fenceBlock, 1,
 				MetaValues.FenceWood), "xyx", 'x', pole, 'y', new ItemStack(
 				Item.stick));
+
+		// Repairs
+		GameRegistry.addShapelessRecipe(new ItemStack(fenceBlock, 1,
+				MetaValues.FenceString), new ItemStack(fenceBlock, 1,
+				MetaValues.FenceCut), new ItemStack(Item.silk));
+		GameRegistry.addShapelessRecipe(new ItemStack(fenceBlock, 1,
+				MetaValues.FenceIron), new ItemStack(fenceBlock, 1,
+				MetaValues.FenceCut), new ItemStack(Item.ingotIron));
+		GameRegistry.addShapelessRecipe(new ItemStack(fenceBlock, 1,
+				MetaValues.FenceBarbed), new ItemStack(fenceBlock, 1,
+				MetaValues.FenceCut), new ItemStack(Block.fenceIron));
+		GameRegistry.addShapelessRecipe(new ItemStack(fenceBlock, 1,
+				MetaValues.FenceWood), new ItemStack(fenceBlock, 1,
+				MetaValues.FenceCut), new ItemStack(Item.stick));
 
 		for (int i = 0; i < 16; i++) {
 			GameRegistry.addShapelessRecipe(new ItemStack(paintedFenceBlock, 1,
