@@ -18,6 +18,7 @@ public class Refs {
 
 	public static float textureSize = 32;
 	public static int dmgMulti;
+	public static boolean dropCenter;
 
 	public static class DmgSrcs {
 		public static DamageSource barbed;

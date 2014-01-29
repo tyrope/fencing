@@ -81,6 +81,13 @@ public class Fencing {
 						+ "max. 1 heart for tin &"
 						+ System.getProperty("line.separator")
 						+ "max. 2 hearts for copper.").getInt();
+		Refs.dropCenter = config.get(
+				"misc",
+				"drop_on_cut",
+				true,
+				"Whether or not to drop the center"
+						+ System.getProperty("line.separator")
+						+ "item when cutting a fence.").getBoolean(true);
 
 		// Save them in case they weren't set before.
 		config.save();
