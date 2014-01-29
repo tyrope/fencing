@@ -194,6 +194,11 @@ public class Fencing {
 				GameRegistry.addRecipe(new ItemStack(electricFenceBlock, 1,
 						MetaValues.FenceElectricTin), "xyx", 'x', pole, 'y',
 						cableTin);
+				// Repair
+				GameRegistry.addShapelessRecipe(new ItemStack(
+						electricFenceBlock, 1, MetaValues.FenceElectricTin),
+						new ItemStack(fenceBlock, 1, MetaValues.FenceCut),
+						cableTin);
 			}
 			ItemStack cableCopper = ic2.api.item.Items
 					.getItem("copperCableItem");
@@ -201,6 +206,11 @@ public class Fencing {
 				System.out.print("Copper loaded. ");
 				GameRegistry.addRecipe(new ItemStack(electricFenceBlock, 1,
 						MetaValues.FenceElectricCopper), "xyx", 'x', pole, 'y',
+						cableCopper);
+				// Repair
+				GameRegistry.addShapelessRecipe(new ItemStack(
+						electricFenceBlock, 1, MetaValues.FenceElectricCopper),
+						new ItemStack(fenceBlock, 1, MetaValues.FenceCut),
 						cableCopper);
 			}
 			System.out.println("Complete.");
