@@ -14,8 +14,6 @@ tile.fenceBlockWood.name=Hölzerner Zaun
 tile.fenceBlockElectricCopper.name=Elektrischer Kupferzaun
 tile.fenceBlockElectricTin.name=Elektrischer Zinnzaun
 
-tile.fenceBlockPainted.name=Unnamed (%s)
-
 # Death messages
 death.attack.barbedWire=%1$s verhedderte sich im Stacheldrahtzaun.
 death.attack.electric=%1$s hat einen Elektrozaun angefasst.

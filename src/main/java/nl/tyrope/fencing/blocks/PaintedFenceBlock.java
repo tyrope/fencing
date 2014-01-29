@@ -17,7 +17,7 @@ public class PaintedFenceBlock extends FenceBlock {
 
 	public PaintedFenceBlock(int id) {
 		super(id);
-		setUnlocalizedName("fenceBlockWood");
+		setUnlocalizedName("fenceBlockWoodPainted");
 		setCreativeTab(Refs.creativeTab);
 
 		setStepSound(Block.soundWoodFootstep);
@@ -30,8 +30,7 @@ public class PaintedFenceBlock extends FenceBlock {
 		textures = new Icon[16];
 		for (int i = 0; i < 16; i++) {
 			textures[i] = iconRegistry.registerIcon("fencing:fencePainted"
-					+ ItemDye.dyeColorNames[ItemDye.dyeColorNames.length - 1
-							- i]);
+					+ ItemDye.dyeColorNames[15 - i]);
 		}
 	}
 
