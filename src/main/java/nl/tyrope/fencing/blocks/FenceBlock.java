@@ -52,7 +52,6 @@ public class FenceBlock extends BlockContainer {
 				world.setBlock(x, y, z, Refs.FenceID, MetaValues.FenceCut, 3);
 				ItemStack is = player.getCurrentEquippedItem();
 				// XXX Damage amount depends on fence type.
-				// TODO Don't damage items of creative players
 				is.damageItem(1, player);
 				player.setCurrentItemOrArmor(0, is);
 				// TODO Drop center item. (configurable)
@@ -67,6 +66,8 @@ public class FenceBlock extends BlockContainer {
 				world.setBlock(x, y, z, Refs.FenceID, MetaValues.FenceIron, 3);
 			} else if (player.getCurrentEquippedItem().itemID == Block.fenceIron.blockID) {
 				world.setBlock(x, y, z, Refs.FenceID, MetaValues.FenceBarbed, 3);
+			} else if (player.getCurrentEquippedItem().itemID == Item.stick.itemID) {
+				world.setBlock(x, y, z, Refs.FenceID, MetaValues.FenceWood, 3);
 			} else {
 				// Invalid item. continue as if nothing happened. Because
 				// nothing happened.
