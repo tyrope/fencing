@@ -45,7 +45,8 @@ public class FenceBlock extends BlockContainer {
 			// Be gone, Null Pointer Exception!
 			return false;
 		}
-		if (world.getBlockMetadata(x, y, z) != MetaValues.FenceCut) {
+		int meta = world.getBlockMetadata(x, y, z);
+		if (meta != MetaValues.FenceCut) {
 			// Cut the fence.
 			if (player.getCurrentEquippedItem().itemID == Item.shears.itemID) {
 				// player is using shears.
@@ -54,8 +55,40 @@ public class FenceBlock extends BlockContainer {
 				// XXX Damage amount depends on fence type.
 				is.damageItem(1, player);
 				player.setCurrentItemOrArmor(0, is);
-				// TODO Drop center item. (configurable)
+				if (Refs.dropCenter && !world.isRemote) {
+					// TODO Don't drop to creative players.
+					int droppedItemID;
+					switch (meta) {
+					case Refs.MetaValues.FenceString:
+						droppedItemID = Item.silk.itemID;
+						break;
+					case Refs.MetaValues.FenceIron:
+						droppedItemID = Item.ingotIron.itemID;
+						break;
+					case Refs.MetaValues.FenceBarbed:
+						droppedItemID = Block.fenceIron.blockID;
+						break;
+					case Refs.MetaValues.FenceWood:
+						droppedItemID = Item.stick.itemID;
+						break;
+					case Refs.MetaValues.FenceSilly:
+						player.dropItem(Item.slimeBall.itemID, 1);
+						droppedItemID = Item.silk.itemID;
+						break;
+					default:
+						droppedItemID = 0;
+					}
+					player.dropItem(droppedItemID, 1);
+				}
 				return true;
+			} else if (player.getCurrentEquippedItem().itemID == Item.slimeBall.itemID
+					&& meta == MetaValues.FenceString) {
+				// Upgrade a string fence with a slime ball.
+				world.setBlock(x, y, z, Refs.FenceID, MetaValues.FenceSilly, 3);
+				// TODO Don't take items from creative players
+				ItemStack is = player.getCurrentEquippedItem();
+				is.stackSize = is.stackSize - 1;
+				player.setCurrentItemOrArmor(0, is);
 			}
 			return false;
 		} else {
