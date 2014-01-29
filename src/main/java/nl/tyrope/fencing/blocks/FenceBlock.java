@@ -57,6 +57,7 @@ public class FenceBlock extends BlockContainer {
 				player.setCurrentItemOrArmor(0, is);
 				if (Refs.dropCenter && !world.isRemote) {
 					// TODO Don't drop to creative players.
+					// entityPlayerMP.theItemInWorldManager.isCreative()
 					int droppedItemID;
 					switch (meta) {
 					case Refs.MetaValues.FenceString:
@@ -86,6 +87,7 @@ public class FenceBlock extends BlockContainer {
 				// Upgrade a string fence with a slime ball.
 				world.setBlock(x, y, z, Refs.FenceID, MetaValues.FenceSilly, 3);
 				// TODO Don't take items from creative players
+				// entityPlayerMP.theItemInWorldManager.isCreative()
 				ItemStack is = player.getCurrentEquippedItem();
 				is.stackSize = is.stackSize - 1;
 				player.setCurrentItemOrArmor(0, is);
@@ -108,6 +110,7 @@ public class FenceBlock extends BlockContainer {
 			}
 			// Valid item, remove one from the stack.
 			// TODO Don't take items from creative players
+			// entityPlayerMP.theItemInWorldManager.isCreative()
 			ItemStack is = player.getCurrentEquippedItem();
 			is.stackSize = is.stackSize - 1;
 			player.setCurrentItemOrArmor(0, is);
