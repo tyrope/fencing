@@ -1,40 +1,5 @@
 [img]https://raw.github.com/tyrope/fencing/master/docs/img/header.png[/img]
-Does exactly what it says on the tin, fence off any area you want!
-
-[size=5]Items, blocks and crafting recipes[/size]
-[spoiler]
-[list][*]Fence Post
-[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_post.png[/img]
-Reinforced sticks for a sturdy base.
-
-[*]String Fence
-[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_string.png[/img]
-Cheap and simple. Keep things out (or in) of your area.
-
-[*]Iron Fence
-[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_iron.png[/img]
-Slightly more expensive, slightly more blast resistant.
-
-[*]Silly String Fence
-[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_silly.png[/img]
-Upgrade your string fences with some slime, instant stickyness!
-
-[*]Barbed Wire Fence
-[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_barbed.png[/img]
-For those areas you really don't want anybody (or anything) to be near.
-
-[*]Wooden Fence
-[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_wooden.png[/img]
-For when you're out of string, or prefer a brown look.
-
-[*]Tin Electric Fence
-[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_elecTin.png[/img]
-Low power, but shockingly effective. Only available when IC2 is installed.
-
-[*]Copper Electric Fence
-[img]https://raw.github.com/tyrope/fencing/master/docs/img/craft_elecCopper.png[/img]
-Who know that putting electrical power through copper fences had such a stunning effect. Only available when IC2 is installed.
-[/list][/spoiler]
+A minecraft mod adding all kinds of new fences (and possibly more in the future!)
 
 [size=5]Screenshots[/size]
 [spoiler]
@@ -58,7 +23,7 @@ For older versions, see [url=https://github.com/tyrope/fencing/releases]The GitH
 Latest development build: [color=red]WARNING: Potentially game-breaking, back up your saves before installing these.[/color]
 [url=http://willie.dftba.net/jenkins/job/Fencing/lastSuccessfulBuild/artifact/fencing-nightly.jar]I agree that this link can destroy my saves.[/url]
 
-[url=https://github.com/tyrope/fencing]Source Code[/url]  & [url=https://github.com/tyrope/fencing/issues]Bug tracking[/url] hosted on github. Please post bugs there!
+[url=https://github.com/tyrope/fencing/wiki]Wiki[/url] & [url=https://github.com/tyrope/fencing]Source Code[/url] & [url=https://github.com/tyrope/fencing/issues]Bug tracking[/url] hosted on github. Please post bugs there!
 Support channel: [url=https://webchat.esper.net/?channels=fluffymods]irc.esper.net#fluffymods[/url]
 
 [size=5]Legal things[/size]
