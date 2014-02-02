@@ -10,9 +10,27 @@ tile.fenceBlockIron.name=Eisenzaun
 tile.fenceBlockSilly.name=Klebriger Schnurzaun
 tile.fenceBlockBarbed.name=Stacheldrahtzaun
 tile.fenceBlockWood.name=Hölzerner Zaun
+tile.fenceBlockCut.name=Zerschnittener Zaun
 
 tile.fenceBlockElectricCopper.name=Elektrischer Kupferzaun
 tile.fenceBlockElectricTin.name=Elektrischer Zinnzaun
+
+tile.fenceBlockWoodPainted.black.name=Gefärbter Hölzerner Zaun (Schwarz)
+tile.fenceBlockWoodPainted.red.name=Gefärbter Hölzerner Zaun (Rot)
+tile.fenceBlockWoodPainted.green.name=Gefärbter Hölzerner Zaun (Grün)
+tile.fenceBlockWoodPainted.brown.name=Gefärbter Hölzerner Zaun (Braun)
+tile.fenceBlockWoodPainted.blue.name=Gefärbter Hölzerner Zaun (Blau)
+tile.fenceBlockWoodPainted.purple.name=Gefärbter Hölzerner Zaun (Violett)
+tile.fenceBlockWoodPainted.cyan.name=Gefärbter Hölzerner Zaun (Türkis)
+tile.fenceBlockWoodPainted.silver.name=Gefärbter Hölzerner Zaun (Hellgrau)
+tile.fenceBlockWoodPainted.gray.name=Gefärbter Hölzerner Zaun (Grau)
+tile.fenceBlockWoodPainted.pink.name=Gefärbter Hölzerner Zaun (Pink)
+tile.fenceBlockWoodPainted.lime.name=Gefärbter Hölzerner Zaun (Hellgrün)
+tile.fenceBlockWoodPainted.yellow.name=Gefärbter Hölzerner Zaun (Gelb)
+tile.fenceBlockWoodPainted.lightBlue.name=Gefärbter Hölzerner Zaun (Hellblau)
+tile.fenceBlockWoodPainted.magenta.name=Gefärbter Hölzerner Zaun (Magenta)
+tile.fenceBlockWoodPainted.orange.name=Gefärbter Hölzerner Zaun (Orange)
+tile.fenceBlockWoodPainted.white.name=Gefärbter Hölzerner Zaun (Weiß)
 
 # Death messages
 death.attack.barbedWire=%1$s verhedderte sich im Stacheldrahtzaun.
