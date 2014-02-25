@@ -21,7 +21,7 @@ public class RecipeInputOreDict implements IRecipeInput {
 		List<ItemStack> inputs = OreDictionary.getOres(input);
 
 		for (ItemStack input1 : inputs) {
-			if (subject.itemID == input1.itemID &&
+			if (subject.getItem() == input1.getItem() &&
 					(subject.getItemDamage() == input1.getItemDamage() || input1.getItemDamage() == OreDictionary.WILDCARD_VALUE)) {
 				return true;
 			}
