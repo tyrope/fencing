@@ -4,9 +4,9 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import nl.tyrope.fencing.Refs;
 import nl.tyrope.fencing.blocks.FenceBlock;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
@@ -16,7 +16,7 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 
 	public static int renderID = RenderingRegistry.getNextAvailableRenderId();
 
-	private float[] getTexCoords(Icon c) {
+	private float[] getTexCoords(IIcon c) {
 		float u = c.getMinU();
 		float v = c.getMinV();
 
@@ -31,7 +31,7 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 	public void renderInventoryBlock(Block block, int metadata, int modelID,
 			RenderBlocks renderer) {
 
-		Icon c = block.getIcon(0, metadata);
+		IIcon c = block.getIcon(0, metadata);
 		float[] tex = getTexCoords(c);
 		float u = tex[0], v = tex[1], du = tex[2], dv = tex[3];
 
@@ -52,7 +52,7 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 	public boolean renderWorldBlock(IBlockAccess iba, int x, int y, int z,
 			Block block, int modelId, RenderBlocks renderer) {
 
-		Icon c = block.getIcon(0, iba.getBlockMetadata(x, y, z));
+		IIcon c = block.getIcon(0, iba.getBlockMetadata(x, y, z));
 		float[] tex = getTexCoords(c);
 		float u = tex[0], v = tex[1], du = tex[2], dv = tex[3];
 
@@ -463,7 +463,7 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 	}
 
 	@Override
-	public boolean shouldRender3DInInventory() {
+	public boolean shouldRender3DInInventory(int modelId) {
 		return false;
 	}
 

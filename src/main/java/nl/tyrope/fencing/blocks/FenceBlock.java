@@ -8,15 +8,18 @@ import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockPane;
 import net.minecraft.block.BlockWall;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import nl.tyrope.fencing.Refs;
@@ -27,14 +30,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class FenceBlock extends BlockContainer {
 
 	public int renderId;
-	Icon[] textures;
+	IIcon[] textures;
 
-	public FenceBlock(int id) {
-		super(id, Material.wood);
-		setUnlocalizedName("fenceBlock");
+	public FenceBlock() {
+		super(Material.wood);
+		setBlockName("fenceBlock");
 		setCreativeTab(Refs.creativeTab);
 
-		setStepSound(Block.soundWoodFootstep);
+		setHarvestLevel("axe", 0);
+		setStepSound(Block.soundTypeWood);
 		setHardness(1.2f);
 	}
 
@@ -48,9 +52,10 @@ public class FenceBlock extends BlockContainer {
 		int meta = world.getBlockMetadata(x, y, z);
 		if (meta != MetaValues.FenceCut) {
 			// Cut the fence.
-			if (player.getCurrentEquippedItem().itemID == Item.shears.itemID) {
+			if (player.getCurrentEquippedItem() == new ItemStack(Items.shears)) {
 				// player is using shears.
-				world.setBlock(x, y, z, Refs.FenceID, MetaValues.FenceCut, 3);
+				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
+						MetaValues.FenceCut, 3);
 				ItemStack is = player.getCurrentEquippedItem();
 				// XXX Damage amount depends on fence type.
 				is.damageItem(1, player);
@@ -58,34 +63,32 @@ public class FenceBlock extends BlockContainer {
 				if (Refs.dropCenter && !world.isRemote) {
 					// TODO Don't drop to creative players.
 					// entityPlayerMP.theItemInWorldManager.isCreative()
-					int droppedItemID;
 					switch (meta) {
 					case Refs.MetaValues.FenceString:
-						droppedItemID = Item.silk.itemID;
+						player.dropItem(Items.string, 1);
 						break;
 					case Refs.MetaValues.FenceIron:
-						droppedItemID = Item.ingotIron.itemID;
+						player.dropItem(Items.iron_ingot, 1);
 						break;
 					case Refs.MetaValues.FenceBarbed:
-						droppedItemID = Block.fenceIron.blockID;
+						player.dropItem(
+								ItemBlock.getItemFromBlock(Blocks.iron_bars), 1);
 						break;
 					case Refs.MetaValues.FenceWood:
-						droppedItemID = Item.stick.itemID;
+						player.dropItem(Items.stick, 1);
 						break;
 					case Refs.MetaValues.FenceSilly:
-						player.dropItem(Item.slimeBall.itemID, 1);
-						droppedItemID = Item.silk.itemID;
+						player.dropItem(Items.string, 1);
+						player.dropItem(Items.slime_ball, 1);
 						break;
-					default:
-						droppedItemID = 0;
 					}
-					player.dropItem(droppedItemID, 1);
 				}
 				return true;
-			} else if (player.getCurrentEquippedItem().itemID == Item.slimeBall.itemID
-					&& meta == MetaValues.FenceString) {
+			} else if (player.getCurrentEquippedItem() == new ItemStack(
+					Items.slime_ball) && meta == MetaValues.FenceString) {
 				// Upgrade a string fence with a slime ball.
-				world.setBlock(x, y, z, Refs.FenceID, MetaValues.FenceSilly, 3);
+				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
+						MetaValues.FenceSilly, 3);
 				// TODO Don't take items from creative players
 				// entityPlayerMP.theItemInWorldManager.isCreative()
 				ItemStack is = player.getCurrentEquippedItem();
@@ -95,14 +98,21 @@ public class FenceBlock extends BlockContainer {
 			return false;
 		} else {
 			// Repair fence.
-			if (player.getCurrentEquippedItem().itemID == Item.silk.itemID) {
-				world.setBlock(x, y, z, Refs.FenceID, MetaValues.FenceString, 3);
-			} else if (player.getCurrentEquippedItem().itemID == Item.ingotIron.itemID) {
-				world.setBlock(x, y, z, Refs.FenceID, MetaValues.FenceIron, 3);
-			} else if (player.getCurrentEquippedItem().itemID == Block.fenceIron.blockID) {
-				world.setBlock(x, y, z, Refs.FenceID, MetaValues.FenceBarbed, 3);
-			} else if (player.getCurrentEquippedItem().itemID == Item.stick.itemID) {
-				world.setBlock(x, y, z, Refs.FenceID, MetaValues.FenceWood, 3);
+			if (player.getCurrentEquippedItem() == new ItemStack(Items.string)) {
+				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
+						MetaValues.FenceString, 3);
+			} else if (player.getCurrentEquippedItem() == new ItemStack(
+					Items.iron_ingot)) {
+				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
+						MetaValues.FenceIron, 3);
+			} else if (player.getCurrentEquippedItem() == new ItemStack(
+					ItemBlock.getItemFromBlock(Blocks.iron_bars))) {
+				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
+						MetaValues.FenceBarbed, 3);
+			} else if (player.getCurrentEquippedItem() == new ItemStack(
+					Items.stick)) {
+				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
+						MetaValues.FenceWood, 3);
 			} else {
 				// Invalid item. continue as if nothing happened. Because
 				// nothing happened.
@@ -119,7 +129,7 @@ public class FenceBlock extends BlockContainer {
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world) {
+	public TileEntity createNewTileEntity(World world, int i) {
 		return null;
 	}
 
@@ -239,10 +249,10 @@ public class FenceBlock extends BlockContainer {
 	}
 
 	protected boolean canConnectTo(IBlockAccess iba, int x, int y, int z) {
-		Block block = Block.blocksList[iba.getBlockId(x, y, z)];
+		Block block = iba.getBlock(x, y, z);
 		if (block == null) {
 			return false;
-		} else if (block.blockMaterial.isOpaque()
+		} else if (block.getMaterial().isOpaque()
 				&& block.renderAsNormalBlock()) {
 			// We'll connect against full 1x1x1 blocks.
 			return true;
@@ -272,14 +282,14 @@ public class FenceBlock extends BlockContainer {
 	// Icon Rendering
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIcon(int side, int meta) {
+	public IIcon getIcon(int side, int meta) {
 		return textures[meta];
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister iconRegistry) {
-		textures = new Icon[Refs.fenceSubNames.length];
+	public void registerBlockIcons(IIconRegister iconRegistry) {
+		textures = new IIcon[Refs.fenceSubNames.length];
 		for (int i = 0; i < Refs.fenceSubNames.length; i++) {
 			textures[i] = iconRegistry.registerIcon("fencing:fence"
 					+ Refs.fenceSubNames[i]);

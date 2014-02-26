@@ -1,6 +1,9 @@
 package nl.tyrope.fencing.creativetab;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import nl.tyrope.fencing.Refs;
 
 public class FencingTab extends CreativeTabs {
@@ -10,7 +13,7 @@ public class FencingTab extends CreativeTabs {
 	}
 
 	@Override
-	public int getTabIconItemIndex() {
-		return Refs.FenceID;
+	public Item getTabIconItem() {
+		return ItemBlock.getItemFromBlock(Refs.ItemsBlocks.Fence);
 	}
 }

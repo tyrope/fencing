@@ -22,7 +22,7 @@ group= "nl.tyrope.fencing" // http://maven.apache.org/guides/mini/guide-naming-c
 archivesBaseName = "fencing"
 
 minecraft {
-    version = "1.7.2-10.12.0.1024"
+    version = "1.7.2-10.12.0.1033"
     assetDir = "eclipse/assets"
 }
 processResources

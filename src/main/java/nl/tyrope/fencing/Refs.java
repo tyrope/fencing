@@ -1,32 +1,39 @@
 package nl.tyrope.fencing;
 
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
 
 public class Refs {
-	// Item IDs for future use.
-	public static int PoleID;
-	public static int FenceID;
-	public static int ElecFenceID;
-	public static int PaintedFenceID;
-
 	// Fence subnames
 	public final static String[] fenceSubNames = { "String", "Iron", "Silly",
 			"Barbed", "Wood", "Cut" };
 	public final static String[] elecFenceSubNames = { "Tin", "Copper" };
-	public static CreativeTabs creativeTab;
 
+	// Misc
+	public static CreativeTabs creativeTab;
 	public static float textureSize = 32;
-	public static int dmgMulti;
 	public static boolean dropCenter;
 
+	// Items & Blocks
+	public static class ItemsBlocks {
+		public static Item Pole;
+		public static Block Fence;
+		public static Block ElecFence;
+		public static Block PaintedFence;
+	}
+
+	// Damage
 	public static class DmgSrcs {
 		public static DamageSource barbed;
 		public static DamageSource electric;
 	}
 
+	public static int dmgMulti;
+
+	// Fence metadata
 	public static class MetaValues {
-		// Fence metadata
 		public static final int FenceString = 0;
 		public static final int FenceIron = 1;
 		public static final int FenceSilly = 2;

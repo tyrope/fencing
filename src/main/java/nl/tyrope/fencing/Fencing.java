@@ -1,10 +1,11 @@
 package nl.tyrope.fencing;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
+import ic2.api.item.IC2Items;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 import nl.tyrope.fencing.Refs.MetaValues;
 import nl.tyrope.fencing.blocks.ElectricFenceBlock;
 import nl.tyrope.fencing.blocks.FenceBlock;
@@ -26,11 +27,9 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-@Mod(modid = "fencing", name = "Fencing", version = "0.4.1", dependencies = "after:IC2")
-@NetworkMod(clientSideRequired = true)
+@Mod(modid = "fencing", name = "Fencing", version = "0.5.0-dev", dependencies = "after:IC2")
 public class Fencing {
 
 	@Instance(value = "fencing")
@@ -39,10 +38,10 @@ public class Fencing {
 	@SidedProxy(clientSide = "nl.tyrope.fencing.proxy.Client", serverSide = "nl.tyrope.fencing.proxy.Common")
 	public static Common proxy;
 
-	public FencePoleItem fencePole;
-	public FenceBlock fenceBlock;
-	public ElectricFenceBlock electricFenceBlock;
-	public PaintedFenceBlock paintedFenceBlock;
+	private FencePoleItem fencePole;
+	private FenceBlock fenceBlock;
+	private ElectricFenceBlock electricFenceBlock;
+	private PaintedFenceBlock paintedFenceBlock;
 
 	/**
 	 * This is code that is executed prior to your mod being initialized into of
@@ -63,11 +62,6 @@ public class Fencing {
 		config.load();
 
 		// Fetch values.
-		Refs.PoleID = config.getItem("fencePole", 5000).getInt();
-		Refs.FenceID = config.getBlock("fenceBlock", 500).getInt();
-		Refs.ElecFenceID = config.getBlock("fenceBlockElectric", 501).getInt();
-		Refs.PaintedFenceID = config.getBlock("fenceBlockPainted", 502)
-				.getInt();
 		Refs.dmgMulti = config.get(
 				"misc",
 				"damage_multiplier",
@@ -93,13 +87,14 @@ public class Fencing {
 		config.save();
 
 		// Make items and blocks
-		fencePole = new FencePoleItem(Refs.PoleID);
-		fenceBlock = new FenceBlock(Refs.FenceID);
-		paintedFenceBlock = new PaintedFenceBlock(Refs.PaintedFenceID);
+		fencePole = new FencePoleItem();
+		Refs.ItemsBlocks.Pole = fencePole;
 
-		// Just in case it gets shifted.
-		Refs.FenceID = fenceBlock.blockID;
-		Refs.PaintedFenceID = paintedFenceBlock.blockID;
+		fenceBlock = new FenceBlock();
+		Refs.ItemsBlocks.Fence = fenceBlock;
+
+		paintedFenceBlock = new PaintedFenceBlock();
+		Refs.ItemsBlocks.PaintedFence = paintedFenceBlock;
 
 		// Make damage objects.
 		Refs.DmgSrcs.barbed = new BarbedDmg();
@@ -115,10 +110,7 @@ public class Fencing {
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		GameRegistry.addRecipe(new ItemStack(fencePole, 4), "xx", "xx", "xx",
-				'x', new ItemStack(Item.stick));
-
-		MinecraftForge.setBlockHarvestLevel(fenceBlock, "axe", 0);
-
+				'x', new ItemStack(Items.stick));
 		// register block
 		GameRegistry.registerBlock(fenceBlock, FenceBlockItem.class,
 				"FenceBlockItem");
@@ -130,38 +122,38 @@ public class Fencing {
 		// Regular pole/X/pole crafting
 		GameRegistry.addRecipe(new ItemStack(fenceBlock, 1,
 				MetaValues.FenceString), "xyx", 'x', pole, 'y', new ItemStack(
-				Item.silk));
+				Items.string));
 		GameRegistry.addRecipe(new ItemStack(fenceBlock, 1,
 				MetaValues.FenceIron), "xyx", 'x', pole, 'y', new ItemStack(
-				Item.ingotIron));
+				Items.iron_ingot));
 		GameRegistry.addShapelessRecipe(new ItemStack(fenceBlock, 1,
-				MetaValues.FenceSilly), new ItemStack(Item.slimeBall),
+				MetaValues.FenceSilly), new ItemStack(Items.slime_ball),
 				new ItemStack(fenceBlock));
 		GameRegistry.addRecipe(new ItemStack(fenceBlock, 1,
 				MetaValues.FenceBarbed), "xyx", 'x', pole, 'y', new ItemStack(
-				Block.fenceIron));
+				Blocks.iron_bars));
 		GameRegistry.addRecipe(new ItemStack(fenceBlock, 1,
 				MetaValues.FenceWood), "xyx", 'x', pole, 'y', new ItemStack(
-				Item.stick));
+				Items.stick));
 
 		// Repairs
 		GameRegistry.addShapelessRecipe(new ItemStack(fenceBlock, 1,
 				MetaValues.FenceString), new ItemStack(fenceBlock, 1,
-				MetaValues.FenceCut), new ItemStack(Item.silk));
+				MetaValues.FenceCut), new ItemStack(Items.string));
 		GameRegistry.addShapelessRecipe(new ItemStack(fenceBlock, 1,
 				MetaValues.FenceIron), new ItemStack(fenceBlock, 1,
-				MetaValues.FenceCut), new ItemStack(Item.ingotIron));
+				MetaValues.FenceCut), new ItemStack(Items.iron_ingot));
 		GameRegistry.addShapelessRecipe(new ItemStack(fenceBlock, 1,
 				MetaValues.FenceBarbed), new ItemStack(fenceBlock, 1,
-				MetaValues.FenceCut), new ItemStack(Block.fenceIron));
+				MetaValues.FenceCut), new ItemStack(Blocks.iron_bars));
 		GameRegistry.addShapelessRecipe(new ItemStack(fenceBlock, 1,
 				MetaValues.FenceWood), new ItemStack(fenceBlock, 1,
-				MetaValues.FenceCut), new ItemStack(Item.stick));
+				MetaValues.FenceCut), new ItemStack(Items.stick));
 
 		for (int i = 0; i < 16; i++) {
 			GameRegistry.addShapelessRecipe(new ItemStack(paintedFenceBlock, 1,
 					i), new ItemStack(fenceBlock, 1, MetaValues.FenceWood),
-					new ItemStack(Item.dyePowder, 1, 15 - i));
+					new ItemStack(Items.dye, 1, 15 - i));
 		}
 
 		// Intermod compatibility.
@@ -169,15 +161,13 @@ public class Fencing {
 			System.out.println("IndustrialCraft 2 detected: ");
 
 			// Make block
-			electricFenceBlock = new ElectricFenceBlock(Refs.ElecFenceID);
-			// Just in case it gets shifted.
-			Refs.ElecFenceID = electricFenceBlock.blockID;
+			electricFenceBlock = new ElectricFenceBlock();
+			Refs.ItemsBlocks.ElecFence = electricFenceBlock;
 
 			// Register damage source
 			Refs.DmgSrcs.electric = new ElecDmg();
 
 			// register block
-			MinecraftForge.setBlockHarvestLevel(electricFenceBlock, "axe", 0);
 			GameRegistry.registerBlock(electricFenceBlock,
 					ElectricFenceBlockItem.class, "ElectricFenceBlockItem");
 			System.out.println("  Electric Fence Block registered.");
@@ -188,7 +178,7 @@ public class Fencing {
 			System.out.print("  Loading electric fence recipes... ");
 
 			// Load items
-			ItemStack cableTin = ic2.api.item.Items.getItem("tinCableItem");
+			ItemStack cableTin = IC2Items.getItem("tinCableItem");
 			if (cableTin != null) {
 				System.out.print("Tin loaded. ");
 				GameRegistry.addRecipe(new ItemStack(electricFenceBlock, 1,
@@ -200,8 +190,7 @@ public class Fencing {
 						new ItemStack(fenceBlock, 1, MetaValues.FenceCut),
 						cableTin);
 			}
-			ItemStack cableCopper = ic2.api.item.Items
-					.getItem("copperCableItem");
+			ItemStack cableCopper = IC2Items.getItem("copperCableItem");
 			if (cableCopper != null) {
 				System.out.print("Copper loaded. ");
 				GameRegistry.addRecipe(new ItemStack(electricFenceBlock, 1,

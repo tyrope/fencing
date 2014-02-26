@@ -1,27 +1,28 @@
 package nl.tyrope.fencing.items;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import nl.tyrope.fencing.Refs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class FenceBlockItem extends ItemBlock {
 
-	public Icon[] FenceItemIcons;
+	public IIcon[] FenceItemIcons;
 
-	public FenceBlockItem(int id) {
-		super(id);
+	public FenceBlockItem(Block block) {
+		super(block);
 		setHasSubtypes(true);
 		setUnlocalizedName("fenceBlock");
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister icon) {
-		FenceItemIcons = new Icon[Refs.fenceSubNames.length];
+	public void registerIcons(IIconRegister icon) {
+		FenceItemIcons = new IIcon[Refs.fenceSubNames.length];
 		for (int i = 0; i < Refs.fenceSubNames.length; i++) {
 			FenceItemIcons[i] = icon.registerIcon("fencing:iconFence"
 					+ Refs.fenceSubNames[i]);
@@ -30,13 +31,13 @@ public class FenceBlockItem extends ItemBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIcon(ItemStack i, int j) {
+	public IIcon getIcon(ItemStack i, int j) {
 		return FenceItemIcons[i.getItemDamage()];
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIconFromDamage(int dmg) {
+	public IIcon getIconFromDamage(int dmg) {
 		return FenceItemIcons[dmg];
 	}
 
