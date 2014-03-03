@@ -57,27 +57,30 @@ public class FenceBlock extends BlockContainer {
 				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
 						MetaValues.FenceCut, 3);
 				ItemStack is = player.getCurrentEquippedItem();
-				// XXX Damage amount depends on fence type.
-				is.damageItem(1, player);
 				player.setCurrentItemOrArmor(0, is);
 				if (Refs.dropCenter && !world.isRemote) {
 					// TODO Don't drop to creative players.
-					// entityPlayerMP.theItemInWorldManager.isCreative()
+					// EntityPlayerMP.theItemInWorldManager.isCreative()
 					switch (meta) {
 					case Refs.MetaValues.FenceString:
+						is.damageItem(1, player);
 						player.dropItem(Items.string, 1);
 						break;
 					case Refs.MetaValues.FenceIron:
+						is.damageItem(2, player);
 						player.dropItem(Items.iron_ingot, 1);
 						break;
 					case Refs.MetaValues.FenceBarbed:
+						is.damageItem(2, player);
 						player.dropItem(
 								ItemBlock.getItemFromBlock(Blocks.iron_bars), 1);
 						break;
 					case Refs.MetaValues.FenceWood:
+						is.damageItem(1, player);
 						player.dropItem(Items.stick, 1);
 						break;
 					case Refs.MetaValues.FenceSilly:
+						is.damageItem(1, player);
 						player.dropItem(Items.string, 1);
 						player.dropItem(Items.slime_ball, 1);
 						break;
@@ -90,7 +93,7 @@ public class FenceBlock extends BlockContainer {
 				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
 						MetaValues.FenceSilly, 3);
 				// TODO Don't take items from creative players
-				// entityPlayerMP.theItemInWorldManager.isCreative()
+				// EntityPlayerMP.theItemInWorldManager.isCreative()
 				ItemStack is = player.getCurrentEquippedItem();
 				is.stackSize = is.stackSize - 1;
 				player.setCurrentItemOrArmor(0, is);
@@ -120,7 +123,7 @@ public class FenceBlock extends BlockContainer {
 			}
 			// Valid item, remove one from the stack.
 			// TODO Don't take items from creative players
-			// entityPlayerMP.theItemInWorldManager.isCreative()
+			// EntityPlayerMP.theItemInWorldManager.isCreative()
 			ItemStack is = player.getCurrentEquippedItem();
 			is.stackSize = is.stackSize - 1;
 			player.setCurrentItemOrArmor(0, is);
@@ -166,7 +169,7 @@ public class FenceBlock extends BlockContainer {
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x,
 			int y, int z) {
 		if (world.getBlockMetadata(x, y, z) == Refs.MetaValues.FenceCut) {
-			// /XXX Hitbox at [0,-1, 0] might cause issues later.
+			// XXX Hitbox at [0,-1, 0] might cause issues later.
 			return AxisAlignedBB.getAABBPool().getAABB(0, -1, 0, 0, -1, 0);
 		} else {
 			return getHitBox(world, x, y, z).expand(0, 0.3f, 0);
