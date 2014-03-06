@@ -1,5 +1,7 @@
 package nl.tyrope.fencing;
 
+import org.apache.logging.log4j.Logger;
+
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -15,6 +17,7 @@ public class Refs {
 	public static CreativeTabs creativeTab;
 	public static float textureSize = 32;
 	public static boolean dropCenter;
+	public static Logger logger;
 
 	// Items & Blocks
 	public static class ItemsBlocks {

@@ -4,7 +4,6 @@ import ic2.api.item.IC2Items;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import nl.tyrope.fencing.Refs.MetaValues;
 import nl.tyrope.fencing.blocks.ElectricFenceBlock;
@@ -53,6 +52,10 @@ public class Fencing {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 
+		// Logger
+		Refs.logger = event.getModLog();
+		Refs.logger.info("Logger created.");
+
 		// Create creative tab.
 		Refs.creativeTab = new FencingTab();
 
@@ -96,8 +99,32 @@ public class Fencing {
 		paintedFenceBlock = new PaintedFenceBlock();
 		Refs.ItemsBlocks.PaintedFence = paintedFenceBlock;
 
+		// register blocks
+		GameRegistry.registerBlock(fenceBlock, FenceBlockItem.class,
+				"FenceBlockItem");
+		GameRegistry.registerBlock(paintedFenceBlock,
+				PaintedFenceBlockItem.class, "PaintedFenceBlockItem");
+
 		// Make damage objects.
 		Refs.DmgSrcs.barbed = new BarbedDmg();
+
+		// Intermod compatibility.
+		if (Loader.isModLoaded("IC2")) {
+			Refs.logger
+					.info("IndustrialCraft 2 detected, Registering electric fences.");
+			// Make block
+			electricFenceBlock = new ElectricFenceBlock();
+			Refs.ItemsBlocks.ElecFence = electricFenceBlock;
+
+			// register block & entity
+			GameRegistry.registerBlock(electricFenceBlock,
+					ElectricFenceBlockItem.class, "ElectricFenceBlockItem");
+			GameRegistry.registerTileEntity(ElectricFenceEntity.class,
+					"ElectricFenceEntity");
+
+			// Register damage source
+			Refs.DmgSrcs.electric = new ElecDmg();
+		}
 	}
 
 	/**
@@ -111,11 +138,6 @@ public class Fencing {
 	public void init(FMLInitializationEvent event) {
 		GameRegistry.addRecipe(new ItemStack(fencePole, 4), "xx", "xx", "xx",
 				'x', new ItemStack(Items.stick));
-		// register block
-		GameRegistry.registerBlock(fenceBlock, FenceBlockItem.class,
-				"FenceBlockItem");
-		GameRegistry.registerBlock(paintedFenceBlock,
-				PaintedFenceBlockItem.class, "PaintedFenceBlockItem");
 
 		ItemStack pole = new ItemStack(fencePole);
 
@@ -158,29 +180,12 @@ public class Fencing {
 
 		// Intermod compatibility.
 		if (Loader.isModLoaded("IC2")) {
-			System.out.println("IndustrialCraft 2 detected: ");
-
-			// Make block
-			electricFenceBlock = new ElectricFenceBlock();
-			Refs.ItemsBlocks.ElecFence = electricFenceBlock;
-
-			// Register damage source
-			Refs.DmgSrcs.electric = new ElecDmg();
-
-			// register block
-			GameRegistry.registerBlock(electricFenceBlock,
-					ElectricFenceBlockItem.class, "ElectricFenceBlockItem");
-			System.out.println("  Electric Fence Block registered.");
-			GameRegistry.registerTileEntity(ElectricFenceEntity.class,
-					"ElectricFenceEntity");
-			System.out.println("  Electric Fence Entity registered.");
-
-			System.out.print("  Loading electric fence recipes... ");
+			Refs.logger.info("Loading electric fence recipes:");
 
 			// Load items
 			ItemStack cableTin = IC2Items.getItem("tinCableItem");
 			if (cableTin != null) {
-				System.out.print("Tin loaded. ");
+				Refs.logger.info("Tin loaded.");
 				GameRegistry.addRecipe(new ItemStack(electricFenceBlock, 1,
 						MetaValues.FenceElectricTin), "xyx", 'x', pole, 'y',
 						cableTin);
@@ -192,7 +197,7 @@ public class Fencing {
 			}
 			ItemStack cableCopper = IC2Items.getItem("copperCableItem");
 			if (cableCopper != null) {
-				System.out.print("Copper loaded. ");
+				Refs.logger.info("Copper loaded.");
 				GameRegistry.addRecipe(new ItemStack(electricFenceBlock, 1,
 						MetaValues.FenceElectricCopper), "xyx", 'x', pole, 'y',
 						cableCopper);
@@ -202,7 +207,7 @@ public class Fencing {
 						new ItemStack(fenceBlock, 1, MetaValues.FenceCut),
 						cableCopper);
 			}
-			System.out.println("Complete.");
+			Refs.logger.info("Complete.");
 
 			proxy.registerRenderers(new FenceBlock[] { fenceBlock,
 					paintedFenceBlock, electricFenceBlock });
