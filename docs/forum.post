@@ -20,7 +20,7 @@ Versions are written as Major.Minor.Bugfix.Build
 For older versions, see [url=https://github.com/tyrope/fencing/releases]The GitHub releases page[/url]
 
 
-Latest development build: [color=red]WARNING: Potentially game-breaking, back up your saves before installing these.[/color]
+Latest development build: (Minecraft 1.7.2) [color=red]WARNING: Potentially game-breaking, back up your saves before installing these.[/color]
 [url=http://willie.dftba.net/jenkins/job/Fencing/lastSuccessfulBuild/artifact/fencing-nightly.jar]I agree that this link can destroy my saves.[/url]
 
 [url=https://github.com/tyrope/fencing/wiki]Wiki[/url] & [url=https://github.com/tyrope/fencing]Source Code[/url] & [url=https://github.com/tyrope/fencing/issues]Bug tracking[/url] hosted on github. Please post bugs there!

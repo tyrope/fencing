@@ -12,9 +12,9 @@ Downloads
 -------
 Versions are written as Major.Minor.Bugfix.Build
 
-Recommended: [0.4.1.39](https://github.com/tyrope/fencing/releases/download/0.4.1.39/fencing-0.4.1.39.jar)
+Recommended: [0.4.1.39 (MC1.6.4)](https://github.com/tyrope/fencing/releases/download/0.4.1.39/fencing-0.4.1.39.jar)
 
-Warning, potentially gamebreakingly unstable: [Latest development build](http://willie.dftba.net/jenkins/job/Fencing/lastSuccessfulBuild/artifact/fencing-nightly.jar)
+Warning, potentially gamebreakingly unstable: [Latest development build(MC1.7.2)](http://willie.dftba.net/jenkins/job/Fencing/lastSuccessfulBuild/artifact/fencing-nightly.jar)
 
 For older versions, see [The release page](https://github.com/tyrope/fencing/releases)
 
