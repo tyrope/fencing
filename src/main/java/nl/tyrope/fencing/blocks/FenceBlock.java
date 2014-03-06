@@ -14,6 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -306,7 +307,8 @@ public class FenceBlock extends BlockContainer {
 
 	// Add all fences to creative menu.
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(int unknown, CreativeTabs tab, List subItems) {
+	@Override
+	public void getSubBlocks(Item unknown, CreativeTabs tab, List subItems) {
 		ItemStack stack;
 		for (int ix = 0; ix < Refs.fenceSubNames.length; ix++) {
 			stack = new ItemStack(this, 1, ix);

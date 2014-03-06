@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -77,7 +78,7 @@ public class ElectricFenceBlock extends FenceBlock {
 	// Add all fences to creative menu.
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(int unknown, CreativeTabs tab, List subItems) {
+	public void getSubBlocks(Item unknown, CreativeTabs tab, List subItems) {
 		ItemStack stack;
 		for (int ix = 0; ix < Refs.elecFenceSubNames.length; ix++) {
 			stack = new ItemStack(this, 1, ix);
