@@ -3,6 +3,7 @@ package nl.tyrope.fencing.renderer;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -30,22 +31,6 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID,
 			RenderBlocks renderer) {
-
-		IIcon c = block.getIcon(0, metadata);
-		float[] tex = getTexCoords(c);
-		float u = tex[0], v = tex[1], du = tex[2], dv = tex[3];
-
-		Tessellator tess = Tessellator.instance;
-		tess.startDrawingQuads();
-		tess.setNormal(0, 1, 0);
-		tess.setColorRGBA(255, 255, 255, 255);
-
-		renderPosts(tess, u, v, du, dv, new ForgeDirection[] {
-				ForgeDirection.NORTH, ForgeDirection.EAST });
-		renderWires(tess, u, v, du, dv, new ForgeDirection[] {
-				ForgeDirection.NORTH, ForgeDirection.EAST });
-
-		tess.draw();
 	}
 
 	@Override
@@ -166,6 +151,43 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 									type, x, y, z));
 			break;
 		}
+
+		// IC2 integration
+		// Cable caps
+		TileEntity te = iba.getTileEntity(x, y, z - 1);
+		if (te != null) {
+			if (ic2.api.energy.tile.IEnergyConductor.class.isAssignableFrom(te
+					.getClass())) {
+				renderIC2CableConnection(tess, u, v, du, dv,
+						ForgeDirection.NORTH);
+			}
+		}
+
+		te = iba.getTileEntity(x, y, z + 1);
+		if (te != null) {
+			if (ic2.api.energy.tile.IEnergyConductor.class.isAssignableFrom(te
+					.getClass())) {
+				renderIC2CableConnection(tess, u, v, du, dv,
+						ForgeDirection.SOUTH);
+			}
+		}
+		te = iba.getTileEntity(x - 1, y, z);
+		if (te != null) {
+			if (ic2.api.energy.tile.IEnergyConductor.class.isAssignableFrom(te
+					.getClass())) {
+				renderIC2CableConnection(tess, u, v, du, dv,
+						ForgeDirection.WEST);
+			}
+		}
+		te = iba.getTileEntity(x + 1, y, z);
+		if (te != null) {
+			if (ic2.api.energy.tile.IEnergyConductor.class.isAssignableFrom(te
+					.getClass())) {
+				renderIC2CableConnection(tess, u, v, du, dv,
+						ForgeDirection.EAST);
+			}
+		}
+
 		tess.addTranslation(-x, -y, -z);
 		return true;
 	}
@@ -460,6 +482,54 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 			wireTop = wireTop - 0.1875f;
 			wireBottom = wireBottom - 0.1875f;
 		}
+	}
+
+	/**
+	 * Render the caps on adjacent IC2 wires.
+	 * 
+	 * @param t
+	 *            an instance of the minecraft tessellator
+	 * @param u
+	 *            lower U bound of the UV map's.
+	 * @param v
+	 *            lower V bound of the UV map.
+	 * @param du
+	 *            U size of 1 pixel on the texture.
+	 * @param dv
+	 *            V size of 1 pixel on the texture.
+	 * @param dir
+	 *            The directions the wire should run. (Valid values:
+	 *            NORTH/SOUTH/EAST/WEST.)
+	 * @param insulated
+	 *            Whether or not the cable connected to is insulated
+	 */
+	private void renderIC2CableConnection(Tessellator t, float u, float v,
+			float U, float V, ForgeDirection dir) {
+		/*
+		// East
+		t.addVertexWithUV(xMod + postWidth, 1, zMod + postWidth, u, v);
+		t.addVertexWithUV(xMod + postWidth, 0, zMod + postWidth, u, V);
+		t.addVertexWithUV(xMod + postWidth, 0, zMod, U, V);
+		t.addVertexWithUV(xMod + postWidth, 1, zMod, U, v);
+
+		// West
+		t.addVertexWithUV(xMod, 0, zMod + postWidth, U, V);
+		t.addVertexWithUV(xMod, 1, zMod + postWidth, u, v);
+		t.addVertexWithUV(xMod, 1, zMod, u, v);
+		t.addVertexWithUV(xMod, 0, zMod, u, V);
+
+		// South
+		t.addVertexWithUV(xMod, 0, zMod + postWidth, u, V);
+		t.addVertexWithUV(xMod + postWidth, 0, zMod + postWidth, U, V);
+		t.addVertexWithUV(xMod + postWidth, 1, zMod + postWidth, U, v);
+		t.addVertexWithUV(xMod, 1, zMod + postWidth, u, v);
+
+		// North
+		t.addVertexWithUV(xMod, 1, zMod, U, v);
+		t.addVertexWithUV(xMod + postWidth, 1, zMod, u, v);
+		t.addVertexWithUV(xMod + postWidth, 0, zMod, u, V);
+		t.addVertexWithUV(xMod, 0, zMod, U, V);
+		*/
 	}
 
 	@Override
