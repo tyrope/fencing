@@ -79,7 +79,7 @@ public class ElectricFenceEntity extends TileEntity implements IEnergySink,
 
 	@Override
 	public double getOfferedEnergy() {
-		return Math.max(0, buffer - getVoltage());
+		return Math.min(buffer, getVoltage());
 	}
 
 	@Override
