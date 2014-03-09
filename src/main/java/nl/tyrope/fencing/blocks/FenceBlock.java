@@ -167,7 +167,7 @@ public class FenceBlock extends BlockContainer {
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x,
 			int y, int z) {
-		if (world.getBlockMetadata(x, y, z) == Refs.MetaValues.FenceCut) {
+		if (world.getBlockMetadata(x, y, z) == Refs.MetaValues.FenceCut && world.getBlock(x,y,z) == Refs.ItemsBlocks.Fence) {
 			// XXX Hitbox at [0,-1, 0] might cause issues later.
 			return AxisAlignedBB.getAABBPool().getAABB(0, -1, 0, 0, -1, 0);
 		} else {
