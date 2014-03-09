@@ -167,7 +167,8 @@ public class FenceBlock extends BlockContainer {
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x,
 			int y, int z) {
-		if (world.getBlockMetadata(x, y, z) == Refs.MetaValues.FenceCut && world.getBlock(x,y,z) == Refs.ItemsBlocks.Fence) {
+		if (world.getBlockMetadata(x, y, z) == Refs.MetaValues.FenceCut
+				&& world.getBlock(x, y, z) == Refs.ItemsBlocks.Fence) {
 			// XXX Hitbox at [0,-1, 0] might cause issues later.
 			return AxisAlignedBB.getAABBPool().getAABB(0, -1, 0, 0, -1, 0);
 		} else {
@@ -181,26 +182,25 @@ public class FenceBlock extends BlockContainer {
 			int y, int z) {
 		return getHitBox(world, x, y, z);
 	}
-	
-	public boolean[] getConnections(IBlockAccess iba, int x, int y, int z){
-		return new boolean[] {
-				this.canConnectTo(iba, x, y, z - 1),
+
+	public boolean[] getConnections(IBlockAccess iba, int x, int y, int z) {
+		return new boolean[] { this.canConnectTo(iba, x, y, z - 1),
 				this.canConnectTo(iba, x + 1, y, z),
 				this.canConnectTo(iba, x, y, z + 1),
-				this.canConnectTo(iba, x - 1, y, z)};
+				this.canConnectTo(iba, x - 1, y, z) };
 	}
-	public boolean[] getPoleConnections(IBlockAccess iba, int x, int y, int z){
-		return new boolean[] {
-				iba.getBlock(x, y, z - 1) instanceof FenceBlock,
+
+	public boolean[] getPoleConnections(IBlockAccess iba, int x, int y, int z) {
+		return new boolean[] { iba.getBlock(x, y, z - 1) instanceof FenceBlock,
 				iba.getBlock(x + 1, y, z) instanceof FenceBlock,
 				iba.getBlock(x, y, z + 1) instanceof FenceBlock,
-				iba.getBlock(x - 1, y, z) instanceof FenceBlock};
+				iba.getBlock(x - 1, y, z) instanceof FenceBlock };
 	}
 
 	public AxisAlignedBB getHitBox(IBlockAccess iba, int x, int y, int z) {
 		// NWSE
-		boolean[] connect = getConnections(iba,x,y,z);
-		
+		boolean[] connect = getConnections(iba, x, y, z);
+
 		int cc = 0;
 		for (boolean b : connect) {
 			if (b) {

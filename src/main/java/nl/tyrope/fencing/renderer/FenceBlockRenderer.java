@@ -13,13 +13,13 @@ import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
-	
-	//posts
+
+	// posts
 	private final int N_POST = 1;
 	private final int S_POST = 2;
 	private final int E_POST = 4;
 	private final int W_POST = 8;
-	//strings
+	// strings
 	private final int NS_STRING = 16;
 	private final int EW_STRING = 32;
 	private final int NE_STRING = 64;
@@ -53,8 +53,9 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		float[] tex = getTexCoords(c);
 		float u = tex[0], v = tex[1], du = tex[2], dv = tex[3];
 
-		boolean[] poleConnections = ((FenceBlock)block).getPoleConnections(iba,x,y,z);//NWSE
-		int type = getType(((FenceBlock)block).getConnections(iba, x, y, z));
+		boolean[] poleConnections = ((FenceBlock) block).getPoleConnections(
+				iba, x, y, z);// NWSE
+		int type = getType(((FenceBlock) block).getConnections(iba, x, y, z));
 
 		Tessellator tess = Tessellator.instance;
 		tess.addTranslation(x, y, z);
@@ -62,81 +63,184 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		tess.setColorRGBA(255, 255, 255, 255);
 		tess.setBrightness(block.getMixedBrightnessForBlock(iba, x, y, z));
 
-		if((type & N_POST)!=0)renderPost(tess, u, v, du, dv, ForgeDirection.NORTH, poleConnections[0]);
-		if((type & S_POST)!=0)renderPost(tess, u, v, du, dv, ForgeDirection.SOUTH, poleConnections[2]);
-		if((type & E_POST)!=0)renderPost(tess, u, v, du, dv, ForgeDirection.EAST, poleConnections[3]);
-		if((type & W_POST)!=0)renderPost(tess, u, v, du, dv, ForgeDirection.WEST, poleConnections[1]);
-		
-		if((type & NS_STRING)!= 0)renderWires(tess, u, v, du, dv, new ForgeDirection[]{ForgeDirection.NORTH,ForgeDirection.SOUTH});
-		if((type & EW_STRING)!= 0)renderWires(tess, u, v, du, dv, new ForgeDirection[]{ForgeDirection.EAST,ForgeDirection.WEST});
-		if((type & NE_STRING)!= 0)renderWires(tess, u, v, du, dv, new ForgeDirection[]{ForgeDirection.NORTH,ForgeDirection.EAST});
-		if((type & NW_STRING)!= 0)renderWires(tess, u, v, du, dv, new ForgeDirection[]{ForgeDirection.NORTH,ForgeDirection.WEST});
-		if((type & SE_STRING)!= 0)renderWires(tess, u, v, du, dv, new ForgeDirection[]{ForgeDirection.SOUTH,ForgeDirection.EAST});
-		if((type & SW_STRING)!= 0)renderWires(tess, u, v, du, dv, new ForgeDirection[]{ForgeDirection.SOUTH,ForgeDirection.WEST});
-		
+		if ((type & N_POST) != 0)
+			renderPost(tess, u, v, du, dv, ForgeDirection.NORTH,
+					poleConnections[0]);
+		if ((type & S_POST) != 0)
+			renderPost(tess, u, v, du, dv, ForgeDirection.SOUTH,
+					poleConnections[2]);
+		if ((type & E_POST) != 0)
+			renderPost(tess, u, v, du, dv, ForgeDirection.EAST,
+					poleConnections[3]);
+		if ((type & W_POST) != 0)
+			renderPost(tess, u, v, du, dv, ForgeDirection.WEST,
+					poleConnections[1]);
+
+		if ((type & NS_STRING) != 0)
+			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.NORTH, ForgeDirection.SOUTH });
+		if ((type & EW_STRING) != 0)
+			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.EAST, ForgeDirection.WEST });
+		if ((type & NE_STRING) != 0)
+			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.NORTH, ForgeDirection.EAST });
+		if ((type & NW_STRING) != 0)
+			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.NORTH, ForgeDirection.WEST });
+		if ((type & SE_STRING) != 0)
+			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.SOUTH, ForgeDirection.EAST });
+		if ((type & SW_STRING) != 0)
+			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
+					ForgeDirection.SOUTH, ForgeDirection.WEST });
+
 		// IC2 integration
 		// Cable caps
+		// North
 		TileEntity te = iba.getTileEntity(x, y, z - 1);
-		if (te != null) if (ic2.api.energy.tile.IEnergyConductor.class.isAssignableFrom(te.getClass())) renderIC2CableConnection(tess, u, v, du, dv, ForgeDirection.NORTH);
-		te = iba.getTileEntity(x, y, z + 1);
-		if (te != null) if (ic2.api.energy.tile.IEnergyConductor.class.isAssignableFrom(te.getClass())) renderIC2CableConnection(tess, u, v, du, dv, ForgeDirection.SOUTH);
+		if (te != null) {
+			if (ic2.api.energy.tile.IEnergyConductor.class.isAssignableFrom(te
+					.getClass())) {
+				renderIC2CableCap(tess, u, v, du, dv, ForgeDirection.NORTH,
+						getIC2CableThickness(iba, x, y, z - 1));
+			}
+		}
+
+		// East
 		te = iba.getTileEntity(x - 1, y, z);
-		if (te != null) if (ic2.api.energy.tile.IEnergyConductor.class.isAssignableFrom(te.getClass())) renderIC2CableConnection(tess, u, v, du, dv, ForgeDirection.WEST);
+		if (te != null) {
+			if (ic2.api.energy.tile.IEnergyConductor.class.isAssignableFrom(te
+					.getClass())) {
+				renderIC2CableCap(tess, u, v, du, dv, ForgeDirection.EAST,
+						getIC2CableThickness(iba, x - 1, y, z));
+			}
+		}
+
+		// South
 		te = iba.getTileEntity(x + 1, y, z);
-		if (te != null) if (ic2.api.energy.tile.IEnergyConductor.class.isAssignableFrom(te.getClass())) renderIC2CableConnection(tess, u, v, du, dv, ForgeDirection.EAST);
-		
+		if (te != null) {
+			if (ic2.api.energy.tile.IEnergyConductor.class.isAssignableFrom(te
+					.getClass())) {
+				renderIC2CableCap(tess, u, v, du, dv, ForgeDirection.SOUTH,
+						getIC2CableThickness(iba, x + 1, y, z));
+			}
+		}
+
+		// East
+		te = iba.getTileEntity(x, y, z + 1);
+		if (te != null) {
+			if (ic2.api.energy.tile.IEnergyConductor.class.isAssignableFrom(te
+					.getClass())) {
+				renderIC2CableCap(tess, u, v, du, dv, ForgeDirection.WEST,
+						getIC2CableThickness(iba, x, y, z + 1));
+			}
+		}
+
 		tess.addTranslation(-x, -y, -z);
 		return true;
 	}
-	
-	private int getType(boolean[] connections){//NWSE
+
+	private int getType(boolean[] connections) {
 		int type = 0;
-		
+
 		int cc = 0;
 		for (boolean b : connections) {
 			if (b) {
 				cc++;
 			}
 		}
-		//add posts
+		// add posts
 		if (cc >= 2) {
 			// Straight... or corner.
 			if (connections[0]) {
-				type = type|N_POST;
+				type = type | N_POST;
 			}
 			if (connections[1]) {
-				type = type|W_POST;
+				type = type | W_POST;
 			}
 			if (connections[2]) {
-				type = type|S_POST;
+				type = type | S_POST;
 			}
 			if (connections[3]) {
-				type = type|E_POST;
+				type = type | E_POST;
 			}
 		} else if (cc == 1) {
 			// Straight.
 			if (connections[0] || connections[2]) {
-				type = type|N_POST|S_POST;
+				type = type | N_POST | S_POST;
 			} else {
-				type = type|E_POST|W_POST;
+				type = type | E_POST | W_POST;
 			}
 		} else {
-			type = type|N_POST|E_POST|S_POST|W_POST;
+			type = type | N_POST | E_POST | S_POST | W_POST;
 			cc = 4;
 		}
-		//connect posts
-		if(cc==4){
-			type = type|NS_STRING|EW_STRING;
+		// connect posts
+		if (cc == 4) {
+			type = type | NS_STRING | EW_STRING;
 		} else {
-			if((type&(N_POST|S_POST))==(N_POST|S_POST)) type = type|NS_STRING;
-			if((type&(N_POST|E_POST))==(N_POST|E_POST)) type = type|NE_STRING;
-			if((type&(N_POST|W_POST))==(N_POST|W_POST)) type = type|NW_STRING;
-			if((type&(E_POST|W_POST))==(E_POST|W_POST)) type = type|EW_STRING;
-			if((type&(S_POST|E_POST))==(S_POST|E_POST)) type = type|SE_STRING;
-			if((type&(S_POST|W_POST))==(S_POST|W_POST)) type = type|SW_STRING;
+			if ((type & (N_POST | S_POST)) == (N_POST | S_POST))
+				type = type | NS_STRING;
+			if ((type & (N_POST | E_POST)) == (N_POST | E_POST))
+				type = type | NE_STRING;
+			if ((type & (N_POST | W_POST)) == (N_POST | W_POST))
+				type = type | NW_STRING;
+			if ((type & (E_POST | W_POST)) == (E_POST | W_POST))
+				type = type | EW_STRING;
+			if ((type & (S_POST | E_POST)) == (S_POST | E_POST))
+				type = type | SE_STRING;
+			if ((type & (S_POST | W_POST)) == (S_POST | W_POST))
+				type = type | SW_STRING;
 		}
-		
+
 		return type;
+	}
+
+	/**
+	 * Wrapper function to get a Block object from an IC2 name item.
+	 * 
+	 * @param ic2name
+	 *            (see ic2.api.item.IC2Items.getItem)
+	 * @return Block metadata
+	 */
+	private int getBlockMetaFromIC2Name(String ic2name) {
+		try {
+			return ic2.api.item.IC2Items.getItem(ic2name).getItemDamage();
+		} catch (NullPointerException e) {
+			return -1;
+		}
+	}
+
+	private int getIC2CableThickness(IBlockAccess iba, int x, int y, int z) {
+		int meta = iba.getBlockMetadata(x, y, z);
+
+		if (getBlockMetaFromIC2Name("goldCableBlock") == meta) {
+			return 0;
+		}
+
+		if (getBlockMetaFromIC2Name("tinCableBlock") == meta
+				|| getBlockMetaFromIC2Name("copperCableBlock") == meta
+				|| getBlockMetaFromIC2Name("glassFiberCableBlock") == meta) {
+			return 1;
+		}
+
+		if (getBlockMetaFromIC2Name("insulatedtinCableBlock") == meta
+				|| getBlockMetaFromIC2Name("insulatedCopperCableBlock") == meta
+				|| getBlockMetaFromIC2Name("insulatedGoldCableBlock") == meta
+				|| getBlockMetaFromIC2Name("ironCableBlock") == meta) {
+			return 2;
+		}
+
+		if (getBlockMetaFromIC2Name("detectorCableBlock") == meta
+				|| getBlockMetaFromIC2Name("splitterCableBlock") == meta) {
+			return 3;
+		}
+
+		if (getBlockMetaFromIC2Name("insulatedIronCableBlock") == meta) {
+			return 4;
+		}
+		return -1;
 	}
 
 	/**
@@ -165,22 +269,22 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		case NORTH:
 			xMod = (1 - postWidth) / 2f;
 			zMod = 0f;
-			sMod = connected ? (postWidth/2f) : 0;
+			sMod = connected ? (postWidth / 2f) : 0;
 			break;
 		case EAST:
 			xMod = 0f;
 			zMod = (1 - postWidth) / 2f;
-			wMod = connected ? (postWidth/2f) : 0;
+			wMod = connected ? (postWidth / 2f) : 0;
 			break;
 		case SOUTH:
 			xMod = (1 - postWidth) / 2f;
 			zMod = 1 - postWidth;
-			nMod = connected ? (postWidth/2f) : 0;
+			nMod = connected ? (postWidth / 2f) : 0;
 			break;
 		case WEST:
 			xMod = 1 - postWidth;
 			zMod = (1 - postWidth) / 2f;
-			eMod = connected ? (postWidth/2f) : 0;
+			eMod = connected ? (postWidth / 2f) : 0;
 			break;
 		default:
 			return;
@@ -196,14 +300,16 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 
 		// Top
 		t.addVertexWithUV(xMod + eMod, 1, zMod + postWidth - sMod, u, v);
-		t.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + postWidth - sMod, u, V);
+		t.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + postWidth - sMod,
+				u, V);
 		t.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + nMod, U, V);
 		t.addVertexWithUV(xMod + eMod, 1, zMod + nMod, U, v);
 
 		// Bottom
 		t.addVertexWithUV(xMod + eMod, 0, zMod + nMod, u, v);
 		t.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + nMod, u, V);
-		t.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + postWidth - sMod, U, V);
+		t.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + postWidth - sMod,
+				U, V);
 		t.addVertexWithUV(xMod + eMod, 0, zMod + postWidth - sMod, U, v);
 
 		// Prepare texture for sides.
@@ -215,8 +321,10 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		V = v + dv * (Refs.textureSize - 4);
 
 		// East
-		t.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + postWidth - sMod, u, v);
-		t.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + postWidth - sMod, u, V);
+		t.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + postWidth - sMod,
+				u, v);
+		t.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + postWidth - sMod,
+				u, V);
 		t.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + nMod, U, V);
 		t.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + nMod, U, v);
 
@@ -228,8 +336,10 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 
 		// South
 		t.addVertexWithUV(xMod + eMod, 0, zMod + postWidth - sMod, u, V);
-		t.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + postWidth - sMod, U, V);
-		t.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + postWidth - sMod, U, v);
+		t.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + postWidth - sMod,
+				U, V);
+		t.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + postWidth - sMod,
+				U, v);
 		t.addVertexWithUV(xMod + eMod, 1, zMod + postWidth - sMod, u, v);
 
 		// North
@@ -237,7 +347,7 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		t.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + nMod, u, v);
 		t.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + nMod, u, V);
 		t.addVertexWithUV(xMod + eMod, 0, zMod + nMod, U, V);
-		
+
 	}
 
 	/**
@@ -346,33 +456,72 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 	 * @param insulated
 	 *            Whether or not the cable connected to is insulated
 	 */
-	private void renderIC2CableConnection(Tessellator t, float u, float v,
-			float U, float V, ForgeDirection dir) {
-		/*
-		// East
-		t.addVertexWithUV(xMod + postWidth, 1, zMod + postWidth, u, v);
-		t.addVertexWithUV(xMod + postWidth, 0, zMod + postWidth, u, V);
-		t.addVertexWithUV(xMod + postWidth, 0, zMod, U, V);
-		t.addVertexWithUV(xMod + postWidth, 1, zMod, U, v);
+	private void renderIC2CableCap(Tessellator t, float u, float v, float du,
+			float dv, ForgeDirection dir, int cableWidth) {
+		// Prepare texture.
+		// Position
+		u = u + du * 8;
+		v = v + dv * 24;
+		// Size
+		float U = u + du * 8;
+		float V = v + dv * 8;
 
-		// West
-		t.addVertexWithUV(xMod, 0, zMod + postWidth, U, V);
-		t.addVertexWithUV(xMod, 1, zMod + postWidth, u, v);
-		t.addVertexWithUV(xMod, 1, zMod, u, v);
-		t.addVertexWithUV(xMod, 0, zMod, u, V);
+		// set cap size.
+		float tMin, tMax;
+		switch (cableWidth) {
+		case 0:
+			tMin = 6.5f / 16f;
+			tMax = 9.5f / 16f;
+			break;
+		case 1:
+			tMin = 6f / 16f;
+			tMax = 10f / 16f;
+			break;
+		case 2:
+			tMin = 5f / 16f; // 0.3125f;
+			tMax = 11f / 16f; // 0.6875f;
+			break;
+		case 3:
+			tMin = 4f / 16f;
+			tMax = 12f / 16f;
+			break;
+		case 4:
+			tMin = 3f / 16f;
+			tMax = 13f / 16f;
+			break;
+		default:
+			tMin = tMax = 0;
+			break;
+		}
 
-		// South
-		t.addVertexWithUV(xMod, 0, zMod + postWidth, u, V);
-		t.addVertexWithUV(xMod + postWidth, 0, zMod + postWidth, U, V);
-		t.addVertexWithUV(xMod + postWidth, 1, zMod + postWidth, U, v);
-		t.addVertexWithUV(xMod, 1, zMod + postWidth, u, v);
-
-		// North
-		t.addVertexWithUV(xMod, 1, zMod, U, v);
-		t.addVertexWithUV(xMod + postWidth, 1, zMod, u, v);
-		t.addVertexWithUV(xMod + postWidth, 0, zMod, u, V);
-		t.addVertexWithUV(xMod, 0, zMod, U, V);
-		*/
+		switch (dir) {
+		case NORTH:
+			t.addVertexWithUV(tMin, tMin, 0, u, V);
+			t.addVertexWithUV(tMax, tMin, 0, U, V);
+			t.addVertexWithUV(tMax, tMax, 0, U, v);
+			t.addVertexWithUV(tMin, tMax, 0, u, v);
+			break;
+		case SOUTH:
+			t.addVertexWithUV(1, tMin, tMax, U, V);
+			t.addVertexWithUV(1, tMax, tMax, u, v);
+			t.addVertexWithUV(1, tMax, tMin, u, v);
+			t.addVertexWithUV(1, tMin, tMin, u, V);
+			break;
+		case EAST:
+			t.addVertexWithUV(0, tMax, tMax, U, V);
+			t.addVertexWithUV(0, tMin, tMax, u, v);
+			t.addVertexWithUV(0, tMin, tMin, u, v);
+			t.addVertexWithUV(0, tMax, tMin, u, V);
+			break;
+		case WEST:
+			t.addVertexWithUV(tMin, tMax, 1, u, V);
+			t.addVertexWithUV(tMax, tMax, 1, U, V);
+			t.addVertexWithUV(tMax, tMin, 1, U, v);
+			t.addVertexWithUV(tMin, tMin, 1, u, v);
+			break;
+		default:
+			return;
+		}
 	}
 
 	@Override
