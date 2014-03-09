@@ -15,17 +15,17 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 	
 	//posts
-	private final int N_POST = 0b1;
-	private final int S_POST = 0b10;
-	private final int E_POST = 0b100;
-	private final int W_POST = 0b1000;
+	private final int N_POST = 1;
+	private final int S_POST = 2;
+	private final int E_POST = 4;
+	private final int W_POST = 8;
 	//strings
-	private final int NS_STRING = 0b10000;
-	private final int EW_STRING = 0b100000;
-	private final int NE_STRING = 0b1000000;
-	private final int NW_STRING = 0b10000000;
-	private final int SE_STRING = 0b100000000;
-	private final int SW_STRING = 0b1000000000;
+	private final int NS_STRING = 16;
+	private final int EW_STRING = 32;
+	private final int NE_STRING = 64;
+	private final int NW_STRING = 128;
+	private final int SE_STRING = 256;
+	private final int SW_STRING = 512;
 
 	public static int renderID = RenderingRegistry.getNextAvailableRenderId();
 
