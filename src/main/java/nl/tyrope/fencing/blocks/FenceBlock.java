@@ -15,7 +15,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -73,7 +72,7 @@ public class FenceBlock extends BlockContainer {
 					case Refs.MetaValues.FenceBarbed:
 						is.damageItem(2, player);
 						player.dropItem(
-								ItemBlock.getItemFromBlock(Blocks.iron_bars), 1);
+								Item.getItemFromBlock(Blocks.iron_bars), 1);
 						break;
 					case Refs.MetaValues.FenceWood:
 						is.damageItem(1, player);
@@ -109,7 +108,7 @@ public class FenceBlock extends BlockContainer {
 				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
 						MetaValues.FenceIron, 3);
 			} else if (player.getCurrentEquippedItem() == new ItemStack(
-					ItemBlock.getItemFromBlock(Blocks.iron_bars))) {
+					Item.getItemFromBlock(Blocks.iron_bars))) {
 				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
 						MetaValues.FenceBarbed, 3);
 			} else if (player.getCurrentEquippedItem() == new ItemStack(
@@ -182,15 +181,26 @@ public class FenceBlock extends BlockContainer {
 			int y, int z) {
 		return getHitBox(world, x, y, z);
 	}
-
-	public AxisAlignedBB getHitBox(IBlockAccess iba, int x, int y, int z) {
-		// NESW
-		boolean[] connect = new boolean[] {
+	
+	public boolean[] getConnections(IBlockAccess iba, int x, int y, int z){
+		return new boolean[] {
 				this.canConnectTo(iba, x, y, z - 1),
 				this.canConnectTo(iba, x + 1, y, z),
 				this.canConnectTo(iba, x, y, z + 1),
-				this.canConnectTo(iba, x - 1, y, z) };
+				this.canConnectTo(iba, x - 1, y, z)};
+	}
+	public boolean[] getPoleConnections(IBlockAccess iba, int x, int y, int z){
+		return new boolean[] {
+				iba.getBlock(x, y, z - 1) instanceof FenceBlock,
+				iba.getBlock(x + 1, y, z) instanceof FenceBlock,
+				iba.getBlock(x, y, z + 1) instanceof FenceBlock,
+				iba.getBlock(x - 1, y, z) instanceof FenceBlock};
+	}
 
+	public AxisAlignedBB getHitBox(IBlockAccess iba, int x, int y, int z) {
+		// NWSE
+		boolean[] connect = getConnections(iba,x,y,z);
+		
 		int cc = 0;
 		for (boolean b : connect) {
 			if (b) {
@@ -207,7 +217,7 @@ public class FenceBlock extends BlockContainer {
 				// No north
 				zMin = f1;
 			} else if (!connect[1]) {
-				// No east
+				// No west
 				xMax = f2;
 			} else if (!connect[2]) {
 				// No south
@@ -223,7 +233,7 @@ public class FenceBlock extends BlockContainer {
 				zMin = f1;
 			}
 			if (!connect[1]) {
-				// No east
+				// No west
 				xMax = f2;
 			}
 			if (!connect[2]) {
@@ -268,6 +278,7 @@ public class FenceBlock extends BlockContainer {
 		return false;
 	}
 
+	@Override
 	public int getRenderType() {
 		return renderId;
 	}
@@ -317,12 +328,14 @@ public class FenceBlock extends BlockContainer {
 	}
 
 	// Effects of touching the fence.
+	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z,
 			Entity entity) {
 		affectEntity(world.getBlockMetadata(x, y, z), entity);
 	}
 
 	// Effects of walking on the fence.
+	@Override
 	public void onEntityWalking(World world, int x, int y, int z, Entity entity) {
 		// FIXME Not triggered due to heightened hitbox.
 		affectEntity(world.getBlockMetadata(x, y, z), entity);
