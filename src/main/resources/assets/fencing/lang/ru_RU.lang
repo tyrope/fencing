@@ -1,0 +1,37 @@
+#Creative Tab
+itemGroup.Fencing=Fencing
+
+# Items
+item.fencePole.name=Подпорка забора
+
+# Blocks
+tile.fenceBlockString.name=Нитяной забор
+tile.fenceBlockIron.name=Железный забор
+tile.fenceBlockSilly.name=Простой нитяной забор
+tile.fenceBlockBarbed.name=Забор с колючей проволокой
+tile.fenceBlockWood.name=Деревянный забор
+tile.fenceBlockCut.name=Разрезанный забор
+
+tile.fenceBlockElectricCopper.name=Медный электрический забор
+tile.fenceBlockElectricTin.name=Оловянный электрический забор
+
+tile.fenceBlockWoodPainted.black.name=Окрашенный деревянный забор (Чёрный)
+tile.fenceBlockWoodPainted.red.name=Окрашенный деревянный забор (Красный)
+tile.fenceBlockWoodPainted.green.name=Окрашенный деревянный забор (Зелёный)
+tile.fenceBlockWoodPainted.brown.name=Окрашенный деревянный забор (Коричневый)
+tile.fenceBlockWoodPainted.blue.name=Окрашенный деревянный забор (Синий)
+tile.fenceBlockWoodPainted.purple.name=Окрашенный деревянный забор (Фиолетовый)
+tile.fenceBlockWoodPainted.cyan.name=Окрашенный деревянный забор (Бирюзовый)
+tile.fenceBlockWoodPainted.silver.name=Окрашенный деревянный забор (Светло-серый)
+tile.fenceBlockWoodPainted.gray.name=Окрашенный деревянный забор (Серый)
+tile.fenceBlockWoodPainted.pink.name=Окрашенный деревянный забор (Розовый)
+tile.fenceBlockWoodPainted.lime.name=Окрашенный деревянный забор (Лаймовый)
+tile.fenceBlockWoodPainted.yellow.name=Окрашенный деревянный забор (Жёлтый)
+tile.fenceBlockWoodPainted.lightBlue.name=Окрашенный деревянный забор (Светло-синий)
+tile.fenceBlockWoodPainted.magenta.name=Окрашенный деревянный забор (Сиреневый)
+tile.fenceBlockWoodPainted.orange.name=Окрашенный деревянный забор (Оранжевый)
+tile.fenceBlockWoodPainted.white.name=Окрашенный деревянный забор (Белый)
+
+# Death messages
+death.attack.barbedWire=%1$s был исколат до смерти колючей проволокой.
+death.attack.electric=%1$s получил удар током от электрического забора.
