@@ -52,15 +52,8 @@ public class ElectricFenceBlock extends FenceBlock {
 		TileEntity te = iba.getTileEntity(x, y, z);
 
 		if (te != null) { // Do you have a TE?
-			if (ic2.api.energy.tile.IEnergyConductor.class.isAssignableFrom(te
-					.getClass())
-					|| ic2.api.energy.tile.IEnergySink.class
-							.isAssignableFrom(te.getClass())
-					|| ic2.api.energy.tile.IEnergySource.class
-							.isAssignableFrom(te.getClass())) {
-				// Valid IC2 energy thing...
-				return true;
-			}
+			//TODO Detect if the tile entity is a type we want to connect to... somehow.
+			return false;
 		}
 		return false;
 	}

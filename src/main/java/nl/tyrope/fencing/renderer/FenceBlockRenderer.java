@@ -95,46 +95,30 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
 					ForgeDirection.SOUTH, ForgeDirection.WEST });
 
-		// IC2 integration
+		// Rendering Integration
 		// Cable caps
 		// North
 		TileEntity te = iba.getTileEntity(x, y, z - 1);
 		if (te != null) {
-			if (ic2.api.energy.tile.IEnergyConductor.class.isAssignableFrom(te
-					.getClass())) {
-				renderIC2CableCap(tess, u, v, du, dv, ForgeDirection.NORTH,
-						getIC2CableThickness(iba, x, y, z - 1));
-			}
+			renderCableCap(tess, u, v, du, dv, ForgeDirection.NORTH);
 		}
 
 		// East
 		te = iba.getTileEntity(x - 1, y, z);
 		if (te != null) {
-			if (ic2.api.energy.tile.IEnergyConductor.class.isAssignableFrom(te
-					.getClass())) {
-				renderIC2CableCap(tess, u, v, du, dv, ForgeDirection.EAST,
-						getIC2CableThickness(iba, x - 1, y, z));
-			}
+			renderCableCap(tess, u, v, du, dv, ForgeDirection.EAST);
 		}
 
 		// South
 		te = iba.getTileEntity(x + 1, y, z);
 		if (te != null) {
-			if (ic2.api.energy.tile.IEnergyConductor.class.isAssignableFrom(te
-					.getClass())) {
-				renderIC2CableCap(tess, u, v, du, dv, ForgeDirection.SOUTH,
-						getIC2CableThickness(iba, x + 1, y, z));
-			}
+			renderCableCap(tess, u, v, du, dv, ForgeDirection.SOUTH);
 		}
 
 		// East
 		te = iba.getTileEntity(x, y, z + 1);
 		if (te != null) {
-			if (ic2.api.energy.tile.IEnergyConductor.class.isAssignableFrom(te
-					.getClass())) {
-				renderIC2CableCap(tess, u, v, du, dv, ForgeDirection.WEST,
-						getIC2CableThickness(iba, x, y, z + 1));
-			}
+			renderCableCap(tess, u, v, du, dv, ForgeDirection.WEST);
 		}
 
 		tess.addTranslation(-x, -y, -z);
@@ -195,52 +179,6 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		}
 
 		return type;
-	}
-
-	/**
-	 * Wrapper function to get a Block object from an IC2 name item.
-	 * 
-	 * @param ic2name
-	 *            (see ic2.api.item.IC2Items.getItem)
-	 * @return Block metadata
-	 */
-	private int getBlockMetaFromIC2Name(String ic2name) {
-		try {
-			return ic2.api.item.IC2Items.getItem(ic2name).getItemDamage();
-		} catch (NullPointerException e) {
-			return -1;
-		}
-	}
-
-	private int getIC2CableThickness(IBlockAccess iba, int x, int y, int z) {
-		int meta = iba.getBlockMetadata(x, y, z);
-
-		if (getBlockMetaFromIC2Name("goldCableBlock") == meta) {
-			return 0;
-		}
-
-		if (getBlockMetaFromIC2Name("tinCableBlock") == meta
-				|| getBlockMetaFromIC2Name("copperCableBlock") == meta
-				|| getBlockMetaFromIC2Name("glassFiberCableBlock") == meta) {
-			return 1;
-		}
-
-		if (getBlockMetaFromIC2Name("insulatedtinCableBlock") == meta
-				|| getBlockMetaFromIC2Name("insulatedCopperCableBlock") == meta
-				|| getBlockMetaFromIC2Name("insulatedGoldCableBlock") == meta
-				|| getBlockMetaFromIC2Name("ironCableBlock") == meta) {
-			return 2;
-		}
-
-		if (getBlockMetaFromIC2Name("detectorCableBlock") == meta
-				|| getBlockMetaFromIC2Name("splitterCableBlock") == meta) {
-			return 3;
-		}
-
-		if (getBlockMetaFromIC2Name("insulatedIronCableBlock") == meta) {
-			return 4;
-		}
-		return -1;
 	}
 
 	/**
@@ -456,8 +394,8 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 	 * @param insulated
 	 *            Whether or not the cable connected to is insulated
 	 */
-	private void renderIC2CableCap(Tessellator t, float u, float v, float du,
-			float dv, ForgeDirection dir, int cableWidth) {
+	private void renderCableCap(Tessellator t, float u, float v, float du,
+			float dv, ForgeDirection dir) {
 		// Prepare texture.
 		// Position
 		u = u + du * 8;
@@ -467,32 +405,7 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		float V = v + dv * 8;
 
 		// set cap size.
-		float tMin, tMax;
-		switch (cableWidth) {
-		case 0:
-			tMin = 6.5f / 16f;
-			tMax = 9.5f / 16f;
-			break;
-		case 1:
-			tMin = 6f / 16f;
-			tMax = 10f / 16f;
-			break;
-		case 2:
-			tMin = 5f / 16f; // 0.3125f;
-			tMax = 11f / 16f; // 0.6875f;
-			break;
-		case 3:
-			tMin = 4f / 16f;
-			tMax = 12f / 16f;
-			break;
-		case 4:
-			tMin = 3f / 16f;
-			tMax = 13f / 16f;
-			break;
-		default:
-			tMin = tMax = 0;
-			break;
-		}
+		float tMin = 6.5f / 16f, tMax = 9.5f / 16f;
 
 		switch (dir) {
 		case NORTH:

@@ -1,6 +1,5 @@
 package nl.tyrope.fencing;
 
-import ic2.api.item.IC2Items;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -181,32 +180,31 @@ public class Fencing {
 		// Intermod compatibility.
 		if (Loader.isModLoaded("IC2")) {
 			Refs.logger.info("Loading electric fence recipes:");
+			
+			ItemStack tinIngot = null, copperIngot = null; 
 
-			// Load items
-			ItemStack cableTin = IC2Items.getItem("tinCableItem");
-			if (cableTin != null) {
-				Refs.logger.info("Tin loaded.");
-				GameRegistry.addRecipe(new ItemStack(electricFenceBlock, 1,
-						MetaValues.FenceElectricTin), "xyx", 'x', pole, 'y',
-						cableTin);
-				// Repair
-				GameRegistry.addShapelessRecipe(new ItemStack(
+			// Tin
+			Refs.logger.info("Tin loaded.");
+			GameRegistry.addRecipe(new ItemStack(electricFenceBlock, 1,
+					MetaValues.FenceElectricTin), "xyx", 'x', pole, 'y',
+					tinIngot);
+			// Repair
+			GameRegistry.addShapelessRecipe(new ItemStack(
 						electricFenceBlock, 1, MetaValues.FenceElectricTin),
 						new ItemStack(fenceBlock, 1, MetaValues.FenceCut),
-						cableTin);
-			}
-			ItemStack cableCopper = IC2Items.getItem("copperCableItem");
-			if (cableCopper != null) {
-				Refs.logger.info("Copper loaded.");
+						tinIngot);
+			
+			// Copper
+			Refs.logger.info("Copper loaded.");
 				GameRegistry.addRecipe(new ItemStack(electricFenceBlock, 1,
 						MetaValues.FenceElectricCopper), "xyx", 'x', pole, 'y',
-						cableCopper);
+						copperIngot);
 				// Repair
 				GameRegistry.addShapelessRecipe(new ItemStack(
 						electricFenceBlock, 1, MetaValues.FenceElectricCopper),
 						new ItemStack(fenceBlock, 1, MetaValues.FenceCut),
-						cableCopper);
-			}
+						copperIngot);
+			
 			Refs.logger.info("Complete.");
 
 			proxy.registerRenderers(new FenceBlock[] { fenceBlock,
