@@ -1,11 +1,11 @@
 package nl.tyrope.fencing;
 
-import org.apache.logging.log4j.Logger;
-
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
+
+import org.apache.logging.log4j.Logger;
 
 public class Refs {
 	// Fence subnames
@@ -16,6 +16,7 @@ public class Refs {
 	// Misc
 	public static CreativeTabs creativeTab;
 	public static float textureSize = 32;
+	/** Whether or not to drop the center item when cutting a fence. */
 	public static boolean dropCenter;
 	public static Logger logger;
 

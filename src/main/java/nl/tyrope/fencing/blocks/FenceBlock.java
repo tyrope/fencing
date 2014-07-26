@@ -44,90 +44,99 @@ public class FenceBlock extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z,
 			EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (player.getCurrentEquippedItem() == null) {
-			// Be gone, Null Pointer Exception!
+		ItemStack equippedStack = player.getCurrentEquippedItem();
+		if (equippedStack == null) {
 			return false;
 		}
 
-		int meta = world.getBlockMetadata(x, y, z);
-		if (meta != MetaValues.FenceCut) {
-			// Cut the fence.
-			if (player.getCurrentEquippedItem().getItem() == Items.shears) {
-				// player is using shears.
-				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
-						MetaValues.FenceCut, 3);
-				ItemStack is = player.getCurrentEquippedItem();
-				if (Refs.dropCenter && !world.isRemote) {
-					// TODO Don't drop to creative players.
-					// EntityPlayerMP.theItemInWorldManager.isCreative()
-					switch (meta) {
-					case Refs.MetaValues.FenceString:
-						is.damageItem(1, player);
-						player.dropItem(Items.string, 1);
-						break;
-					case Refs.MetaValues.FenceIron:
-						is.damageItem(2, player);
-						player.dropItem(Items.iron_ingot, 1);
-						break;
-					case Refs.MetaValues.FenceBarbed:
-						is.damageItem(2, player);
-						player.dropItem(
-								Item.getItemFromBlock(Blocks.iron_bars), 1);
-						break;
-					case Refs.MetaValues.FenceWood:
-						is.damageItem(1, player);
-						player.dropItem(Items.stick, 1);
-						break;
-					case Refs.MetaValues.FenceSilly:
-						is.damageItem(1, player);
-						player.dropItem(Items.string, 1);
-						player.dropItem(Items.slime_ball, 1);
-						break;
-					}
-				}
-				return true;
-			} else if (player.getCurrentEquippedItem() == new ItemStack(
-					Items.slime_ball) && meta == MetaValues.FenceString) {
-				// Upgrade a string fence with a slime ball.
-				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
-						MetaValues.FenceSilly, 3);
-				// TODO Don't take items from creative players
-				// EntityPlayerMP.theItemInWorldManager.isCreative()
-				ItemStack is = player.getCurrentEquippedItem();
-				is.stackSize = is.stackSize - 1;
-				player.setCurrentItemOrArmor(0, is);
-			}
-			return false;
-		} else {
+		int metadata = world.getBlockMetadata(x, y, z);
+		if (metadata == MetaValues.FenceCut) {
 			// Repair fence.
-			if (player.getCurrentEquippedItem() == new ItemStack(Items.string)) {
+			if (equippedStack.getItem() == Items.string) {
 				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
 						MetaValues.FenceString, 3);
-			} else if (player.getCurrentEquippedItem() == new ItemStack(
-					Items.iron_ingot)) {
+			} else if (equippedStack.getItem() == Items.iron_ingot) {
 				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
 						MetaValues.FenceIron, 3);
-			} else if (player.getCurrentEquippedItem() == new ItemStack(
-					Item.getItemFromBlock(Blocks.iron_bars))) {
+			} else if (equippedStack.getItem() == Item.getItemFromBlock(
+					Blocks.iron_bars)) {
 				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
 						MetaValues.FenceBarbed, 3);
-			} else if (player.getCurrentEquippedItem() == new ItemStack(
-					Items.stick)) {
+			} else if (equippedStack.getItem() == Items.stick) {
 				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
 						MetaValues.FenceWood, 3);
 			} else {
-				// Invalid item. continue as if nothing happened. Because
-				// nothing happened.
 				return false;
 			}
-			// Valid item, remove one from the stack.
-			// TODO Don't take items from creative players
-			// EntityPlayerMP.theItemInWorldManager.isCreative()
-			ItemStack is = player.getCurrentEquippedItem();
-			is.stackSize = is.stackSize - 1;
-			player.setCurrentItemOrArmor(0, is);
+
+			if (player.capabilities.isCreativeMode) {
+				return true;
+			}
+
+			if (--equippedStack.stackSize > 0) {
+				player.setCurrentItemOrArmor(0, equippedStack);
+			} else {
+				player.setCurrentItemOrArmor(0, null);
+			}
+
+			return true;
+		} else if (equippedStack.getItem() == Items.shears) {
+			// Cut the fence.
+			world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
+					MetaValues.FenceCut, 3);
+
+			if (!Refs.dropCenter
+					|| world.isRemote
+					|| player.capabilities.isCreativeMode) {
+				return true;
+			}
+
+			switch (metadata) {
+			case Refs.MetaValues.FenceString:
+				equippedStack.damageItem(1, player);
+				player.dropItem(Items.string, 1);
+				break;
+			case Refs.MetaValues.FenceIron:
+				equippedStack.damageItem(2, player);
+				player.dropItem(Items.iron_ingot, 1);
+				break;
+			case Refs.MetaValues.FenceBarbed:
+				equippedStack.damageItem(2, player);
+				player.dropItem(
+						Item.getItemFromBlock(Blocks.iron_bars), 1);
+				break;
+			case Refs.MetaValues.FenceWood:
+				equippedStack.damageItem(1, player);
+				player.dropItem(Items.stick, 1);
+				break;
+			case Refs.MetaValues.FenceSilly:
+				equippedStack.damageItem(1, player);
+				player.dropItem(Items.string, 1);
+				player.dropItem(Items.slime_ball, 1);
+				break;
+			}
+
+			return true;
+		} else if (equippedStack.getItem() == Items.slime_ball
+				&& metadata == MetaValues.FenceString) {
+			// Upgrade a string fence with a slime ball.
+			world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
+					MetaValues.FenceSilly, 3);
+
+			if (player.capabilities.isCreativeMode) {
+				return true;
+			}
+
+			if (--equippedStack.stackSize > 0) {
+				player.setCurrentItemOrArmor(0, equippedStack);
+			} else {
+				player.setCurrentItemOrArmor(0, null);
+			}
+
 			return true;
 		}
+
+		return false;
 	}
 
 	@Override
