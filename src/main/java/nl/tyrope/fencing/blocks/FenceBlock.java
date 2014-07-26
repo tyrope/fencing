@@ -181,7 +181,7 @@ public class FenceBlock extends BlockContainer {
 				&& world.getBlock(x, y, z) == Refs.ItemsBlocks.Fence) {
 			return null;
 		} else {
-			return getHitBox(world, x, y, z).expand(0, 0.3f, 0);
+			return getHitBox(world, x, y, z).expand(0, 0.5f, 0);
 		}
 	}
 
