@@ -98,6 +98,9 @@ public class Fencing {
 		paintedFenceBlock = new PaintedFenceBlock();
 		Refs.ItemsBlocks.PaintedFence = paintedFenceBlock;
 
+		// register items
+		GameRegistry.registerItem(fencePole, "fencePole");
+
 		// register blocks
 		GameRegistry.registerBlock(fenceBlock, FenceBlockItem.class,
 				"FenceBlockItem");
