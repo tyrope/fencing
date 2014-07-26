@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "build BUILDNO"
+version = "build_" + getBuildNumber()
 group= "nl.tyrope.fencing" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "fencing"
 
@@ -46,8 +46,7 @@ dependencies {
 
 }
 
-processResources
-{
+processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
@@ -64,4 +63,8 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+def getBuildNumber() {
+    return System.getenv("BUILD_NUMBER") ?: "1"
 }

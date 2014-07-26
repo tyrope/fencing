@@ -4,7 +4,6 @@ bin/
 # Build files #
 .gradle/
 build/
-build.gradle
 
 # eclipse files #
 .settings/
