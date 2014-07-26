@@ -29,7 +29,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class FenceBlock extends BlockContainer {
 
-	IIcon[] textures;
+	protected IIcon[] textures;
 
 	public FenceBlock() {
 		super(Material.wood);
