@@ -43,7 +43,7 @@ public class FenceBlock extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z,
-			EntityPlayer player, int par6, float par7, float par8, float par9) {
+			EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.getCurrentEquippedItem() == null) {
 			// Be gone, Null Pointer Exception!
 			return false;
@@ -132,7 +132,7 @@ public class FenceBlock extends BlockContainer {
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int i) {
+	public TileEntity createNewTileEntity(World world, int metadata) {
 		return null;
 	}
 
@@ -155,11 +155,11 @@ public class FenceBlock extends BlockContainer {
 	 * mask.) Parameters: World, X, Y, Z, mask, list, colliding entity
 	 */
 	public void addCollisionBoxesToList(World world, int x, int y, int z,
-			AxisAlignedBB abb, List list, Entity entity) {
+			AxisAlignedBB mask, List list, Entity entity) {
 		AxisAlignedBB axisalignedbb1 = this.getCollisionBoundingBoxFromPool(
 				world, x, y, z);
 
-		if (axisalignedbb1 != null && abb.intersectsWith(axisalignedbb1)) {
+		if (axisalignedbb1 != null && mask.intersectsWith(axisalignedbb1)) {
 			list.add(axisalignedbb1);
 		}
 	}
@@ -184,23 +184,23 @@ public class FenceBlock extends BlockContainer {
 		return getHitBox(world, x, y, z);
 	}
 
-	public boolean[] getConnections(IBlockAccess iba, int x, int y, int z) {
-		return new boolean[] { this.canConnectTo(iba, x, y, z - 1),
-				this.canConnectTo(iba, x + 1, y, z),
-				this.canConnectTo(iba, x, y, z + 1),
-				this.canConnectTo(iba, x - 1, y, z) };
+	public boolean[] getConnections(IBlockAccess blockAccess, int x, int y, int z) {
+		return new boolean[] { this.canConnectTo(blockAccess, x, y, z - 1),
+				this.canConnectTo(blockAccess, x + 1, y, z),
+				this.canConnectTo(blockAccess, x, y, z + 1),
+				this.canConnectTo(blockAccess, x - 1, y, z) };
 	}
 
-	public boolean[] getPoleConnections(IBlockAccess iba, int x, int y, int z) {
-		return new boolean[] { iba.getBlock(x, y, z - 1) instanceof FenceBlock,
-				iba.getBlock(x + 1, y, z) instanceof FenceBlock,
-				iba.getBlock(x, y, z + 1) instanceof FenceBlock,
-				iba.getBlock(x - 1, y, z) instanceof FenceBlock };
+	public boolean[] getPoleConnections(IBlockAccess blockAccess, int x, int y, int z) {
+		return new boolean[] { blockAccess.getBlock(x, y, z - 1) instanceof FenceBlock,
+				blockAccess.getBlock(x + 1, y, z) instanceof FenceBlock,
+				blockAccess.getBlock(x, y, z + 1) instanceof FenceBlock,
+				blockAccess.getBlock(x - 1, y, z) instanceof FenceBlock };
 	}
 
-	public AxisAlignedBB getHitBox(IBlockAccess iba, int x, int y, int z) {
+	public AxisAlignedBB getHitBox(IBlockAccess blockAccess, int x, int y, int z) {
 		// NWSE
-		boolean[] connect = getConnections(iba, x, y, z);
+		boolean[] connect = getConnections(blockAccess, x, y, z);
 
 		int cc = 0;
 		for (boolean b : connect) {
@@ -262,8 +262,8 @@ public class FenceBlock extends BlockContainer {
 				x + xMax, y + 1, z + zMax);
 	}
 
-	protected boolean canConnectTo(IBlockAccess iba, int x, int y, int z) {
-		Block block = iba.getBlock(x, y, z);
+	protected boolean canConnectTo(IBlockAccess blockAccess, int x, int y, int z) {
+		Block block = blockAccess.getBlock(x, y, z);
 		if (block == null) {
 			return false;
 		} else if (block.getMaterial().isOpaque()
@@ -297,8 +297,8 @@ public class FenceBlock extends BlockContainer {
 	// Icon Rendering
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta) {
-		return textures[meta];
+	public IIcon getIcon(int side, int metadata) {
+		return textures[metadata];
 	}
 
 	@Override
@@ -320,7 +320,7 @@ public class FenceBlock extends BlockContainer {
 	// Add all fences to creative menu.
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item unknown, CreativeTabs tab, List subItems) {
+	public void getSubBlocks(Item itemBlock, CreativeTabs tab, List subItems) {
 		ItemStack stack;
 		for (int ix = 0; ix < Refs.fenceSubNames.length; ix++) {
 			stack = new ItemStack(this, 1, ix);
@@ -342,11 +342,11 @@ public class FenceBlock extends BlockContainer {
 		affectEntity(world.getBlockMetadata(x, y, z), entity);
 	}
 
-	protected void affectEntity(int meta, Entity entity) {
-		if (meta == MetaValues.FenceSilly) {
+	protected void affectEntity(int metadata, Entity entity) {
+		if (metadata == MetaValues.FenceSilly) {
 			entity.motionX *= 0.1D;
 			entity.motionZ *= 0.1D;
-		} else if (meta == MetaValues.FenceBarbed) {
+		} else if (metadata == MetaValues.FenceBarbed) {
 			entity.attackEntityFrom(Refs.DmgSrcs.barbed, Refs.dmgMulti);
 		}
 	}
