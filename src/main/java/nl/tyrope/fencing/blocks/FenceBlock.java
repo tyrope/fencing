@@ -23,12 +23,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import nl.tyrope.fencing.Refs;
 import nl.tyrope.fencing.Refs.MetaValues;
+import nl.tyrope.fencing.renderer.FenceBlockRenderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class FenceBlock extends BlockContainer {
 
-	public int renderId;
 	IIcon[] textures;
 
 	public FenceBlock() {
@@ -281,7 +281,7 @@ public class FenceBlock extends BlockContainer {
 
 	@Override
 	public int getRenderType() {
-		return renderId;
+		return FenceBlockRenderer.renderID;
 	}
 
 	@Override

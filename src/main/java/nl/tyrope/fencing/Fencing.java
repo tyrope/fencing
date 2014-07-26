@@ -107,6 +107,9 @@ public class Fencing {
 		GameRegistry.registerBlock(paintedFenceBlock,
 				PaintedFenceBlockItem.class, "PaintedFenceBlockItem");
 
+		// Register renderers
+		proxy.registerRenderers();
+
 		// Make damage objects.
 		Refs.DmgSrcs.barbed = new BarbedDmg();
 
@@ -209,12 +212,6 @@ public class Fencing {
 						copperIngot);
 			
 			Refs.logger.info("Complete.");
-
-			proxy.registerRenderers(new FenceBlock[] { fenceBlock,
-					paintedFenceBlock, electricFenceBlock });
-		} else {
-			proxy.registerRenderers(new FenceBlock[] { fenceBlock,
-					paintedFenceBlock });
 		}
 	}
 
