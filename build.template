@@ -23,7 +23,11 @@ archivesBaseName = "fencing"
 
 minecraft {
     version = "1.7.2-10.12.2.1147"
-    assetDir = "eclipse/assets"
+    if (file('../run').exists()) {
+        assetDir = "../run/assets"
+    } else {
+        assetDir = "eclipse/assets"
+    }
 }
 
 dependencies {
