@@ -57,7 +57,6 @@ public class FenceBlock extends BlockContainer {
 				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
 						MetaValues.FenceCut, 3);
 				ItemStack is = player.getCurrentEquippedItem();
-				player.setCurrentItemOrArmor(0, is);
 				if (Refs.dropCenter && !world.isRemote) {
 					// TODO Don't drop to creative players.
 					// EntityPlayerMP.theItemInWorldManager.isCreative()
