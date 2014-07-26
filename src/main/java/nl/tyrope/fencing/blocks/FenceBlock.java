@@ -48,10 +48,11 @@ public class FenceBlock extends BlockContainer {
 			// Be gone, Null Pointer Exception!
 			return false;
 		}
+
 		int meta = world.getBlockMetadata(x, y, z);
 		if (meta != MetaValues.FenceCut) {
 			// Cut the fence.
-			if (player.getCurrentEquippedItem() == new ItemStack(Items.shears)) {
+			if (player.getCurrentEquippedItem().getItem() == Items.shears) {
 				// player is using shears.
 				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
 						MetaValues.FenceCut, 3);
