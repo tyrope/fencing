@@ -157,6 +157,7 @@ public class FenceBlock extends BlockContainer {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	/**
 	 * Adds all intersecting collision boxes to a list. (Be sure to only add boxes to the list if they intersect the
@@ -326,6 +327,7 @@ public class FenceBlock extends BlockContainer {
 	}
 
 	// Add all fences to creative menu.
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubBlocks(Item itemBlock, CreativeTabs tab, List subItems) {

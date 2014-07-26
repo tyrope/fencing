@@ -63,6 +63,7 @@ public class ElectricFenceBlock extends FenceBlock {
 	}
 
 	// Add all fences to creative menu.
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item unknown, CreativeTabs tab, List subItems) {
