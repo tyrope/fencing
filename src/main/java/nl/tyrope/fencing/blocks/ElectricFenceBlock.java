@@ -25,13 +25,7 @@ public class ElectricFenceBlock extends FenceBlock {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int i) {
-		return null;
-	}
-
-	@Override
-	public TileEntity createTileEntity(World world, int meta) {
-		ElectricFenceEntity te = new ElectricFenceEntity();
-		return te;
+		return new ElectricFenceEntity();
 	}
 
 	@Override
