@@ -8,6 +8,8 @@ build.gradle
 
 # eclipse files #
 .settings/
+.classpath
+.project
 
 # Package Files #
 *.jar
