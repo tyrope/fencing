@@ -24,7 +24,7 @@ public class ElectricFenceBlock extends FenceBlock {
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int i) {
+	public TileEntity createNewTileEntity(World world, int metadata) {
 		return new ElectricFenceEntity();
 	}
 
@@ -36,14 +36,14 @@ public class ElectricFenceBlock extends FenceBlock {
 	}
 
 	@Override
-	protected boolean canConnectTo(IBlockAccess iba, int x, int y, int z) {
+	protected boolean canConnectTo(IBlockAccess blockAccess, int x, int y, int z) {
 		// Can you connect to something as a fence?
-		if (super.canConnectTo(iba, x, y, z)) {
+		if (super.canConnectTo(blockAccess, x, y, z)) {
 			return true;
 		}
 
 		// Can you connect to something as a cable?
-		TileEntity te = iba.getTileEntity(x, y, z);
+		TileEntity te = blockAccess.getTileEntity(x, y, z);
 
 		if (te != null) { // Do you have a TE?
 			//TODO Detect if the tile entity is a type we want to connect to... somehow.
@@ -66,7 +66,7 @@ public class ElectricFenceBlock extends FenceBlock {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item unknown, CreativeTabs tab, List subItems) {
+	public void getSubBlocks(Item itemBlock, CreativeTabs tab, List subItems) {
 		ItemStack stack;
 		for (int ix = 0; ix < Refs.elecFenceSubNames.length; ix++) {
 			stack = new ItemStack(this, 1, ix);
