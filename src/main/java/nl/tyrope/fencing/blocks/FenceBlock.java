@@ -207,54 +207,55 @@ public class FenceBlock extends BlockContainer {
 
 	public AxisAlignedBB getHitBox(IBlockAccess blockAccess, int x, int y, int z) {
 		// NWSE
-		boolean[] connect = getConnections(blockAccess, x, y, z);
+		boolean[] connections = getConnections(blockAccess, x, y, z);
 
-		int cc = 0;
-		for (boolean b : connect) {
+		int nbConnection = 0;
+		for (boolean b : connections) {
 			if (b) {
-				cc++;
+				nbConnection++;
 			}
 		}
 
-		float f1 = 0.4375f, f2 = 0.5625f;
+		float unit = 1/16.0F;
+		float f1 = unit * 7, f2 = unit * 9;
 		float xMin = 0, zMin = 0, xMax = 1, zMax = 1;
 
-		if (cc == 3) {
+		if (nbConnection == 3) {
 			// T
-			if (!connect[0]) {
+			if (!connections[0]) {
 				// No north
 				zMin = f1;
-			} else if (!connect[1]) {
+			} else if (!connections[1]) {
 				// No west
 				xMax = f2;
-			} else if (!connect[2]) {
+			} else if (!connections[2]) {
 				// No south
 				zMax = f2;
-			} else if (!connect[3]) {
+			} else if (!connections[3]) {
 				// No east
 				xMin = f1;
 			}
-		} else if (cc == 2) {
+		} else if (nbConnection == 2) {
 			// Straight... or corner.
-			if (!connect[0]) {
+			if (!connections[0]) {
 				// No north
 				zMin = f1;
 			}
-			if (!connect[1]) {
+			if (!connections[1]) {
 				// No west
 				xMax = f2;
 			}
-			if (!connect[2]) {
+			if (!connections[2]) {
 				// No south
 				zMax = f2;
 			}
-			if (!connect[3]) {
+			if (!connections[3]) {
 				// No east
 				xMin = f1;
 			}
-		} else if (cc == 1) {
+		} else if (nbConnection == 1) {
 			// Straight.
-			if (connect[0] || connect[2]) {
+			if (connections[0] || connections[2]) {
 				// N/S
 				xMin = f1;
 				xMax = f2;
