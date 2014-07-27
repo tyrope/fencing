@@ -16,11 +16,12 @@ JailBrokenByT2 reviews Fencing 0.1.
 
 [size=5]Download[/size]
 Versions are written as Major.Minor.Bugfix.Build
+[url=https://github.com/tyrope/fencing/releases/download/0.5.0-dev/fencing-0.5.0-dev.41.jar]Version 0.5.0-dev for Minecraft 1.7.2[/url]
 [url=https://github.com/tyrope/fencing/releases/download/0.4.1.39/fencing-0.4.1.39.jar]Version 0.4.1.39 for Minecraft 1.6.4[/url]
 For older versions, see [url=https://github.com/tyrope/fencing/releases]The GitHub releases page[/url]
 
 
-Latest development build: (Minecraft 1.7.2) [color=red]WARNING: Potentially game-breaking, back up your saves before installing these.[/color]
+Latest development build: [color=red]WARNING: Potentially game-breaking, back up your saves before installing these.[/color]
 [url=http://willie.dftba.net/jenkins/job/Fencing/lastSuccessfulBuild/artifact/fencing-nightly.jar]I agree that this link can destroy my saves.[/url]
 
 [url=https://github.com/tyrope/fencing/wiki]Wiki[/url] & [url=https://github.com/tyrope/fencing]Source Code[/url] & [url=https://github.com/tyrope/fencing/issues]Bug tracking[/url] hosted on github. Please post bugs there!
