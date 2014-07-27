@@ -3,13 +3,13 @@ bin/
 
 # Build files #
 .gradle/
-gradle/
 build/
-build.gradle
-gradlew
 
 # eclipse files #
 .settings/
+.classpath
+.project
+eclipse/
 
 # Package Files #
 *.jar
