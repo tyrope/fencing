@@ -220,16 +220,7 @@ public class FenceBlock extends BlockContainer {
 	}
 
 	public AxisAlignedBB getHitBox(IBlockAccess blockAccess, int x, int y, int z) {
-		AxisAlignedBB boundingBox = getBoundingBox(blockAccess, x, y, z);
-
-		boundingBox.minX += x;
-		boundingBox.minY += y;
-		boundingBox.minZ += z;
-		boundingBox.maxX += x;
-		boundingBox.maxY += y;
-		boundingBox.maxZ += z;
-
-		return boundingBox;
+		return getBoundingBox(blockAccess, x, y, z).offset(x, y, z);
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockAccess blockAccess, int x, int y, int z) {
