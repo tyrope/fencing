@@ -19,6 +19,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import nl.tyrope.fencing.Refs;
@@ -173,6 +175,17 @@ public class FenceBlock extends BlockContainer {
 		}
 	}
 
+	@Override
+	public MovingObjectPosition collisionRayTrace(World world,
+			int x, int y, int z, Vec3 startVec, Vec3 endVec) {
+		AxisAlignedBB boundingBox = getBoundingBox(world, x, y, z);
+		setBlockBounds((float) boundingBox.minX, (float) boundingBox.minY,
+				(float) boundingBox.minZ, (float) boundingBox.maxX,
+				(float) boundingBox.maxY, (float) boundingBox.maxZ);
+
+		return super.collisionRayTrace(world, x, y, z, startVec, endVec);
+	}
+
 	// Hitbox
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x,
@@ -207,6 +220,19 @@ public class FenceBlock extends BlockContainer {
 	}
 
 	public AxisAlignedBB getHitBox(IBlockAccess blockAccess, int x, int y, int z) {
+		AxisAlignedBB boundingBox = getBoundingBox(blockAccess, x, y, z);
+
+		boundingBox.minX += x;
+		boundingBox.minY += y;
+		boundingBox.minZ += z;
+		boundingBox.maxX += x;
+		boundingBox.maxY += y;
+		boundingBox.maxZ += z;
+
+		return boundingBox;
+	}
+
+	public AxisAlignedBB getBoundingBox(IBlockAccess blockAccess, int x, int y, int z) {
 		// NWSE
 		boolean[] connections = getConnections(blockAccess, x, y, z);
 
@@ -267,8 +293,7 @@ public class FenceBlock extends BlockContainer {
 			}
 		} // if it's 0 or 4 it's an X and should keep the full bounding box.
 
-		return AxisAlignedBB.getBoundingBox(x + xMin, y, z + zMin,
-				x + xMax, y + 1, z + zMax);
+		return AxisAlignedBB.getBoundingBox(xMin, 0, zMin, xMax, 1, zMax);
 	}
 
 	protected boolean canConnectTo(IBlockAccess blockAccess, int x, int y, int z) {
