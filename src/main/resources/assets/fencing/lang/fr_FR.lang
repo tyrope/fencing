@@ -1,0 +1,37 @@
+#Creative Tab
+itemGroup.Fencing=Barrières
+
+# Items
+item.fencePole.name=Poteau
+
+# Blocks
+tile.fenceBlockString.name=Barrière de corde
+tile.fenceBlockIron.name=Barrière en fer
+tile.fenceBlockSilly.name=Barrière collante
+tile.fenceBlockBarbed.name=Barrière barbelé
+tile.fenceBlockWood.name=Barrière en bois
+tile.fenceBlockCut.name=Barrière brisé
+
+tile.fenceBlockElectricCopper.name=Barrière éléctrique en cuivre
+tile.fenceBlockElectricTin.name=Barrière éléctrique en étain
+
+tile.fenceBlockWoodPainted.black.name=Barrière en bois peint (Noir)
+tile.fenceBlockWoodPainted.red.name=Barrière en bois peint (Rouge)
+tile.fenceBlockWoodPainted.green.name=Barrière en bois peint (Vert)
+tile.fenceBlockWoodPainted.brown.name=Barrière en bois peint (Marron)
+tile.fenceBlockWoodPainted.blue.name=Barrière en bois peint (Bleu)
+tile.fenceBlockWoodPainted.purple.name=Barrière en bois peint (Violet)
+tile.fenceBlockWoodPainted.cyan.name=Barrière en bois peint (Cyan)
+tile.fenceBlockWoodPainted.silver.name=Barrière en bois peint (Gris clair)
+tile.fenceBlockWoodPainted.gray.name=Barrière en bois peint (Gris)
+tile.fenceBlockWoodPainted.pink.name=Barrière en bois peint (Rose)
+tile.fenceBlockWoodPainted.lime.name=Barrière en bois peint (Vert clair)
+tile.fenceBlockWoodPainted.yellow.name=Barrière en bois peint (Jaune)
+tile.fenceBlockWoodPainted.lightBlue.name=Barrière en bois peint (Bleu clair)
+tile.fenceBlockWoodPainted.magenta.name=Barrière en bois peint (Magenta)
+tile.fenceBlockWoodPainted.orange.name=Barrière en bois peint (Orange)
+tile.fenceBlockWoodPainted.white.name=Barrière en bois peint (Blanc)
+
+# Death messages
+death.attack.barbedWire=%1$s est mort empalé sur des barbelé.
+death.attack.electric=%1$s est mort électrocuté.
