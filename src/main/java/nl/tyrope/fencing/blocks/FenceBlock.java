@@ -19,17 +19,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import nl.tyrope.fencing.Refs;
 import nl.tyrope.fencing.Refs.MetaValues;
+import nl.tyrope.fencing.renderer.FenceBlockRenderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class FenceBlock extends BlockContainer {
 
-	public int renderId;
-	IIcon[] textures;
+	protected IIcon[] textures;
 
 	public FenceBlock() {
 		super(Material.wood);
@@ -43,95 +45,104 @@ public class FenceBlock extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z,
-			EntityPlayer player, int par6, float par7, float par8, float par9) {
-		if (player.getCurrentEquippedItem() == null) {
-			// Be gone, Null Pointer Exception!
+			EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		ItemStack equippedStack = player.getCurrentEquippedItem();
+		if (equippedStack == null) {
 			return false;
 		}
-		int meta = world.getBlockMetadata(x, y, z);
-		if (meta != MetaValues.FenceCut) {
-			// Cut the fence.
-			if (player.getCurrentEquippedItem() == new ItemStack(Items.shears)) {
-				// player is using shears.
-				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
-						MetaValues.FenceCut, 3);
-				ItemStack is = player.getCurrentEquippedItem();
-				player.setCurrentItemOrArmor(0, is);
-				if (Refs.dropCenter && !world.isRemote) {
-					// TODO Don't drop to creative players.
-					// EntityPlayerMP.theItemInWorldManager.isCreative()
-					switch (meta) {
-					case Refs.MetaValues.FenceString:
-						is.damageItem(1, player);
-						player.dropItem(Items.string, 1);
-						break;
-					case Refs.MetaValues.FenceIron:
-						is.damageItem(2, player);
-						player.dropItem(Items.iron_ingot, 1);
-						break;
-					case Refs.MetaValues.FenceBarbed:
-						is.damageItem(2, player);
-						player.dropItem(
-								Item.getItemFromBlock(Blocks.iron_bars), 1);
-						break;
-					case Refs.MetaValues.FenceWood:
-						is.damageItem(1, player);
-						player.dropItem(Items.stick, 1);
-						break;
-					case Refs.MetaValues.FenceSilly:
-						is.damageItem(1, player);
-						player.dropItem(Items.string, 1);
-						player.dropItem(Items.slime_ball, 1);
-						break;
-					}
-				}
-				return true;
-			} else if (player.getCurrentEquippedItem() == new ItemStack(
-					Items.slime_ball) && meta == MetaValues.FenceString) {
-				// Upgrade a string fence with a slime ball.
-				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
-						MetaValues.FenceSilly, 3);
-				// TODO Don't take items from creative players
-				// EntityPlayerMP.theItemInWorldManager.isCreative()
-				ItemStack is = player.getCurrentEquippedItem();
-				is.stackSize = is.stackSize - 1;
-				player.setCurrentItemOrArmor(0, is);
-			}
-			return false;
-		} else {
+
+		int metadata = world.getBlockMetadata(x, y, z);
+		if (metadata == MetaValues.FenceCut) {
 			// Repair fence.
-			if (player.getCurrentEquippedItem() == new ItemStack(Items.string)) {
+			if (equippedStack.getItem() == Items.string) {
 				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
 						MetaValues.FenceString, 3);
-			} else if (player.getCurrentEquippedItem() == new ItemStack(
-					Items.iron_ingot)) {
+			} else if (equippedStack.getItem() == Items.iron_ingot) {
 				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
 						MetaValues.FenceIron, 3);
-			} else if (player.getCurrentEquippedItem() == new ItemStack(
-					Item.getItemFromBlock(Blocks.iron_bars))) {
+			} else if (equippedStack.getItem() == Item.getItemFromBlock(
+					Blocks.iron_bars)) {
 				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
 						MetaValues.FenceBarbed, 3);
-			} else if (player.getCurrentEquippedItem() == new ItemStack(
-					Items.stick)) {
+			} else if (equippedStack.getItem() == Items.stick) {
 				world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
 						MetaValues.FenceWood, 3);
 			} else {
-				// Invalid item. continue as if nothing happened. Because
-				// nothing happened.
 				return false;
 			}
-			// Valid item, remove one from the stack.
-			// TODO Don't take items from creative players
-			// EntityPlayerMP.theItemInWorldManager.isCreative()
-			ItemStack is = player.getCurrentEquippedItem();
-			is.stackSize = is.stackSize - 1;
-			player.setCurrentItemOrArmor(0, is);
+
+			if (player.capabilities.isCreativeMode) {
+				return true;
+			}
+
+			if (--equippedStack.stackSize > 0) {
+				player.setCurrentItemOrArmor(0, equippedStack);
+			} else {
+				player.setCurrentItemOrArmor(0, null);
+			}
+
+			return true;
+		} else if (equippedStack.getItem() == Items.shears) {
+			// Cut the fence.
+			world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
+					MetaValues.FenceCut, 3);
+
+			if (!Refs.dropCenter
+					|| world.isRemote
+					|| player.capabilities.isCreativeMode) {
+				return true;
+			}
+
+			switch (metadata) {
+			case Refs.MetaValues.FenceString:
+				equippedStack.damageItem(1, player);
+				player.dropItem(Items.string, 1);
+				break;
+			case Refs.MetaValues.FenceIron:
+				equippedStack.damageItem(2, player);
+				player.dropItem(Items.iron_ingot, 1);
+				break;
+			case Refs.MetaValues.FenceBarbed:
+				equippedStack.damageItem(2, player);
+				player.dropItem(
+						Item.getItemFromBlock(Blocks.iron_bars), 1);
+				break;
+			case Refs.MetaValues.FenceWood:
+				equippedStack.damageItem(1, player);
+				player.dropItem(Items.stick, 1);
+				break;
+			case Refs.MetaValues.FenceSilly:
+				equippedStack.damageItem(1, player);
+				player.dropItem(Items.string, 1);
+				player.dropItem(Items.slime_ball, 1);
+				break;
+			}
+
+			return true;
+		} else if (equippedStack.getItem() == Items.slime_ball
+				&& metadata == MetaValues.FenceString) {
+			// Upgrade a string fence with a slime ball.
+			world.setBlock(x, y, z, Refs.ItemsBlocks.Fence,
+					MetaValues.FenceSilly, 3);
+
+			if (player.capabilities.isCreativeMode) {
+				return true;
+			}
+
+			if (--equippedStack.stackSize > 0) {
+				player.setCurrentItemOrArmor(0, equippedStack);
+			} else {
+				player.setCurrentItemOrArmor(0, null);
+			}
+
 			return true;
 		}
+
+		return false;
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int i) {
+	public TileEntity createNewTileEntity(World world, int metadata) {
 		return null;
 	}
 
@@ -148,19 +159,31 @@ public class FenceBlock extends BlockContainer {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	/**
 	 * Adds all intersecting collision boxes to a list. (Be sure to only add boxes to the list if they intersect the
 	 * mask.) Parameters: World, X, Y, Z, mask, list, colliding entity
 	 */
 	public void addCollisionBoxesToList(World world, int x, int y, int z,
-			AxisAlignedBB abb, List list, Entity entity) {
+			AxisAlignedBB mask, List list, Entity entity) {
 		AxisAlignedBB axisalignedbb1 = this.getCollisionBoundingBoxFromPool(
 				world, x, y, z);
 
-		if (axisalignedbb1 != null && abb.intersectsWith(axisalignedbb1)) {
+		if (axisalignedbb1 != null && mask.intersectsWith(axisalignedbb1)) {
 			list.add(axisalignedbb1);
 		}
+	}
+
+	@Override
+	public MovingObjectPosition collisionRayTrace(World world,
+			int x, int y, int z, Vec3 startVec, Vec3 endVec) {
+		AxisAlignedBB boundingBox = getBoundingBox(world, x, y, z);
+		setBlockBounds((float) boundingBox.minX, (float) boundingBox.minY,
+				(float) boundingBox.minZ, (float) boundingBox.maxX,
+				(float) boundingBox.maxY, (float) boundingBox.maxZ);
+
+		return super.collisionRayTrace(world, x, y, z, startVec, endVec);
 	}
 
 	// Hitbox
@@ -169,10 +192,9 @@ public class FenceBlock extends BlockContainer {
 			int y, int z) {
 		if (world.getBlockMetadata(x, y, z) == Refs.MetaValues.FenceCut
 				&& world.getBlock(x, y, z) == Refs.ItemsBlocks.Fence) {
-			// XXX Hitbox at [0,-1, 0] might cause issues later.
-			return AxisAlignedBB.getAABBPool().getAABB(0, -1, 0, 0, -1, 0);
+			return null;
 		} else {
-			return getHitBox(world, x, y, z).expand(0, 0.3f, 0);
+			return getHitBox(world, x, y, z).expand(0, 0.5f, 0);
 		}
 	}
 
@@ -183,70 +205,84 @@ public class FenceBlock extends BlockContainer {
 		return getHitBox(world, x, y, z);
 	}
 
-	public boolean[] getConnections(IBlockAccess iba, int x, int y, int z) {
-		return new boolean[] { this.canConnectTo(iba, x, y, z - 1),
-				this.canConnectTo(iba, x + 1, y, z),
-				this.canConnectTo(iba, x, y, z + 1),
-				this.canConnectTo(iba, x - 1, y, z) };
+	public boolean[] getConnections(IBlockAccess blockAccess, int x, int y, int z) {
+		return new boolean[] { this.canConnectTo(blockAccess, x, y, z - 1),
+				this.canConnectTo(blockAccess, x + 1, y, z),
+				this.canConnectTo(blockAccess, x, y, z + 1),
+				this.canConnectTo(blockAccess, x - 1, y, z) };
 	}
 
-	public boolean[] getPoleConnections(IBlockAccess iba, int x, int y, int z) {
-		return new boolean[] { iba.getBlock(x, y, z - 1) instanceof FenceBlock,
-				iba.getBlock(x + 1, y, z) instanceof FenceBlock,
-				iba.getBlock(x, y, z + 1) instanceof FenceBlock,
-				iba.getBlock(x - 1, y, z) instanceof FenceBlock };
+	public boolean[] getPoleConnections(IBlockAccess blockAccess, int x, int y, int z) {
+		return new boolean[] { blockAccess.getBlock(x, y, z - 1) instanceof FenceBlock,
+				blockAccess.getBlock(x + 1, y, z) instanceof FenceBlock,
+				blockAccess.getBlock(x, y, z + 1) instanceof FenceBlock,
+				blockAccess.getBlock(x - 1, y, z) instanceof FenceBlock };
 	}
 
-	public AxisAlignedBB getHitBox(IBlockAccess iba, int x, int y, int z) {
+	public AxisAlignedBB getHitBox(IBlockAccess blockAccess, int x, int y, int z) {
+		AxisAlignedBB boundingBox = getBoundingBox(blockAccess, x, y, z);
+
+		boundingBox.minX += x;
+		boundingBox.minY += y;
+		boundingBox.minZ += z;
+		boundingBox.maxX += x;
+		boundingBox.maxY += y;
+		boundingBox.maxZ += z;
+
+		return boundingBox;
+	}
+
+	public AxisAlignedBB getBoundingBox(IBlockAccess blockAccess, int x, int y, int z) {
 		// NWSE
-		boolean[] connect = getConnections(iba, x, y, z);
+		boolean[] connections = getConnections(blockAccess, x, y, z);
 
-		int cc = 0;
-		for (boolean b : connect) {
+		int nbConnection = 0;
+		for (boolean b : connections) {
 			if (b) {
-				cc++;
+				nbConnection++;
 			}
 		}
 
-		float f1 = 0.4375f, f2 = 0.5625f;
+		float unit = 1/16.0F;
+		float f1 = unit * 7, f2 = unit * 9;
 		float xMin = 0, zMin = 0, xMax = 1, zMax = 1;
 
-		if (cc == 3) {
+		if (nbConnection == 3) {
 			// T
-			if (!connect[0]) {
+			if (!connections[0]) {
 				// No north
 				zMin = f1;
-			} else if (!connect[1]) {
+			} else if (!connections[1]) {
 				// No west
 				xMax = f2;
-			} else if (!connect[2]) {
+			} else if (!connections[2]) {
 				// No south
 				zMax = f2;
-			} else if (!connect[3]) {
+			} else if (!connections[3]) {
 				// No east
 				xMin = f1;
 			}
-		} else if (cc == 2) {
+		} else if (nbConnection == 2) {
 			// Straight... or corner.
-			if (!connect[0]) {
+			if (!connections[0]) {
 				// No north
 				zMin = f1;
 			}
-			if (!connect[1]) {
+			if (!connections[1]) {
 				// No west
 				xMax = f2;
 			}
-			if (!connect[2]) {
+			if (!connections[2]) {
 				// No south
 				zMax = f2;
 			}
-			if (!connect[3]) {
+			if (!connections[3]) {
 				// No east
 				xMin = f1;
 			}
-		} else if (cc == 1) {
+		} else if (nbConnection == 1) {
 			// Straight.
-			if (connect[0] || connect[2]) {
+			if (connections[0] || connections[2]) {
 				// N/S
 				xMin = f1;
 				xMax = f2;
@@ -257,12 +293,11 @@ public class FenceBlock extends BlockContainer {
 			}
 		} // if it's 0 or 4 it's an X and should keep the full bounding box.
 
-		return AxisAlignedBB.getAABBPool().getAABB(x + xMin, y, z + zMin,
-				x + xMax, y + 1, z + zMax);
+		return AxisAlignedBB.getBoundingBox(xMin, 0, zMin, xMax, 1, zMax);
 	}
 
-	protected boolean canConnectTo(IBlockAccess iba, int x, int y, int z) {
-		Block block = iba.getBlock(x, y, z);
+	protected boolean canConnectTo(IBlockAccess blockAccess, int x, int y, int z) {
+		Block block = blockAccess.getBlock(x, y, z);
 		if (block == null) {
 			return false;
 		} else if (block.getMaterial().isOpaque()
@@ -280,7 +315,7 @@ public class FenceBlock extends BlockContainer {
 
 	@Override
 	public int getRenderType() {
-		return renderId;
+		return FenceBlockRenderer.renderID;
 	}
 
 	@Override
@@ -296,8 +331,8 @@ public class FenceBlock extends BlockContainer {
 	// Icon Rendering
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta) {
-		return textures[meta];
+	public IIcon getIcon(int side, int metadata) {
+		return textures[metadata];
 	}
 
 	@Override
@@ -317,9 +352,10 @@ public class FenceBlock extends BlockContainer {
 	}
 
 	// Add all fences to creative menu.
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item unknown, CreativeTabs tab, List subItems) {
+	public void getSubBlocks(Item itemBlock, CreativeTabs tab, List subItems) {
 		ItemStack stack;
 		for (int ix = 0; ix < Refs.fenceSubNames.length; ix++) {
 			stack = new ItemStack(this, 1, ix);
@@ -341,11 +377,11 @@ public class FenceBlock extends BlockContainer {
 		affectEntity(world.getBlockMetadata(x, y, z), entity);
 	}
 
-	protected void affectEntity(int meta, Entity entity) {
-		if (meta == MetaValues.FenceSilly) {
+	protected void affectEntity(int metadata, Entity entity) {
+		if (metadata == MetaValues.FenceSilly) {
 			entity.motionX *= 0.1D;
 			entity.motionZ *= 0.1D;
-		} else if (meta == MetaValues.FenceBarbed) {
+		} else if (metadata == MetaValues.FenceBarbed) {
 			entity.attackEntityFrom(Refs.DmgSrcs.barbed, Refs.dmgMulti);
 		}
 	}

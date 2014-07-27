@@ -36,6 +36,7 @@ public class PaintedFenceBlock extends FenceBlock {
 	}
 
 	// Add all fences to creative menu.
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubBlocks(Item unknown, CreativeTabs tab, List subItems) {
