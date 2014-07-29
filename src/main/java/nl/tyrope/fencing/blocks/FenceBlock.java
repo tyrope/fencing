@@ -19,8 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import nl.tyrope.fencing.Refs;
@@ -158,17 +156,6 @@ public class FenceBlock extends BlockContainer {
 		} else {
 			return 10;
 		}
-	}
-
-	@Override
-	public MovingObjectPosition collisionRayTrace(World world,
-			int x, int y, int z, Vec3 startVec, Vec3 endVec) {
-		AxisAlignedBB boundingBox = getBoundingBox(world, x, y, z);
-		setBlockBounds((float) boundingBox.minX, (float) boundingBox.minY,
-				(float) boundingBox.minZ, (float) boundingBox.maxX,
-				(float) boundingBox.maxY, (float) boundingBox.maxZ);
-
-		return super.collisionRayTrace(world, x, y, z, startVec, endVec);
 	}
 
 	// Hitbox
@@ -337,6 +324,15 @@ public class FenceBlock extends BlockContainer {
 			stack = new ItemStack(this, 1, ix);
 			subItems.add(stack);
 		}
+	}
+
+	@Override
+	public void setBlockBoundsBasedOnState(IBlockAccess blockAccess,
+			int x, int y, int z) {
+		AxisAlignedBB boundingBox = getBoundingBox(blockAccess, x, y, z);
+		setBlockBounds((float) boundingBox.minX, (float) boundingBox.minY,
+				(float) boundingBox.minZ, (float) boundingBox.maxX,
+				(float) boundingBox.maxY, (float) boundingBox.maxZ);
 	}
 
 	// Effects of touching the fence.
