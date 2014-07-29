@@ -50,8 +50,6 @@ public class FenceTopBlock extends Block {
 			double explosionZ) {
 		Block block = world.getBlock(x, y - 1, z);
 		if (!(block instanceof FenceBlock)) {
-			Refs.logger.warn("Multiblock error : The block under this block (" + x + ", " + y + ", " + z + ") is not a FenceBlock.");
-
 			return 10;
 		}
 
@@ -66,8 +64,6 @@ public class FenceTopBlock extends Block {
 
 		Block block = world.getBlock(x, y - 1, z);
 		if (!(block instanceof FenceBlock)) {
-			Refs.logger.warn("Multiblock error : The block under this block (" + x + ", " + y + ", " + z + ") is not a FenceBlock.");
-
 			return;
 		}
 
@@ -79,8 +75,6 @@ public class FenceTopBlock extends Block {
 			int x, int y, int z) {
 		Block block = blockAccess.getBlock(x, y - 1, z);
 		if (!(block instanceof FenceBlock)) {
-			Refs.logger.warn("Multiblock error : The block under this block (" + x + ", " + y + ", " + z + ") is not a FenceBlock.");
-
 			return;
 		}
 
@@ -99,8 +93,6 @@ public class FenceTopBlock extends Block {
 			int y, int z) {
 		Block block = world.getBlock(x, y - 1, z);
 		if (!(block instanceof FenceBlock)) {
-			Refs.logger.warn("Multiblock error : The block under this block (" + x + ", " + y + ", " + z + ") is not a FenceBlock.");
-
 			return null;
 		}
 
