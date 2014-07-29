@@ -9,6 +9,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import nl.tyrope.fencing.Refs;
 import nl.tyrope.fencing.blocks.FenceBlock;
+import nl.tyrope.fencing.blocks.FenceTopBlock;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
@@ -50,6 +51,8 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 			Block block, int modelId, RenderBlocks renderer) {
 		if (block instanceof FenceBlock) {
 			return renderWorldBlock(blockAccess, x, y, z, (FenceBlock) block, modelId, renderer);
+		} else if (block instanceof FenceTopBlock) {
+			return true;
 		}
 
 		return false;

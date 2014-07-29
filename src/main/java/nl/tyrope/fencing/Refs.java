@@ -1,8 +1,11 @@
 package nl.tyrope.fencing;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
+import nl.tyrope.fencing.blocks.ElectricFenceBlock;
+import nl.tyrope.fencing.blocks.FenceBlock;
+import nl.tyrope.fencing.blocks.FenceTopBlock;
+import nl.tyrope.fencing.blocks.PaintedFenceBlock;
 
 import org.apache.logging.log4j.Logger;
 
@@ -21,9 +24,10 @@ public class Refs {
 	// Items & Blocks
 	public static class ItemsBlocks {
 		public static Item Pole;
-		public static Block Fence;
-		public static Block ElecFence;
-		public static Block PaintedFence;
+		public static FenceBlock Fence;
+		public static FenceTopBlock FenceTop;
+		public static ElectricFenceBlock ElecFence;
+		public static PaintedFenceBlock PaintedFence;
 	}
 
 	// Damage

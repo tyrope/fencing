@@ -166,7 +166,7 @@ public class FenceBlock extends BlockContainer {
 				&& world.getBlock(x, y, z) == Refs.ItemsBlocks.Fence) {
 			return null;
 		} else {
-			return getHitBox(world, x, y, z).expand(0, 0.5f, 0);
+			return getHitBox(world, x, y, z);
 		}
 	}
 
@@ -345,7 +345,6 @@ public class FenceBlock extends BlockContainer {
 	// Effects of walking on the fence.
 	@Override
 	public void onEntityWalking(World world, int x, int y, int z, Entity entity) {
-		// FIXME Not triggered due to heightened hitbox.
 		affectEntity(world.getBlockMetadata(x, y, z), entity);
 	}
 
@@ -356,5 +355,31 @@ public class FenceBlock extends BlockContainer {
 		} else if (metadata == MetaValues.FenceBarbed) {
 			entity.attackEntityFrom(Refs.DmgSrcs.barbed, Refs.dmgMulti);
 		}
+	}
+
+	@Override
+	public void onBlockAdded(World world, int x, int y, int z) {
+		if (world.getBlock(x, y + 1, z).getMaterial().isReplaceable()) {
+			world.setBlock(x, y + 1, z, getFenceTopBlock());
+		}
+
+		super.onBlockAdded(world, x, y, z);
+	}
+
+	@Override
+	public void breakBlock(World world, int x, int y, int z, Block block, int metadata) {
+		if (world.getBlock(x, y + 1, z) instanceof FenceTopBlock) {
+			world.setBlockToAir(x, y + 1, z);
+		}
+
+		super.breakBlock(world, x, y, z, block, metadata);
+	}
+
+	/**
+	 * Return the fence top block.
+	 * @return	The fence top block.
+	 */
+	public FenceTopBlock getFenceTopBlock() {
+		return Refs.ItemsBlocks.FenceTop;
 	}
 }

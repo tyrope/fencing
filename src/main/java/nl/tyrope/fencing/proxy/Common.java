@@ -8,6 +8,7 @@ import nl.tyrope.fencing.Refs;
 import nl.tyrope.fencing.Refs.MetaValues;
 import nl.tyrope.fencing.blocks.ElectricFenceBlock;
 import nl.tyrope.fencing.blocks.FenceBlock;
+import nl.tyrope.fencing.blocks.FenceTopBlock;
 import nl.tyrope.fencing.blocks.PaintedFenceBlock;
 import nl.tyrope.fencing.items.ElectricFenceBlockItem;
 import nl.tyrope.fencing.items.FenceBlockItem;
@@ -56,6 +57,7 @@ public class Common {
 
 	public void registerBlocks() {
 		GameRegistry.registerBlock(Refs.ItemsBlocks.Fence = new FenceBlock(), FenceBlockItem.class, "FenceBlockItem");
+		GameRegistry.registerBlock(Refs.ItemsBlocks.FenceTop = new FenceTopBlock(), "FenceTopBlock");
 		GameRegistry.registerBlock(Refs.ItemsBlocks.PaintedFence = new PaintedFenceBlock(), PaintedFenceBlockItem.class, "PaintedFenceBlockItem");
 
 		if (Loader.isModLoaded("IC2")) {
