@@ -14,6 +14,7 @@ tile.fenceBlockCut.name=Zerschnittener Zaun
 
 tile.fenceBlockElectricCopper.name=Elektrischer Kupferzaun
 tile.fenceBlockElectricTin.name=Elektrischer Zinnzaun
+tile.fenceBlockElectricNickel.name=Nickel Electric Fence #TODO
 
 tile.fenceBlockWoodPainted.black.name=Gefärbter Hölzerner Zaun (Schwarz)
 tile.fenceBlockWoodPainted.red.name=Gefärbter Hölzerner Zaun (Rot)

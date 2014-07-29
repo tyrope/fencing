@@ -14,6 +14,7 @@ tile.fenceBlockCut.name=Разрезанный забор
 
 tile.fenceBlockElectricCopper.name=Медный электрический забор
 tile.fenceBlockElectricTin.name=Оловянный электрический забор
+tile.fenceBlockElectricNickel.name=Nickel Electric Fence #TODO
 
 tile.fenceBlockWoodPainted.black.name=Окрашенный деревянный забор (Чёрный)
 tile.fenceBlockWoodPainted.red.name=Окрашенный деревянный забор (Красный)

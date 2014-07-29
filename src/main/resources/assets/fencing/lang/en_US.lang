@@ -14,6 +14,7 @@ tile.fenceBlockCut.name=Cut Fence
 
 tile.fenceBlockElectricCopper.name=Copper Electric Fence
 tile.fenceBlockElectricTin.name=Tin Electric Fence
+tile.fenceBlockElectricNickel.name=Nickel Electric Fence
 
 tile.fenceBlockWoodPainted.black.name=Painted Wooden Fence (Black)
 tile.fenceBlockWoodPainted.red.name=Painted Wooden Fence (Red)
