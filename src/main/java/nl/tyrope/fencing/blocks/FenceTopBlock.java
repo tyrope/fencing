@@ -60,7 +60,7 @@ public class FenceTopBlock extends Block {
 
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity){
 		// only when the entity is on top of this block.
-		if (MathHelper.abs((float) (entity.posY - entity.yOffset - y - 0.5F)) > 0.1F) {
+		if (MathHelper.abs((float) (entity.posY - entity.yOffset - y - 0.3F)) > 0.1F) {
 			return;
 		}
 
@@ -90,7 +90,7 @@ public class FenceTopBlock extends Block {
 		this.minY = ((int) block.getBlockBoundsMinY());
 		this.minZ = block.getBlockBoundsMinZ();
 		this.maxX = block.getBlockBoundsMaxX();
-		this.maxY = ((int) block.getBlockBoundsMinY()) + 0.5D;
+		this.maxY = ((int) block.getBlockBoundsMinY()) + 0.3D;
 		this.maxZ = block.getBlockBoundsMaxZ();
 	}
 
@@ -104,7 +104,7 @@ public class FenceTopBlock extends Block {
 			return null;
 		}
 
-		return block.getCollisionBoundingBoxFromPool(world, x, y - 1, z).addCoord(0, 0.5D, 0);
+		return block.getCollisionBoundingBoxFromPool(world, x, y - 1, z).addCoord(0, 0.3D, 0);
 	}
 
 	@Override
