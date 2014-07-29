@@ -10,7 +10,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import nl.tyrope.fencing.Refs;
 import nl.tyrope.fencing.renderer.FenceBlockRenderer;
 
 public class FenceTopBlock extends Block {

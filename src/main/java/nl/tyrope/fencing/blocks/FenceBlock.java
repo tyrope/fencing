@@ -188,7 +188,8 @@ public class FenceBlock extends BlockContainer {
 		return new boolean[] { blockAccess.getBlock(x, y, z - 1) instanceof FenceBlock,
 				blockAccess.getBlock(x + 1, y, z) instanceof FenceBlock,
 				blockAccess.getBlock(x, y, z + 1) instanceof FenceBlock,
-				blockAccess.getBlock(x - 1, y, z) instanceof FenceBlock };
+				blockAccess.getBlock(x - 1, y, z) instanceof FenceBlock,
+				blockAccess.getBlock(x, y + 1, z) instanceof FenceBlock};
 	}
 
 	public AxisAlignedBB getHitBox(IBlockAccess blockAccess, int x, int y, int z) {
