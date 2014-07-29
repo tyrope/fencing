@@ -9,6 +9,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import nl.tyrope.fencing.Refs;
 import nl.tyrope.fencing.blocks.FenceBlock;
+import nl.tyrope.fencing.blocks.FenceTopBlock;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
@@ -29,14 +30,14 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 
 	public static int renderID = RenderingRegistry.getNextAvailableRenderId();
 
-	private float[] getTexCoords(IIcon c) {
-		float u = c.getMinU();
-		float v = c.getMinV();
+	private float[] getTextureCoords(IIcon icon) {
+		float u = icon.getMinU();
+		float v = icon.getMinV();
 
 		// Delta-u and Delta-v is the size of a 'pixel' on the UV map, add a
 		// multiplier of this to u or v to get a pixel count from origin.
-		float du = (c.getMaxU() - u) / Refs.textureSize;
-		float dv = (c.getMaxV() - v) / Refs.textureSize;
+		float du = (icon.getMaxU() - u) / Refs.textureSize;
+		float dv = (icon.getMaxV() - v) / Refs.textureSize;
 		return new float[] { u, v, du, dv };
 	}
 
@@ -46,96 +47,100 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 	}
 
 	@Override
-	public boolean renderWorldBlock(IBlockAccess iba, int x, int y, int z,
+	public boolean renderWorldBlock(IBlockAccess blockAccess, int x, int y, int z,
 			Block block, int modelId, RenderBlocks renderer) {
+		if (block instanceof FenceBlock) {
+			return renderWorldBlock(blockAccess, x, y, z, (FenceBlock) block, modelId, renderer);
+		} else if (block instanceof FenceTopBlock) {
+			return true;
+		}
 
-		IIcon c = block.getIcon(0, iba.getBlockMetadata(x, y, z));
-		float[] tex = getTexCoords(c);
-		float u = tex[0], v = tex[1], du = tex[2], dv = tex[3];
+		return false;
+	}
 
-		boolean[] poleConnections = ((FenceBlock) block).getPoleConnections(
-				iba, x, y, z);// NWSE
-		int type = getType(((FenceBlock) block).getConnections(iba, x, y, z));
+	public boolean renderWorldBlock(IBlockAccess blockAccess, int x, int y, int z,
+			FenceBlock fenceBlock, int modelId, RenderBlocks renderer) {
+		IIcon blockIcon = fenceBlock.getIcon(0, blockAccess.getBlockMetadata(x, y, z));
+		float[] textureCoords = getTextureCoords(blockIcon);
+		float u = textureCoords[0], v = textureCoords[1], du = textureCoords[2], dv = textureCoords[3];
 
-		Tessellator tess = Tessellator.instance;
-		tess.addTranslation(x, y, z);
-		tess.setNormal(0, 1, 0);
-		tess.setColorRGBA(255, 255, 255, 255);
-		tess.setBrightness(block.getMixedBrightnessForBlock(iba, x, y, z));
+		boolean[] poleConnections = fenceBlock.getPoleConnections(blockAccess, x, y, z);// NWSE
+		int type = getType(fenceBlock.getConnections(blockAccess, x, y, z));
+
+		Tessellator tessellator = Tessellator.instance;
+		tessellator.addTranslation(x, y, z);
+		tessellator.setNormal(0, 1, 0);
+		tessellator.setColorRGBA(255, 255, 255, 255);
+		tessellator.setBrightness(fenceBlock.getMixedBrightnessForBlock(blockAccess, x, y, z));
 
 		if ((type & N_POST) != 0)
-			renderPost(tess, u, v, du, dv, ForgeDirection.NORTH,
+			renderPost(tessellator, u, v, du, dv, ForgeDirection.NORTH,
 					poleConnections[0]);
 		if ((type & S_POST) != 0)
-			renderPost(tess, u, v, du, dv, ForgeDirection.SOUTH,
+			renderPost(tessellator, u, v, du, dv, ForgeDirection.SOUTH,
 					poleConnections[2]);
 		if ((type & E_POST) != 0)
-			renderPost(tess, u, v, du, dv, ForgeDirection.EAST,
+			renderPost(tessellator, u, v, du, dv, ForgeDirection.EAST,
 					poleConnections[3]);
 		if ((type & W_POST) != 0)
-			renderPost(tess, u, v, du, dv, ForgeDirection.WEST,
+			renderPost(tessellator, u, v, du, dv, ForgeDirection.WEST,
 					poleConnections[1]);
 
 		if ((type & NS_STRING) != 0)
-			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
-					ForgeDirection.NORTH, ForgeDirection.SOUTH });
+			renderWires(tessellator, u, v, du, dv, ForgeDirection.NORTH, ForgeDirection.SOUTH);
 		if ((type & EW_STRING) != 0)
-			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
-					ForgeDirection.EAST, ForgeDirection.WEST });
+			renderWires(tessellator, u, v, du, dv, ForgeDirection.EAST, ForgeDirection.WEST);
 		if ((type & NE_STRING) != 0)
-			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
-					ForgeDirection.NORTH, ForgeDirection.EAST });
+			renderWires(tessellator, u, v, du, dv, ForgeDirection.NORTH, ForgeDirection.EAST);
 		if ((type & NW_STRING) != 0)
-			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
-					ForgeDirection.NORTH, ForgeDirection.WEST });
+			renderWires(tessellator, u, v, du, dv, ForgeDirection.NORTH, ForgeDirection.WEST);
 		if ((type & SE_STRING) != 0)
-			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
-					ForgeDirection.SOUTH, ForgeDirection.EAST });
+			renderWires(tessellator, u, v, du, dv, ForgeDirection.SOUTH, ForgeDirection.EAST);
 		if ((type & SW_STRING) != 0)
-			renderWires(tess, u, v, du, dv, new ForgeDirection[] {
-					ForgeDirection.SOUTH, ForgeDirection.WEST });
+			renderWires(tessellator, u, v, du, dv, ForgeDirection.SOUTH, ForgeDirection.WEST);
 
 		// Rendering Integration
 		// Cable caps
 		// North
-		TileEntity te = iba.getTileEntity(x, y, z - 1);
-		if (te != null) {
-			renderCableCap(tess, u, v, du, dv, ForgeDirection.NORTH);
+		TileEntity tileEntity = blockAccess.getTileEntity(x, y, z - 1);
+		if (tileEntity != null) {
+			renderCableCap(tessellator, u, v, du, dv, ForgeDirection.NORTH);
 		}
 
 		// East
-		te = iba.getTileEntity(x - 1, y, z);
-		if (te != null) {
-			renderCableCap(tess, u, v, du, dv, ForgeDirection.EAST);
+		tileEntity = blockAccess.getTileEntity(x - 1, y, z);
+		if (tileEntity != null) {
+			renderCableCap(tessellator, u, v, du, dv, ForgeDirection.EAST);
 		}
 
 		// South
-		te = iba.getTileEntity(x + 1, y, z);
-		if (te != null) {
-			renderCableCap(tess, u, v, du, dv, ForgeDirection.SOUTH);
+		tileEntity = blockAccess.getTileEntity(x + 1, y, z);
+		if (tileEntity != null) {
+			renderCableCap(tessellator, u, v, du, dv, ForgeDirection.SOUTH);
 		}
 
 		// East
-		te = iba.getTileEntity(x, y, z + 1);
-		if (te != null) {
-			renderCableCap(tess, u, v, du, dv, ForgeDirection.WEST);
+		tileEntity = blockAccess.getTileEntity(x, y, z + 1);
+		if (tileEntity != null) {
+			renderCableCap(tessellator, u, v, du, dv, ForgeDirection.WEST);
 		}
 
-		tess.addTranslation(-x, -y, -z);
+		tessellator.addTranslation(-x, -y, -z);
 		return true;
 	}
 
 	private int getType(boolean[] connections) {
 		int type = 0;
 
-		int cc = 0;
-		for (boolean b : connections) {
-			if (b) {
-				cc++;
+		int nbConnection = 0;
+		for (boolean connection : connections) {
+			if (connection) {
+				nbConnection++;
 			}
 		}
+
 		// add posts
-		if (cc >= 2) {
+		if (nbConnection >= 2) {
 			// Straight... or corner.
 			if (connections[0]) {
 				type = type | N_POST;
@@ -149,7 +154,7 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 			if (connections[3]) {
 				type = type | E_POST;
 			}
-		} else if (cc == 1) {
+		} else if (nbConnection == 1) {
 			// Straight.
 			if (connections[0] || connections[2]) {
 				type = type | N_POST | S_POST;
@@ -158,10 +163,11 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 			}
 		} else {
 			type = type | N_POST | E_POST | S_POST | W_POST;
-			cc = 4;
+			nbConnection = 4;
 		}
+
 		// connect posts
-		if (cc == 4) {
+		if (nbConnection == 4) {
 			type = type | NS_STRING | EW_STRING;
 		} else {
 			if ((type & (N_POST | S_POST)) == (N_POST | S_POST))
@@ -184,24 +190,19 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 	/**
 	 * Render a fence post.
 	 * 
-	 * @param t
-	 *            an instance of the minecraft tessellator
-	 * @param u
-	 *            lower U bound of the UV map's.
-	 * @param v
-	 *            lower V bound of the UV map.
-	 * @param du
-	 *            U size of 1 pixel on the texture.
-	 * @param dv
-	 *            V size of 1 pixel on the texture.
-	 * @param dir
-	 *            The direction the posts should face. (Valid:
-	 *            NORTH/EAST/SOUTH/WEST)
+	 * @param tessellator The tessellator instance.
+	 * @param u		The lower U bound of the UV map.
+	 * @param v		The lower V bound of the UV map.
+	 * @param du	The U size of 1 pixel on the texture.
+	 * @param dv	The V size of 1 pixel on the texture.
+	 * @param direction	The direction the posts should face. (Valid: NORTH/EAST/SOUTH/WEST)
+	 * @param connected	Is the fence connected in that direction.
 	 */
-	private void renderPost(Tessellator t, float u, float v, float du,
+	private void renderPost(Tessellator tessellator, float u, float v, float du,
 			float dv, ForgeDirection dir, boolean connected) {
 
-		float postWidth = 0.125f, xMod, zMod, wMod = 0f, eMod = 0f, nMod = 0f, sMod = 0f;
+		float postWidth = 1/8.0f;
+		float xMod = 0f, zMod = 0f, wMod = 0f, eMod = 0f, nMod = 0f, sMod = 0f;
 
 		switch (dir) {
 		case NORTH:
@@ -232,83 +233,71 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		// Position
 		u = u + du * 8;
 		v = v + dv * 24;
-		// Size
-		float U = u + du * 8;
-		float V = v + dv * 8;
+		float uMax = u + du * 8;
+		float vMax = v + dv * 8;
 
 		// Top
-		t.addVertexWithUV(xMod + eMod, 1, zMod + postWidth - sMod, u, v);
-		t.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + postWidth - sMod,
-				u, V);
-		t.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + nMod, U, V);
-		t.addVertexWithUV(xMod + eMod, 1, zMod + nMod, U, v);
+		tessellator.addVertexWithUV(xMod + eMod, 1, zMod + postWidth - sMod, u, v);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + postWidth - sMod, u, vMax);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + nMod, uMax, vMax);
+		tessellator.addVertexWithUV(xMod + eMod, 1, zMod + nMod, uMax, v);
 
 		// Bottom
-		t.addVertexWithUV(xMod + eMod, 0, zMod + nMod, u, v);
-		t.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + nMod, u, V);
-		t.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + postWidth - sMod,
-				U, V);
-		t.addVertexWithUV(xMod + eMod, 0, zMod + postWidth - sMod, U, v);
+		tessellator.addVertexWithUV(xMod + eMod, 0, zMod + nMod, u, v);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + nMod, u, vMax);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + postWidth - sMod, uMax, vMax);
+		tessellator.addVertexWithUV(xMod + eMod, 0, zMod + postWidth - sMod, uMax, v);
 
 		// Prepare texture for sides.
 		// Position
 		u = u - du * 8;
 		v = v - dv * 20;
 		// Size
-		U = u + du * 8;
-		V = v + dv * (Refs.textureSize - 4);
+		uMax = u + du * 8;
+		vMax = v + dv * (Refs.textureSize - 4);
 
 		// East
-		t.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + postWidth - sMod,
-				u, v);
-		t.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + postWidth - sMod,
-				u, V);
-		t.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + nMod, U, V);
-		t.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + nMod, U, v);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + postWidth - sMod, u, v);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + postWidth - sMod, u, vMax);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + nMod, uMax, vMax);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + nMod, uMax, v);
 
 		// West
-		t.addVertexWithUV(xMod + eMod, 0, zMod + postWidth - sMod, U, V);
-		t.addVertexWithUV(xMod + eMod, 1, zMod + postWidth - sMod, u, v);
-		t.addVertexWithUV(xMod + eMod, 1, zMod + nMod, u, v);
-		t.addVertexWithUV(xMod + eMod, 0, zMod + nMod, u, V);
+		tessellator.addVertexWithUV(xMod + eMod, 0, zMod + postWidth - sMod, uMax, vMax);
+		tessellator.addVertexWithUV(xMod + eMod, 1, zMod + postWidth - sMod, u, v);
+		tessellator.addVertexWithUV(xMod + eMod, 1, zMod + nMod, u, v);
+		tessellator.addVertexWithUV(xMod + eMod, 0, zMod + nMod, u, vMax);
 
 		// South
-		t.addVertexWithUV(xMod + eMod, 0, zMod + postWidth - sMod, u, V);
-		t.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + postWidth - sMod,
-				U, V);
-		t.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + postWidth - sMod,
-				U, v);
-		t.addVertexWithUV(xMod + eMod, 1, zMod + postWidth - sMod, u, v);
+		tessellator.addVertexWithUV(xMod + eMod, 0, zMod + postWidth - sMod, u, vMax);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + postWidth - sMod, uMax, vMax);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + postWidth - sMod, uMax, v);
+		tessellator.addVertexWithUV(xMod + eMod, 1, zMod + postWidth - sMod, u, v);
 
 		// North
-		t.addVertexWithUV(xMod + eMod, 1, zMod + nMod, U, v);
-		t.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + nMod, u, v);
-		t.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + nMod, u, V);
-		t.addVertexWithUV(xMod + eMod, 0, zMod + nMod, U, V);
-
+		tessellator.addVertexWithUV(xMod + eMod, 1, zMod + nMod, uMax, v);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + nMod, u, v);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + nMod, u, vMax);
+		tessellator.addVertexWithUV(xMod + eMod, 0, zMod + nMod, uMax, vMax);
 	}
 
 	/**
 	 * Render the wires between 2 fence posts.
 	 * 
-	 * @param t
-	 *            an instance of the minecraft tessellator
-	 * @param u
-	 *            lower U bound of the UV map's.
-	 * @param v
-	 *            lower V bound of the UV map.
-	 * @param du
-	 *            U size of 1 pixel on the texture.
-	 * @param dv
-	 *            V size of 1 pixel on the texture.
-	 * @param dir
-	 *            The directions the wire should run. (Valid values:
-	 *            NORTH/SOUTH/EAST/WEST.)
+	 * @param tessellator	The tessellator instance.
+	 * @param u		The lower U bound of the UV map.
+	 * @param v		The lower V bound of the UV map.
+	 * @param du	The U size of 1 pixel on the texture.
+	 * @param dv	The V size of 1 pixel on the texture.
+	 * @param startSide	The wire starting position. (Valid values: NORTH/SOUTH/EAST/WEST.)
+	 * @param endSide	The wire ending position. (Valid values: NORTH/SOUTH/EAST/WEST.)
 	 */
-	private void renderWires(Tessellator t, float u, float v, float du,
-			float dv, ForgeDirection[] dirs) {
+	private void renderWires(Tessellator tessellator, float u, float v, float du,
+			float dv, ForgeDirection startSide, ForgeDirection endSide) {
 
-		float wireWidth = 0.0625f, wireTop = 0.8125f, wireBottom = 0.75f;
+		float wireWidth = 1/16.0f;
+		float wireTop = 1 - (1/32.0f * 5);
+		float wireBottom = wireTop - wireWidth;
 
 		// Prepare texture.
 		float U = u + du * Refs.textureSize;
@@ -320,10 +309,8 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		 */
 		float[][] loc = new float[2][4];
 
-		ForgeDirection dir;
 		for (int i = 0; i < 2; i++) {
-			dir = dirs[i];
-			switch (dir) {
+			switch (i == 0 ? startSide : endSide) {
 			case NORTH:
 				loc[i] = new float[] { 0.5f + wireWidth / 2.0f,
 						0.5f - wireWidth / 2.0f, wireWidth, wireWidth };
@@ -347,90 +334,81 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 
 		for (int i = 0; i < 3; i++) {
 			// Top
-			t.addVertexWithUV(loc[1][1], wireTop, loc[1][2], u, V);
-			t.addVertexWithUV(loc[0][0], wireTop, loc[0][3], U, V);
-			t.addVertexWithUV(loc[0][1], wireTop, loc[0][2], U, v);
-			t.addVertexWithUV(loc[1][0], wireTop, loc[1][3], u, v);
+			tessellator.addVertexWithUV(loc[1][1], wireTop, loc[1][2], u, V);
+			tessellator.addVertexWithUV(loc[0][0], wireTop, loc[0][3], U, V);
+			tessellator.addVertexWithUV(loc[0][1], wireTop, loc[0][2], U, v);
+			tessellator.addVertexWithUV(loc[1][0], wireTop, loc[1][3], u, v);
 
 			// Bottom
-			t.addVertexWithUV(loc[1][1], wireBottom, loc[1][2], U, V);
-			t.addVertexWithUV(loc[1][0], wireBottom, loc[1][3], U, v);
-			t.addVertexWithUV(loc[0][1], wireBottom, loc[0][2], u, v);
-			t.addVertexWithUV(loc[0][0], wireBottom, loc[0][3], u, V);
+			tessellator.addVertexWithUV(loc[1][1], wireBottom, loc[1][2], U, V);
+			tessellator.addVertexWithUV(loc[1][0], wireBottom, loc[1][3], U, v);
+			tessellator.addVertexWithUV(loc[0][1], wireBottom, loc[0][2], u, v);
+			tessellator.addVertexWithUV(loc[0][0], wireBottom, loc[0][3], u, V);
 
 			// Front
-			t.addVertexWithUV(loc[1][1], wireBottom, loc[1][2], u, V);
-			t.addVertexWithUV(loc[0][0], wireBottom, loc[0][3], U, V);
-			t.addVertexWithUV(loc[0][0], wireTop, loc[0][3], U, v);
-			t.addVertexWithUV(loc[1][1], wireTop, loc[1][2], u, v);
+			tessellator.addVertexWithUV(loc[1][1], wireBottom, loc[1][2], u, V);
+			tessellator.addVertexWithUV(loc[0][0], wireBottom, loc[0][3], U, V);
+			tessellator.addVertexWithUV(loc[0][0], wireTop, loc[0][3], U, v);
+			tessellator.addVertexWithUV(loc[1][1], wireTop, loc[1][2], u, v);
 
 			// Back
-			t.addVertexWithUV(loc[1][0], wireTop, loc[1][3], u, V);
-			t.addVertexWithUV(loc[0][1], wireTop, loc[0][2], U, V);
-			t.addVertexWithUV(loc[0][1], wireBottom, loc[0][2], U, v);
-			t.addVertexWithUV(loc[1][0], wireBottom, loc[1][3], u, v);
+			tessellator.addVertexWithUV(loc[1][0], wireTop, loc[1][3], u, V);
+			tessellator.addVertexWithUV(loc[0][1], wireTop, loc[0][2], U, V);
+			tessellator.addVertexWithUV(loc[0][1], wireBottom, loc[0][2], U, v);
+			tessellator.addVertexWithUV(loc[1][0], wireBottom, loc[1][3], u, v);
 
-			wireTop = wireTop - 0.1875f;
-			wireBottom = wireBottom - 0.1875f;
+			wireTop -= wireWidth * 3;
+			wireBottom = wireTop - wireWidth;
 		}
 	}
 
 	/**
 	 * Render the caps on adjacent IC2 wires.
 	 * 
-	 * @param t
-	 *            an instance of the minecraft tessellator
-	 * @param u
-	 *            lower U bound of the UV map's.
-	 * @param v
-	 *            lower V bound of the UV map.
-	 * @param du
-	 *            U size of 1 pixel on the texture.
-	 * @param dv
-	 *            V size of 1 pixel on the texture.
-	 * @param dir
-	 *            The directions the wire should run. (Valid values:
-	 *            NORTH/SOUTH/EAST/WEST.)
-	 * @param insulated
-	 *            Whether or not the cable connected to is insulated
+	 * @param tessellator	The tessellator instance.
+	 * @param u		The lower U bound of the UV map's.
+	 * @param v		The lower V bound of the UV map.
+	 * @param du	The U size of 1 pixel on the texture.
+	 * @param dv	The V size of 1 pixel on the texture.
+	 * @param direction	The directions the wire should run. (Valid values: NORTH/SOUTH/EAST/WEST.)
 	 */
-	private void renderCableCap(Tessellator t, float u, float v, float du,
-			float dv, ForgeDirection dir) {
+	private void renderCableCap(Tessellator tessellator, float u, float v, float du,
+			float dv, ForgeDirection direction) {
 		// Prepare texture.
 		// Position
 		u = u + du * 8;
 		v = v + dv * 24;
 		// Size
-		float U = u + du * 8;
-		float V = v + dv * 8;
+		float uMax = u + du * 8;
+		float vMax = v + dv * 8;
 
 		// set cap size.
 		float tMin = 6.5f / 16f, tMax = 9.5f / 16f;
 
-		switch (dir) {
+		switch (direction) {
 		case NORTH:
-			t.addVertexWithUV(tMin, tMin, 0, u, V);
-			t.addVertexWithUV(tMax, tMin, 0, U, V);
-			t.addVertexWithUV(tMax, tMax, 0, U, v);
-			t.addVertexWithUV(tMin, tMax, 0, u, v);
+			tessellator.addVertexWithUV(tMin, tMin, 0, u, vMax);
+			tessellator.addVertexWithUV(tMax, tMin, 0, uMax, vMax);
+			tessellator.addVertexWithUV(tMax, tMax, 0, uMax, v);
+			tessellator.addVertexWithUV(tMin, tMax, 0, u, v);
 			break;
 		case SOUTH:
-			t.addVertexWithUV(1, tMin, tMax, U, V);
-			t.addVertexWithUV(1, tMax, tMax, u, v);
-			t.addVertexWithUV(1, tMax, tMin, u, v);
-			t.addVertexWithUV(1, tMin, tMin, u, V);
+			tessellator.addVertexWithUV(1, tMin, tMax, uMax, vMax);
+			tessellator.addVertexWithUV(1, tMax, tMax, u, v);
+			tessellator.addVertexWithUV(1, tMax, tMin, u, v);
+			tessellator.addVertexWithUV(1, tMin, tMin, u, vMax);
 			break;
 		case EAST:
-			t.addVertexWithUV(0, tMax, tMax, U, V);
-			t.addVertexWithUV(0, tMin, tMax, u, v);
-			t.addVertexWithUV(0, tMin, tMin, u, v);
-			t.addVertexWithUV(0, tMax, tMin, u, V);
+			tessellator.addVertexWithUV(0, tMax, tMax, uMax, vMax);
+			tessellator.addVertexWithUV(0, tMin, tMax, u, v);
+			tessellator.addVertexWithUV(0, tMin, tMin, u, v);
+			tessellator.addVertexWithUV(0, tMax, tMin, u, vMax);
 			break;
 		case WEST:
-			t.addVertexWithUV(tMin, tMax, 1, u, V);
-			t.addVertexWithUV(tMax, tMax, 1, U, V);
-			t.addVertexWithUV(tMax, tMin, 1, U, v);
-			t.addVertexWithUV(tMin, tMin, 1, u, v);
+			tessellator.addVertexWithUV(tMin, tMax, 1, u, vMax);
+			tessellator.addVertexWithUV(tMax, tMax, 1, uMax, vMax);
+			tessellator.addVertexWithUV(tMax, tMin, 1, uMax, v);
+			tessellator.addVertexWithUV(tMin, tMin, 1, u, v);
 			break;
 		default:
 			return;

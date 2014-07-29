@@ -19,12 +19,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import nl.tyrope.fencing.Refs;
 import nl.tyrope.fencing.Refs.MetaValues;
+import nl.tyrope.fencing.creativetab.FencingTabs;
 import nl.tyrope.fencing.renderer.FenceBlockRenderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -36,7 +35,7 @@ public class FenceBlock extends BlockContainer {
 	public FenceBlock() {
 		super(Material.wood);
 		setBlockName("fenceBlock");
-		setCreativeTab(Refs.creativeTab);
+		setCreativeTab(FencingTabs.tabFence);
 
 		setHarvestLevel("axe", 0);
 		setStepSound(Block.soundTypeWood);
@@ -159,33 +158,6 @@ public class FenceBlock extends BlockContainer {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	/**
-	 * Adds all intersecting collision boxes to a list. (Be sure to only add boxes to the list if they intersect the
-	 * mask.) Parameters: World, X, Y, Z, mask, list, colliding entity
-	 */
-	public void addCollisionBoxesToList(World world, int x, int y, int z,
-			AxisAlignedBB mask, List list, Entity entity) {
-		AxisAlignedBB axisalignedbb1 = this.getCollisionBoundingBoxFromPool(
-				world, x, y, z);
-
-		if (axisalignedbb1 != null && mask.intersectsWith(axisalignedbb1)) {
-			list.add(axisalignedbb1);
-		}
-	}
-
-	@Override
-	public MovingObjectPosition collisionRayTrace(World world,
-			int x, int y, int z, Vec3 startVec, Vec3 endVec) {
-		AxisAlignedBB boundingBox = getBoundingBox(world, x, y, z);
-		setBlockBounds((float) boundingBox.minX, (float) boundingBox.minY,
-				(float) boundingBox.minZ, (float) boundingBox.maxX,
-				(float) boundingBox.maxY, (float) boundingBox.maxZ);
-
-		return super.collisionRayTrace(world, x, y, z, startVec, endVec);
-	}
-
 	// Hitbox
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x,
@@ -194,7 +166,7 @@ public class FenceBlock extends BlockContainer {
 				&& world.getBlock(x, y, z) == Refs.ItemsBlocks.Fence) {
 			return null;
 		} else {
-			return getHitBox(world, x, y, z).expand(0, 0.5f, 0);
+			return getHitBox(world, x, y, z);
 		}
 	}
 
@@ -220,16 +192,7 @@ public class FenceBlock extends BlockContainer {
 	}
 
 	public AxisAlignedBB getHitBox(IBlockAccess blockAccess, int x, int y, int z) {
-		AxisAlignedBB boundingBox = getBoundingBox(blockAccess, x, y, z);
-
-		boundingBox.minX += x;
-		boundingBox.minY += y;
-		boundingBox.minZ += z;
-		boundingBox.maxX += x;
-		boundingBox.maxY += y;
-		boundingBox.maxZ += z;
-
-		return boundingBox;
+		return getBoundingBox(blockAccess, x, y, z).offset(x, y, z);
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockAccess blockAccess, int x, int y, int z) {
@@ -363,17 +326,18 @@ public class FenceBlock extends BlockContainer {
 		}
 	}
 
-	// Effects of touching the fence.
+	@Override
+	public void setBlockBoundsBasedOnState(IBlockAccess blockAccess,
+			int x, int y, int z) {
+		AxisAlignedBB boundingBox = getBoundingBox(blockAccess, x, y, z);
+		setBlockBounds((float) boundingBox.minX, (float) boundingBox.minY,
+				(float) boundingBox.minZ, (float) boundingBox.maxX,
+				(float) boundingBox.maxY, (float) boundingBox.maxZ);
+	}
+
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z,
 			Entity entity) {
-		affectEntity(world.getBlockMetadata(x, y, z), entity);
-	}
-
-	// Effects of walking on the fence.
-	@Override
-	public void onEntityWalking(World world, int x, int y, int z, Entity entity) {
-		// FIXME Not triggered due to heightened hitbox.
 		affectEntity(world.getBlockMetadata(x, y, z), entity);
 	}
 
@@ -384,5 +348,38 @@ public class FenceBlock extends BlockContainer {
 		} else if (metadata == MetaValues.FenceBarbed) {
 			entity.attackEntityFrom(Refs.DmgSrcs.barbed, Refs.dmgMulti);
 		}
+	}
+
+	@Override
+	public void onBlockAdded(World world, int x, int y, int z) {
+		if (world.getBlock(x, y + 1, z).getMaterial().isReplaceable()) {
+			world.setBlock(x, y + 1, z, getFenceTopBlock());
+		}
+
+		super.onBlockAdded(world, x, y, z);
+	}
+
+	@Override
+	public void breakBlock(World world, int x, int y, int z, Block block, int metadata) {
+		if (world.getBlock(x, y + 1, z) instanceof FenceTopBlock) {
+			world.setBlockToAir(x, y + 1, z);
+		}
+
+		super.breakBlock(world, x, y, z, block, metadata);
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+		if (world.getBlock(x, y + 1, z).getMaterial().isReplaceable()) {
+			world.setBlock(x, y + 1, z, getFenceTopBlock());
+		}
+	}
+
+	/**
+	 * Return the fence top block.
+	 * @return	The fence top block.
+	 */
+	public FenceTopBlock getFenceTopBlock() {
+		return Refs.ItemsBlocks.FenceTop;
 	}
 }

@@ -10,7 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import nl.tyrope.fencing.Refs;
+import nl.tyrope.fencing.creativetab.FencingTabs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -19,7 +19,7 @@ public class PaintedFenceBlock extends FenceBlock {
 	public PaintedFenceBlock() {
 		super();
 		setBlockName("fenceBlockWoodPainted");
-		setCreativeTab(Refs.creativeTab);
+		setCreativeTab(FencingTabs.tabFence);
 
 		setStepSound(Block.soundTypeWood);
 		setHardness(1.2f);
