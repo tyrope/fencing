@@ -80,76 +80,57 @@ public class Common {
 	public void registerRecipes() {
 		// Items Recipes
 		GameRegistry.addRecipe(new ItemStack(Refs.ItemsBlocks.Pole, 4),
-				"xx", "xx", "xx", 'x', new ItemStack(Items.stick));
+				"xx", "xx", "xx", 'x', Items.stick);
 
-		ItemStack pole = new ItemStack(Refs.ItemsBlocks.Pole);
+		ItemStack fenceString = new ItemStack(Refs.ItemsBlocks.Fence, 1, MetaValues.FenceString);
+		ItemStack fenceIron = new ItemStack(Refs.ItemsBlocks.Fence, 1, MetaValues.FenceIron);
+		ItemStack fenceSilly = new ItemStack(Refs.ItemsBlocks.Fence, 1, MetaValues.FenceSilly);
+		ItemStack fenceBarbed = new ItemStack(Refs.ItemsBlocks.Fence, 1, MetaValues.FenceBarbed);
+		ItemStack fenceWood = new ItemStack(Refs.ItemsBlocks.Fence, 1, MetaValues.FenceWood);
+		ItemStack fenceCut = new ItemStack(Refs.ItemsBlocks.Fence, 1, MetaValues.FenceCut);
 
 		// Regular pole/X/pole crafting
-		GameRegistry.addRecipe(new ItemStack(Refs.ItemsBlocks.Fence, 1,
-				MetaValues.FenceString), "xyx", 'x', pole, 'y', new ItemStack(
-				Items.string));
-		GameRegistry.addRecipe(new ItemStack(Refs.ItemsBlocks.Fence, 1,
-				MetaValues.FenceIron), "xyx", 'x', pole, 'y', new ItemStack(
-				Items.iron_ingot));
-		GameRegistry.addShapelessRecipe(new ItemStack(Refs.ItemsBlocks.Fence, 1,
-				MetaValues.FenceSilly), new ItemStack(Items.slime_ball),
-				new ItemStack(Refs.ItemsBlocks.Fence));
-		GameRegistry.addRecipe(new ItemStack(Refs.ItemsBlocks.Fence, 1,
-				MetaValues.FenceBarbed), "xyx", 'x', pole, 'y', new ItemStack(
-				Blocks.iron_bars));
-		GameRegistry.addRecipe(new ItemStack(Refs.ItemsBlocks.Fence, 1,
-				MetaValues.FenceWood), "xyx", 'x', pole, 'y', new ItemStack(
-				Items.stick));
+		GameRegistry.addRecipe(fenceString, "xyx", 'x', Refs.ItemsBlocks.Pole, 'y', Items.string);
+		GameRegistry.addRecipe(fenceIron, "xyx", 'x', Refs.ItemsBlocks.Pole, 'y', Items.iron_ingot);
+		GameRegistry.addShapelessRecipe(fenceSilly, Items.slime_ball, fenceString);
+		GameRegistry.addRecipe(fenceBarbed, "xyx", 'x', Refs.ItemsBlocks.Pole, 'y', Blocks.iron_bars);
+		GameRegistry.addRecipe(fenceWood, "xyx", 'x', Refs.ItemsBlocks.Pole, 'y', Items.stick);
 
 		// Repairs
-		GameRegistry.addShapelessRecipe(new ItemStack(Refs.ItemsBlocks.Fence, 1,
-				MetaValues.FenceString), new ItemStack(Refs.ItemsBlocks.Fence, 1,
-				MetaValues.FenceCut), new ItemStack(Items.string));
-		GameRegistry.addShapelessRecipe(new ItemStack(Refs.ItemsBlocks.Fence, 1,
-				MetaValues.FenceIron), new ItemStack(Refs.ItemsBlocks.Fence, 1,
-				MetaValues.FenceCut), new ItemStack(Items.iron_ingot));
-		GameRegistry.addShapelessRecipe(new ItemStack(Refs.ItemsBlocks.Fence, 1,
-				MetaValues.FenceBarbed), new ItemStack(Refs.ItemsBlocks.Fence, 1,
-				MetaValues.FenceCut), new ItemStack(Blocks.iron_bars));
-		GameRegistry.addShapelessRecipe(new ItemStack(Refs.ItemsBlocks.Fence, 1,
-				MetaValues.FenceWood), new ItemStack(Refs.ItemsBlocks.Fence, 1,
-				MetaValues.FenceCut), new ItemStack(Items.stick));
+		GameRegistry.addShapelessRecipe(fenceString, fenceCut, Items.string);
+		GameRegistry.addShapelessRecipe(fenceIron, fenceCut, Items.iron_ingot);
+		GameRegistry.addShapelessRecipe(fenceBarbed, fenceCut, Blocks.iron_bars);
+		GameRegistry.addShapelessRecipe(fenceWood, fenceCut, Items.stick);
 
 		for (int i = 0; i < 16; i++) {
 			GameRegistry.addShapelessRecipe(new ItemStack(Refs.ItemsBlocks.PaintedFence, 1,
-					i), new ItemStack(Refs.ItemsBlocks.Fence, 1, MetaValues.FenceWood),
-					new ItemStack(Items.dye, 1, 15 - i));
+					i), fenceWood, new ItemStack(Items.dye, 1, 15 - i));
 		}
 
 		// Intermod compatibility.
 		if (Loader.isModLoaded("IC2")) {
-			Refs.logger.info("Loading electric fence recipes:");
-			
-			ItemStack tinIngot = null, copperIngot = null; 
+			Refs.logger.info("Loading electric fence recipes :");
+
+			ItemStack tinIngot = null, copperIngot = null;
+
+			ItemStack fenceTin = new ItemStack(Refs.ItemsBlocks.ElecFence, 1, MetaValues.FenceElectricTin);
+			ItemStack fenceCopper = new ItemStack(Refs.ItemsBlocks.ElecFence, 1, MetaValues.FenceElectricCopper);
 
 			// Tin
 			Refs.logger.info("Tin loaded.");
-			GameRegistry.addRecipe(new ItemStack(Refs.ItemsBlocks.ElecFence, 1,
-					MetaValues.FenceElectricTin), "xyx", 'x', pole, 'y',
-					tinIngot);
+			GameRegistry.addRecipe(fenceTin, "xyx", 'x', Refs.ItemsBlocks.Pole, 'y', tinIngot);
+
 			// Repair
-			GameRegistry.addShapelessRecipe(new ItemStack(
-					Refs.ItemsBlocks.ElecFence, 1, MetaValues.FenceElectricTin),
-						new ItemStack(Refs.ItemsBlocks.Fence, 1, MetaValues.FenceCut),
-						tinIngot);
+			GameRegistry.addShapelessRecipe(fenceTin, fenceCut, tinIngot);
 			
 			// Copper
 			Refs.logger.info("Copper loaded.");
-				GameRegistry.addRecipe(new ItemStack(Refs.ItemsBlocks.ElecFence, 1,
-						MetaValues.FenceElectricCopper), "xyx", 'x', pole, 'y',
-						copperIngot);
+			GameRegistry.addRecipe(fenceCopper, "xyx", 'x', Refs.ItemsBlocks.Pole, 'y', copperIngot);
+
 			// Repair
-			GameRegistry.addShapelessRecipe(new ItemStack(
-					Refs.ItemsBlocks.ElecFence, 1, MetaValues.FenceElectricCopper),
-					new ItemStack(Refs.ItemsBlocks.Fence, 1, MetaValues.FenceCut),
-					copperIngot);
+			GameRegistry.addShapelessRecipe(fenceCopper, fenceCut, copperIngot);
 			
-			Refs.logger.info("Complete.");
+			Refs.logger.info("Loading electric fence recipes : Complete.");
 		}
 	}
 }
