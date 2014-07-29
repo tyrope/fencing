@@ -13,7 +13,8 @@ public class Refs {
 	// Fence subnames
 	public final static String[] fenceSubNames = { "String", "Iron", "Silly",
 			"Barbed", "Wood", "Cut" };
-	public final static String[] elecFenceSubNames = { "Tin", "Copper" };
+	public final static String[] elecFenceSubNames = { "Tin", "Copper",
+			"Nickel" };
 
 	// Misc
 	public static float textureSize = 32;
@@ -49,5 +50,6 @@ public class Refs {
 
 		public static final int FenceElectricTin = 0;
 		public static final int FenceElectricCopper = 1;
+		public static final int FenceElectricNickel = 2;
 	}
 }

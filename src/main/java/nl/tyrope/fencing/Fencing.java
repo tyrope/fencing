@@ -10,7 +10,8 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = "fencing", name = "Fencing", version = "0.5.0-dev", dependencies = "after:IC2")
+//TODO Depend on after:Thermal Expansion, not IndustrialCraft.
+@Mod(modid = "fencing", name = "Fencing", version = "0.6.0-dev", dependencies = "after:IC2")
 public class Fencing {
 
 	@Instance(value = "fencing")
@@ -22,14 +23,16 @@ public class Fencing {
 	/**
 	 * This is code that is executed prior to your mod being initialized.
 	 * 
-	 * @param event The Forge ModLoader pre-initialization event.
+	 * @param event
+	 *            The Forge ModLoader pre-initialization event.
 	 */
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		Refs.logger = event.getModLog();
 		Refs.logger.info("Logger created.");
 
-		proxy.loadConfigs(new Configuration(event.getSuggestedConfigurationFile()));
+		proxy.loadConfigs(new Configuration(event
+				.getSuggestedConfigurationFile()));
 
 		proxy.registerItems();
 		proxy.registerBlocks();
@@ -40,7 +43,8 @@ public class Fencing {
 	/**
 	 * This is code that is executed when your mod is being initialized.
 	 * 
-	 * @param event The Forge ModLoader initialization event.
+	 * @param event
+	 *            The Forge ModLoader initialization event.
 	 */
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
@@ -50,7 +54,8 @@ public class Fencing {
 	/**
 	 * This is code that is executed after all mods are initialized.
 	 * 
-	 * @param event The Forge ModLoader post-initialization event.
+	 * @param event
+	 *            The Forge ModLoader post-initialization event.
 	 */
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {

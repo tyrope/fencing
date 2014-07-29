@@ -14,6 +14,8 @@ public class ElectricFenceEntity extends TileEntity {
 		int ret = 1;
 		if (blockMetadata == Refs.MetaValues.FenceElectricTin) {
 			return ret;
+		} else if (blockMetadata == Refs.MetaValues.FenceElectricNickel) {
+			return ret * 1.5;
 		} else {
 			return ret * 2;
 		}
