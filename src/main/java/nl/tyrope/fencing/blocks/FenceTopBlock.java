@@ -24,6 +24,11 @@ public class FenceTopBlock extends Block {
 	}
 
 	@Override
+	public boolean isReplaceable(IBlockAccess blockAccess, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}

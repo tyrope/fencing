@@ -375,6 +375,13 @@ public class FenceBlock extends BlockContainer {
 		super.breakBlock(world, x, y, z, block, metadata);
 	}
 
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+		if (world.getBlock(x, y + 1, z).getMaterial().isReplaceable()) {
+			world.setBlock(x, y + 1, z, getFenceTopBlock());
+		}
+	}
+
 	/**
 	 * Return the fence top block.
 	 * @return	The fence top block.
