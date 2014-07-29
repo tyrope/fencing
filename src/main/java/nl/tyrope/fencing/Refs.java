@@ -1,7 +1,6 @@
 package nl.tyrope.fencing;
 
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
 
@@ -14,7 +13,6 @@ public class Refs {
 	public final static String[] elecFenceSubNames = { "Tin", "Copper" };
 
 	// Misc
-	public static CreativeTabs creativeTab;
 	public static float textureSize = 32;
 	/** Whether or not to drop the center item when cutting a fence. */
 	public static boolean dropCenter;

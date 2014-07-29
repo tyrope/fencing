@@ -25,6 +25,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import nl.tyrope.fencing.Refs;
 import nl.tyrope.fencing.Refs.MetaValues;
+import nl.tyrope.fencing.creativetab.FencingTabs;
 import nl.tyrope.fencing.renderer.FenceBlockRenderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -36,7 +37,7 @@ public class FenceBlock extends BlockContainer {
 	public FenceBlock() {
 		super(Material.wood);
 		setBlockName("fenceBlock");
-		setCreativeTab(Refs.creativeTab);
+		setCreativeTab(FencingTabs.tabFence);
 
 		setHarvestLevel("axe", 0);
 		setStepSound(Block.soundTypeWood);

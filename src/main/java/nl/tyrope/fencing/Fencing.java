@@ -8,7 +8,6 @@ import nl.tyrope.fencing.Refs.MetaValues;
 import nl.tyrope.fencing.blocks.ElectricFenceBlock;
 import nl.tyrope.fencing.blocks.FenceBlock;
 import nl.tyrope.fencing.blocks.PaintedFenceBlock;
-import nl.tyrope.fencing.creativetab.FencingTab;
 import nl.tyrope.fencing.items.ElectricFenceBlockItem;
 import nl.tyrope.fencing.items.FenceBlockItem;
 import nl.tyrope.fencing.items.FencePoleItem;
@@ -54,9 +53,6 @@ public class Fencing {
 		// Logger
 		Refs.logger = event.getModLog();
 		Refs.logger.info("Logger created.");
-
-		// Create creative tab.
-		Refs.creativeTab = new FencingTab();
 
 		// Load configuration file.
 		Configuration config = new Configuration(
