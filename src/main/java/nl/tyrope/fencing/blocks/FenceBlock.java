@@ -160,22 +160,6 @@ public class FenceBlock extends BlockContainer {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	/**
-	 * Adds all intersecting collision boxes to a list. (Be sure to only add boxes to the list if they intersect the
-	 * mask.) Parameters: World, X, Y, Z, mask, list, colliding entity
-	 */
-	public void addCollisionBoxesToList(World world, int x, int y, int z,
-			AxisAlignedBB mask, List list, Entity entity) {
-		AxisAlignedBB axisalignedbb1 = this.getCollisionBoundingBoxFromPool(
-				world, x, y, z);
-
-		if (axisalignedbb1 != null && mask.intersectsWith(axisalignedbb1)) {
-			list.add(axisalignedbb1);
-		}
-	}
-
 	@Override
 	public MovingObjectPosition collisionRayTrace(World world,
 			int x, int y, int z, Vec3 startVec, Vec3 endVec) {
