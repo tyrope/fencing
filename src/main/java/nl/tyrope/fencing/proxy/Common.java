@@ -111,6 +111,7 @@ public class Common {
 		if (Loader.isModLoaded("IC2")) {
 			Refs.logger.info("Loading electric fence recipes :");
 
+			// TODO : Create tinIngot and copperIngot items & register them in OreDictionary
 			ItemStack tinIngot = null, copperIngot = null;
 
 			ItemStack fenceTin = new ItemStack(Refs.ItemsBlocks.ElecFence, 1, MetaValues.FenceElectricTin);
