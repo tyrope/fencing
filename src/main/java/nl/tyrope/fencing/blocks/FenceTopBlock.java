@@ -5,6 +5,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
@@ -20,7 +21,7 @@ public class FenceTopBlock extends Block {
 		super(Material.wood);
 		setBlockName("fenceTopBlock");
 		setStepSound(Block.soundTypeWood);
-		setBlockTextureName("fencing:fence");
+		setBlockTextureName("fencing:fenceWood");
 	}
 
 	@Override
@@ -57,9 +58,12 @@ public class FenceTopBlock extends Block {
 		return block.getExplosionResistance(entity, world, x, y, z, explosionX, explosionY, explosionZ);
 	}
 
-	// Effects of walking on the fence.
-	@Override
-	public void onEntityWalking(World world, int x, int y, int z, Entity entity) {
+	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity){
+		// only when the entity is on top of this block.
+		if (MathHelper.abs((float) (entity.posY - entity.yOffset - y - 0.5F)) > 0.1F) {
+			return;
+		}
+
 		Block block = world.getBlock(x, y - 1, z);
 		if (!(block instanceof FenceBlock)) {
 			Refs.logger.warn("Multiblock error : The block under this block (" + x + ", " + y + ", " + z + ") is not a FenceBlock.");
@@ -67,7 +71,7 @@ public class FenceTopBlock extends Block {
 			return;
 		}
 
-		block.onEntityWalking(world, x, y - 1, z, entity);
+		block.onEntityCollidedWithBlock(world, x, y - 1, z, entity);
 	}
 
 	@Override

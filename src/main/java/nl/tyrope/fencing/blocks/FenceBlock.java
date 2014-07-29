@@ -335,16 +335,9 @@ public class FenceBlock extends BlockContainer {
 				(float) boundingBox.maxY, (float) boundingBox.maxZ);
 	}
 
-	// Effects of touching the fence.
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z,
 			Entity entity) {
-		affectEntity(world.getBlockMetadata(x, y, z), entity);
-	}
-
-	// Effects of walking on the fence.
-	@Override
-	public void onEntityWalking(World world, int x, int y, int z, Entity entity) {
 		affectEntity(world.getBlockMetadata(x, y, z), entity);
 	}
 
