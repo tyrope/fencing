@@ -53,10 +53,12 @@ public class FenceTopBlock extends Block {
 			return 10;
 		}
 
-		return block.getExplosionResistance(entity, world, x, y, z, explosionX, explosionY, explosionZ);
+		return block.getExplosionResistance(entity, world, x, y, z, explosionX,
+				explosionY, explosionZ);
 	}
 
-	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity){
+	public void onEntityCollidedWithBlock(World world, int x, int y, int z,
+			Entity entity) {
 		// only when the entity is on top of this block.
 		if (MathHelper.abs((float) (entity.posY - entity.yOffset - y - 0.3F)) > 0.1F) {
 			return;
@@ -71,8 +73,8 @@ public class FenceTopBlock extends Block {
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess blockAccess,
-			int x, int y, int z) {
+	public void setBlockBoundsBasedOnState(IBlockAccess blockAccess, int x,
+			int y, int z) {
 		Block block = blockAccess.getBlock(x, y - 1, z);
 		if (!(block instanceof FenceBlock)) {
 			return;
@@ -96,7 +98,13 @@ public class FenceTopBlock extends Block {
 			return null;
 		}
 
-		return block.getCollisionBoundingBoxFromPool(world, x, y - 1, z).addCoord(0, 0.3D, 0);
+		AxisAlignedBB boundingBox = block.getCollisionBoundingBoxFromPool(
+				world, x, y - 1, z);
+		if (boundingBox == null) {
+			return null;
+		} else {
+			return boundingBox.addCoord(0, 0.3D, 0);
+		}
 	}
 
 	@Override
