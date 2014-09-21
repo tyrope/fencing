@@ -80,7 +80,15 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		float[] textureCoords = getTextureCoords(blockIcon);
 		float u = textureCoords[0], v = textureCoords[1], du = textureCoords[2], dv = textureCoords[3];
 
-		boolean[] poleConnections = fenceBlock.getPoleConnections(blockAccess, x, y, z);// NWSE
+		boolean[] poleConnections = fenceBlock.getPoleConnections(blockAccess, x, y, z);// NWSET
+		int nbConnection = 0;
+		for (boolean connection : poleConnections) {
+			if (connection) {
+				nbConnection++;
+			}
+		}
+
+		boolean smoothEnd = nbConnection == 1 && !poleConnections[4];
 		int type = getType(fenceBlock.getConnections(blockAccess, x, y, z));
 
 		Tessellator tessellator = Tessellator.instance;
@@ -91,29 +99,31 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 
 		if ((type & N_POST) != 0)
 			renderPost(tessellator, u, v, du, dv, ForgeDirection.NORTH,
-					poleConnections[0]);
+					poleConnections[0], smoothEnd && poleConnections[2]);
 		if ((type & S_POST) != 0)
 			renderPost(tessellator, u, v, du, dv, ForgeDirection.SOUTH,
-					poleConnections[2]);
+					poleConnections[2], smoothEnd && poleConnections[0]);
 		if ((type & E_POST) != 0)
 			renderPost(tessellator, u, v, du, dv, ForgeDirection.EAST,
-					poleConnections[3]);
+					poleConnections[3], smoothEnd && poleConnections[1]);
 		if ((type & W_POST) != 0)
 			renderPost(tessellator, u, v, du, dv, ForgeDirection.WEST,
-					poleConnections[1]);
+					poleConnections[1], smoothEnd && poleConnections[3]);
 
 		if ((type & NS_STRING) != 0)
-			renderWires(tessellator, u, v, du, dv, ForgeDirection.NORTH, ForgeDirection.SOUTH);
+			renderWires(tessellator, u, v, du, dv, ForgeDirection.NORTH, ForgeDirection.SOUTH,
+					!smoothEnd ? ForgeDirection.UNKNOWN : poleConnections[0] ? ForgeDirection.NORTH : ForgeDirection.SOUTH);
 		if ((type & EW_STRING) != 0)
-			renderWires(tessellator, u, v, du, dv, ForgeDirection.EAST, ForgeDirection.WEST);
+			renderWires(tessellator, u, v, du, dv, ForgeDirection.EAST, ForgeDirection.WEST,
+					!smoothEnd ? ForgeDirection.UNKNOWN : poleConnections[1] ? ForgeDirection.EAST : ForgeDirection.WEST);
 		if ((type & NE_STRING) != 0)
-			renderWires(tessellator, u, v, du, dv, ForgeDirection.NORTH, ForgeDirection.EAST);
+			renderWires(tessellator, u, v, du, dv, ForgeDirection.NORTH, ForgeDirection.EAST, ForgeDirection.UNKNOWN);
 		if ((type & NW_STRING) != 0)
-			renderWires(tessellator, u, v, du, dv, ForgeDirection.NORTH, ForgeDirection.WEST);
+			renderWires(tessellator, u, v, du, dv, ForgeDirection.NORTH, ForgeDirection.WEST, ForgeDirection.UNKNOWN);
 		if ((type & SE_STRING) != 0)
-			renderWires(tessellator, u, v, du, dv, ForgeDirection.SOUTH, ForgeDirection.EAST);
+			renderWires(tessellator, u, v, du, dv, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.UNKNOWN);
 		if ((type & SW_STRING) != 0)
-			renderWires(tessellator, u, v, du, dv, ForgeDirection.SOUTH, ForgeDirection.WEST);
+			renderWires(tessellator, u, v, du, dv, ForgeDirection.SOUTH, ForgeDirection.WEST, ForgeDirection.UNKNOWN);
 
 		// Rendering Integration
 		// Cable caps
@@ -213,12 +223,15 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 	 * @param dv	The V size of 1 pixel on the texture.
 	 * @param direction	The direction the posts should face. (Valid: NORTH/EAST/SOUTH/WEST)
 	 * @param connected	Is the fence connected in that direction.
+	 * @param smooth	Render a 'smooth' pole.
 	 */
 	private void renderPost(Tessellator tessellator, float u, float v, float du,
-			float dv, ForgeDirection dir, boolean connected) {
+			float dv, ForgeDirection dir, boolean connected, boolean smooth) {
 
 		float postWidth = 1/8.0f;
-		float xMod = 0f, zMod = 0f, wMod = 0f, eMod = 0f, nMod = 0f, sMod = 0f;
+		float xMod = 0f, zMod = 0f;
+		float wMod = 0f, eMod = 0f, nMod = 0f, sMod = 0f, bMod = 0f;
+		float tMod = smooth ? 1/16.0f * 10 : 1f;
 
 		switch (dir) {
 		case NORTH:
@@ -253,16 +266,16 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		float vMax = v + dv * 8;
 
 		// Top
-		tessellator.addVertexWithUV(xMod + eMod, 1, zMod + postWidth - sMod, u, v);
-		tessellator.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + postWidth - sMod, u, vMax);
-		tessellator.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + nMod, uMax, vMax);
-		tessellator.addVertexWithUV(xMod + eMod, 1, zMod + nMod, uMax, v);
+		tessellator.addVertexWithUV(xMod + eMod, tMod, zMod + postWidth - sMod, u, v);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, tMod, zMod + postWidth - sMod, u, vMax);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, tMod, zMod + nMod, uMax, vMax);
+		tessellator.addVertexWithUV(xMod + eMod, tMod, zMod + nMod, uMax, v);
 
 		// Bottom
-		tessellator.addVertexWithUV(xMod + eMod, 0, zMod + nMod, u, v);
-		tessellator.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + nMod, u, vMax);
-		tessellator.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + postWidth - sMod, uMax, vMax);
-		tessellator.addVertexWithUV(xMod + eMod, 0, zMod + postWidth - sMod, uMax, v);
+		tessellator.addVertexWithUV(xMod + eMod, bMod, zMod + nMod, u, v);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, bMod, zMod + nMod, u, vMax);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, bMod, zMod + postWidth - sMod, uMax, vMax);
+		tessellator.addVertexWithUV(xMod + eMod, bMod, zMod + postWidth - sMod, uMax, v);
 
 		// Prepare texture for sides.
 		// Position
@@ -273,28 +286,28 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		vMax = v + dv * (Refs.textureSize - 4);
 
 		// East
-		tessellator.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + postWidth - sMod, u, v);
-		tessellator.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + postWidth - sMod, u, vMax);
-		tessellator.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + nMod, uMax, vMax);
-		tessellator.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + nMod, uMax, v);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, tMod, zMod + postWidth - sMod, u, v);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, bMod, zMod + postWidth - sMod, u, vMax);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, bMod, zMod + nMod, uMax, vMax);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, tMod, zMod + nMod, uMax, v);
 
 		// West
-		tessellator.addVertexWithUV(xMod + eMod, 0, zMod + postWidth - sMod, uMax, vMax);
-		tessellator.addVertexWithUV(xMod + eMod, 1, zMod + postWidth - sMod, u, v);
-		tessellator.addVertexWithUV(xMod + eMod, 1, zMod + nMod, u, v);
-		tessellator.addVertexWithUV(xMod + eMod, 0, zMod + nMod, u, vMax);
+		tessellator.addVertexWithUV(xMod + eMod, bMod, zMod + postWidth - sMod, uMax, vMax);
+		tessellator.addVertexWithUV(xMod + eMod, tMod, zMod + postWidth - sMod, u, v);
+		tessellator.addVertexWithUV(xMod + eMod, tMod, zMod + nMod, u, v);
+		tessellator.addVertexWithUV(xMod + eMod, bMod, zMod + nMod, u, vMax);
 
 		// South
-		tessellator.addVertexWithUV(xMod + eMod, 0, zMod + postWidth - sMod, u, vMax);
-		tessellator.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + postWidth - sMod, uMax, vMax);
-		tessellator.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + postWidth - sMod, uMax, v);
-		tessellator.addVertexWithUV(xMod + eMod, 1, zMod + postWidth - sMod, u, v);
+		tessellator.addVertexWithUV(xMod + eMod, bMod, zMod + postWidth - sMod, u, vMax);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, bMod, zMod + postWidth - sMod, uMax, vMax);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, tMod, zMod + postWidth - sMod, uMax, v);
+		tessellator.addVertexWithUV(xMod + eMod, tMod, zMod + postWidth - sMod, u, v);
 
 		// North
-		tessellator.addVertexWithUV(xMod + eMod, 1, zMod + nMod, uMax, v);
-		tessellator.addVertexWithUV(xMod + postWidth - wMod, 1, zMod + nMod, u, v);
-		tessellator.addVertexWithUV(xMod + postWidth - wMod, 0, zMod + nMod, u, vMax);
-		tessellator.addVertexWithUV(xMod + eMod, 0, zMod + nMod, uMax, vMax);
+		tessellator.addVertexWithUV(xMod + eMod, tMod, zMod + nMod, uMax, v);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, tMod, zMod + nMod, u, v);
+		tessellator.addVertexWithUV(xMod + postWidth - wMod, bMod, zMod + nMod, u, vMax);
+		tessellator.addVertexWithUV(xMod + eMod, bMod, zMod + nMod, uMax, vMax);
 	}
 
 	/**
@@ -307,9 +320,11 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 	 * @param dv	The V size of 1 pixel on the texture.
 	 * @param startSide	The wire starting position. (Valid values: NORTH/SOUTH/EAST/WEST.)
 	 * @param endSide	The wire ending position. (Valid values: NORTH/SOUTH/EAST/WEST.)
+	 * @param smoothSide	The side of the fence to smooth.
 	 */
 	private void renderWires(Tessellator tessellator, float u, float v, float du,
-			float dv, ForgeDirection startSide, ForgeDirection endSide) {
+			float dv, ForgeDirection startSide, ForgeDirection endSide,
+			ForgeDirection smoothSide) {
 
 		float wireWidth = 1/16.0f;
 		float wireTop = 1 - (1/32.0f * 5);
@@ -320,28 +335,36 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 		float V = v + dv * 2;
 
 		/**
-		 * { Start side: { x Min, x Max, z Min, z Max}, End side: {x Min, x Max,
-		 * z Min, z Max} }
+		 * { Start side : { x Min, x Max, z Min, z Max, y Min, y Max },
+		 *   End side :   { x Min, x Max, z Min, z Max, y Min, y Max } }
 		 */
-		float[][] loc = new float[2][4];
+		float[][] loc = new float[2][6];
 
 		for (int i = 0; i < 2; i++) {
 			switch (i == 0 ? startSide : endSide) {
 			case NORTH:
 				loc[i] = new float[] { 0.5f + wireWidth / 2.0f,
-						0.5f - wireWidth / 2.0f, wireWidth, wireWidth };
+						0.5f - wireWidth / 2.0f, wireWidth, wireWidth,
+						smoothSide == ForgeDirection.SOUTH ? wireTop - 0.3f : wireTop,
+						smoothSide == ForgeDirection.SOUTH ? wireBottom - 0.3f : wireBottom};
 				break;
 			case EAST:
 				loc[i] = new float[] { wireWidth, wireWidth,
-						0.5f + wireWidth / 2.0f, 0.5f - wireWidth / 2.0f };
+						0.5f + wireWidth / 2.0f, 0.5f - wireWidth / 2.0f,
+						smoothSide == ForgeDirection.EAST ? wireTop - 0.3f : wireTop,
+						smoothSide == ForgeDirection.EAST ? wireBottom - 0.3f : wireBottom};
 				break;
 			case SOUTH:
 				loc[i] = new float[] { 0.5f - wireWidth / 2.0f,
-						0.5f + wireWidth / 2.0f, 1 - wireWidth, 1 - wireWidth };
+						0.5f + wireWidth / 2.0f, 1 - wireWidth, 1 - wireWidth,
+						smoothSide == ForgeDirection.NORTH ? wireTop - 0.3f : wireTop,
+						smoothSide == ForgeDirection.NORTH ? wireBottom - 0.3f : wireBottom};
 				break;
 			case WEST:
 				loc[i] = new float[] { 1 - wireWidth, 1 - wireWidth,
-						0.5f - wireWidth / 2.0f, 0.5f + wireWidth / 2.0f };
+						0.5f - wireWidth / 2.0f, 0.5f + wireWidth / 2.0f,
+						smoothSide == ForgeDirection.WEST ? wireTop - 0.3f : wireTop,
+						smoothSide == ForgeDirection.WEST ? wireBottom - 0.3f : wireBottom};
 				break;
 			default:
 				return;
@@ -350,31 +373,33 @@ public class FenceBlockRenderer implements ISimpleBlockRenderingHandler {
 
 		for (int i = 0; i < 3; i++) {
 			// Top
-			tessellator.addVertexWithUV(loc[1][1], wireTop, loc[1][2], u, V);
-			tessellator.addVertexWithUV(loc[0][0], wireTop, loc[0][3], U, V);
-			tessellator.addVertexWithUV(loc[0][1], wireTop, loc[0][2], U, v);
-			tessellator.addVertexWithUV(loc[1][0], wireTop, loc[1][3], u, v);
+			tessellator.addVertexWithUV(loc[1][1], loc[1][4], loc[1][2], u, V);
+			tessellator.addVertexWithUV(loc[0][0], loc[0][4], loc[0][3], U, V);
+			tessellator.addVertexWithUV(loc[0][1], loc[0][4], loc[0][2], U, v);
+			tessellator.addVertexWithUV(loc[1][0], loc[1][4], loc[1][3], u, v);
 
 			// Bottom
-			tessellator.addVertexWithUV(loc[1][1], wireBottom, loc[1][2], U, V);
-			tessellator.addVertexWithUV(loc[1][0], wireBottom, loc[1][3], U, v);
-			tessellator.addVertexWithUV(loc[0][1], wireBottom, loc[0][2], u, v);
-			tessellator.addVertexWithUV(loc[0][0], wireBottom, loc[0][3], u, V);
+			tessellator.addVertexWithUV(loc[1][1], loc[1][5], loc[1][2], U, V);
+			tessellator.addVertexWithUV(loc[1][0], loc[1][5], loc[1][3], U, v);
+			tessellator.addVertexWithUV(loc[0][1], loc[0][5], loc[0][2], u, v);
+			tessellator.addVertexWithUV(loc[0][0], loc[0][5], loc[0][3], u, V);
 
 			// Front
-			tessellator.addVertexWithUV(loc[1][1], wireBottom, loc[1][2], u, V);
-			tessellator.addVertexWithUV(loc[0][0], wireBottom, loc[0][3], U, V);
-			tessellator.addVertexWithUV(loc[0][0], wireTop, loc[0][3], U, v);
-			tessellator.addVertexWithUV(loc[1][1], wireTop, loc[1][2], u, v);
+			tessellator.addVertexWithUV(loc[1][1], loc[1][5], loc[1][2], u, V);
+			tessellator.addVertexWithUV(loc[0][0], loc[0][5], loc[0][3], U, V);
+			tessellator.addVertexWithUV(loc[0][0], loc[0][4], loc[0][3], U, v);
+			tessellator.addVertexWithUV(loc[1][1], loc[1][4], loc[1][2], u, v);
 
 			// Back
-			tessellator.addVertexWithUV(loc[1][0], wireTop, loc[1][3], u, V);
-			tessellator.addVertexWithUV(loc[0][1], wireTop, loc[0][2], U, V);
-			tessellator.addVertexWithUV(loc[0][1], wireBottom, loc[0][2], U, v);
-			tessellator.addVertexWithUV(loc[1][0], wireBottom, loc[1][3], u, v);
+			tessellator.addVertexWithUV(loc[1][0], loc[1][4], loc[1][3], u, V);
+			tessellator.addVertexWithUV(loc[0][1], loc[0][4], loc[0][2], U, V);
+			tessellator.addVertexWithUV(loc[0][1], loc[0][5], loc[0][2], U, v);
+			tessellator.addVertexWithUV(loc[1][0], loc[1][5], loc[1][3], u, v);
 
-			wireTop -= wireWidth * 3;
-			wireBottom = wireTop - wireWidth;
+			loc[0][4] -= wireWidth * 3;
+			loc[0][5] = loc[0][4] - wireWidth;
+			loc[1][4] -= wireWidth * 3;
+			loc[1][5] = loc[1][4] - wireWidth;
 		}
 	}
 
